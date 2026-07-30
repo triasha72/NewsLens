@@ -6,10 +6,20 @@ from .popularity import (
     PopularityRecommender,
     PopularityStatistics,
 )
+from .tfidf import (
+    ArticleSearchError,
+    ArticleSearchNotFittedError,
+    ArticleSearchResult,
+    TfidfArticleSearch,
+)
 
 __all__ = [
+    "ArticleSearchError",
+    "ArticleSearchNotFittedError",
+    "ArticleSearchResult",
     "PopularityModelError",
     "PopularityModelNotFittedError",
     "PopularityRecommender",
     "PopularityStatistics",
+    "TfidfArticleSearch",
 ]
