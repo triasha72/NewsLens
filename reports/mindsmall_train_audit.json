@@ -1,0 +1,31 @@
+{
+  "average_candidates_per_impression": 37.227688,
+  "average_history_length": 32.539987,
+  "behavior_records": 156965,
+  "candidate_impressions": 5843444,
+  "categories": 17,
+  "click_through_rate": 0.040446,
+  "clicks": 236344,
+  "empty_histories": 3238,
+  "first_timestamp": "2019-11-09T00:00:19",
+  "last_timestamp": "2019-11-14T23:59:13",
+  "missing_abstracts": 2666,
+  "missing_titles": 0,
+  "news_articles": 51282,
+  "non_clicks": 5607100,
+  "referenced_news_missing_metadata": 0,
+  "split": "train",
+  "top_categories": {
+    "autos": 1639,
+    "finance": 3107,
+    "foodanddrink": 2551,
+    "health": 1885,
+    "lifestyle": 2479,
+    "news": 15774,
+    "sports": 14510,
+    "travel": 2350,
+    "video": 2068,
+    "weather": 2048
+  },
+  "unique_users": 50000
+}
