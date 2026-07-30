@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "newslens"
+version = "0.1.0"
+description = "A leakage-aware news search and recommendation system."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = "MIT"
+authors = [{ name = "Triasha Sarkar" }]
+dependencies = [
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "scikit-learn>=1.5",
+  "scipy>=1.13",
+]
+
+[project.optional-dependencies]
+dev = [
+  "ipykernel>=6.29",
+  "pytest>=8.2",
+  "ruff>=0.6",
+]
+
+[project.scripts]
+newslens = "newslens.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
