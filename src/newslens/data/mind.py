@@ -74,9 +74,7 @@ def _validate_required_fields(
         empty_rows = frame[column].str.strip().eq("")
 
         if empty_rows.any():
-            raise MindDataValidationError(
-                f"Column '{column}' contains empty values."
-            )
+            raise MindDataValidationError(f"Column '{column}' contains empty values.")
 
 
 def _validate_unique_column(
@@ -90,9 +88,7 @@ def _validate_unique_column(
     ].unique()
 
     if len(duplicates) > 0:
-        raise MindDataValidationError(
-            f"Duplicate {description} found: {', '.join(duplicates)}"
-        )
+        raise MindDataValidationError(f"Duplicate {description} found: {', '.join(duplicates)}")
 
 
 def load_news(path: str | Path) -> pd.DataFrame:
@@ -115,14 +111,10 @@ def _parse_impression_token(token: str) -> tuple[str, int]:
         ) from error
 
     if not news_id:
-        raise MindDataValidationError(
-            f"Invalid impression token '{token}': news ID is empty."
-        )
+        raise MindDataValidationError(f"Invalid impression token '{token}': news ID is empty.")
 
     if label_text not in {"0", "1"}:
-        raise MindDataValidationError(
-            f"Invalid impression token '{token}': label must be 0 or 1."
-        )
+        raise MindDataValidationError(f"Invalid impression token '{token}': label must be 0 or 1.")
 
     return news_id, int(label_text)
 
