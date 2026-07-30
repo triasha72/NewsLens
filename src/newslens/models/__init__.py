@@ -7,6 +7,12 @@ from .content import (
     ContentModelNotFittedError,
     ContentRecommendation,
 )
+from .fallback import (
+    ContentPopularityFallbackRecommender,
+    FallbackModelError,
+    FallbackRecommendation,
+    RecommendationSource,
+)
 from .popularity import (
     PopularityModelError,
     PopularityModelNotFittedError,
@@ -28,10 +34,14 @@ __all__ = [
     "ContentBasedRecommender",
     "ContentModelError",
     "ContentModelNotFittedError",
+    "ContentPopularityFallbackRecommender",
     "ContentRecommendation",
+    "FallbackModelError",
+    "FallbackRecommendation",
     "PopularityModelError",
     "PopularityModelNotFittedError",
     "PopularityRecommender",
     "PopularityStatistics",
+    "RecommendationSource",
     "TfidfArticleSearch",
 ]
