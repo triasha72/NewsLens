@@ -1,0 +1,54 @@
+{
+  "dataset": {
+    "name": "MIND-small",
+    "development_policy": "reserved final holdout",
+    "modeling_source_split": "train"
+  },
+  "chronological_split": {
+    "validation_fraction": 0.2,
+    "timestamp_column": "timestamp",
+    "boundary_policy": "identical timestamps remain in the same partition",
+    "require_strict_separation": true
+  },
+  "popularity": {
+    "score": "training click count",
+    "tie_break": "news_id",
+    "uses_validation_interactions": false
+  },
+  "tfidf": {
+    "text_fields": [
+      "title",
+      "abstract",
+      "category",
+      "subcategory"
+    ],
+    "stop_words": "english",
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_document_frequency": 1,
+    "max_features": 50000,
+    "sublinear_term_frequency": true,
+    "normalization": "l2"
+  },
+  "content_recommender": {
+    "profile_method": "mean history article TF-IDF vector",
+    "similarity": "cosine",
+    "vocabulary_scope": "articles referenced by chronological training records",
+    "candidate_metadata_scope": "available MIND-small training catalog",
+    "exclude_history": true
+  },
+  "cold_start": {
+    "fallback": "training-only popularity",
+    "triggers": [
+      "empty history",
+      "unknown history",
+      "zero content similarity"
+    ]
+  },
+  "randomness": {
+    "uses_random_sampling": false,
+    "random_seed": null
+  }
+}
