@@ -17,6 +17,14 @@ NEWS_COLUMNS: tuple[str, ...] = (
     "abstract_entities",
 )
 
+BEHAVIOR_COLUMNS: tuple[str, ...] = (
+    "impression_id",
+    "user_id",
+    "timestamp",
+    "history",
+    "impressions",
+)
+
 
 class MindDataValidationError(ValueError):
     """Raised when a MIND dataset file does not follow the expected schema."""
@@ -40,41 +48,124 @@ def _validate_tsv_width(path: Path, expected_columns: int) -> None:
         raise MindDataValidationError(f"{path} is empty.")
 
 
-def load_news(path: str | Path) -> pd.DataFrame:
-    """Load and validate a MIND news.tsv file."""
+def _read_tsv(path: str | Path, columns: tuple[str, ...]) -> pd.DataFrame:
+    data_path = Path(path)
 
-    news_path = Path(path)
+    if not data_path.is_file():
+        raise FileNotFoundError(f"MIND dataset file was not found: {data_path}")
 
-    if not news_path.is_file():
-        raise FileNotFoundError(f"MIND news file was not found: {news_path}")
+    _validate_tsv_width(data_path, expected_columns=len(columns))
 
-    _validate_tsv_width(news_path, expected_columns=len(NEWS_COLUMNS))
-
-    news = pd.read_csv(
-        news_path,
+    return pd.read_csv(
+        data_path,
         sep="\t",
         header=None,
-        names=NEWS_COLUMNS,
+        names=columns,
         dtype="string",
         keep_default_na=False,
     )
 
-    for required_column in ("news_id", "category", "title"):
-        empty_rows = news[required_column].str.strip().eq("")
+
+def _validate_required_fields(
+    frame: pd.DataFrame,
+    required_columns: tuple[str, ...],
+) -> None:
+    for column in required_columns:
+        empty_rows = frame[column].str.strip().eq("")
 
         if empty_rows.any():
             raise MindDataValidationError(
-                f"Column '{required_column}' contains empty values."
+                f"Column '{column}' contains empty values."
             )
 
-    duplicate_ids = news.loc[
-        news["news_id"].duplicated(keep=False),
-        "news_id",
+
+def _validate_unique_column(
+    frame: pd.DataFrame,
+    column: str,
+    description: str,
+) -> None:
+    duplicates = frame.loc[
+        frame[column].duplicated(keep=False),
+        column,
     ].unique()
 
-    if len(duplicate_ids) > 0:
+    if len(duplicates) > 0:
         raise MindDataValidationError(
-            f"Duplicate news IDs found: {', '.join(duplicate_ids)}"
+            f"Duplicate {description} found: {', '.join(duplicates)}"
         )
 
+
+def load_news(path: str | Path) -> pd.DataFrame:
+    """Load and validate a MIND news.tsv file."""
+
+    news = _read_tsv(path, NEWS_COLUMNS)
+
+    _validate_required_fields(news, ("news_id", "category", "title"))
+    _validate_unique_column(news, "news_id", "news IDs")
+
     return news
+
+
+def _parse_impression_token(token: str) -> tuple[str, int]:
+    try:
+        news_id, label_text = token.rsplit("-", maxsplit=1)
+    except ValueError as error:
+        raise MindDataValidationError(
+            f"Invalid impression token '{token}'. Expected NEWS_ID-LABEL."
+        ) from error
+
+    if not news_id:
+        raise MindDataValidationError(
+            f"Invalid impression token '{token}': news ID is empty."
+        )
+
+    if label_text not in {"0", "1"}:
+        raise MindDataValidationError(
+            f"Invalid impression token '{token}': label must be 0 or 1."
+        )
+
+    return news_id, int(label_text)
+
+
+def parse_impressions(value: str) -> tuple[tuple[str, int], ...]:
+    """Convert a MIND impression string into news ID and click-label pairs."""
+
+    tokens = value.split()
+
+    if not tokens:
+        raise MindDataValidationError("An impression must contain at least one article.")
+
+    return tuple(_parse_impression_token(token) for token in tokens)
+
+
+def load_behaviors(path: str | Path) -> pd.DataFrame:
+    """Load and validate a labeled MIND behaviors.tsv file."""
+
+    behaviors = _read_tsv(path, BEHAVIOR_COLUMNS)
+
+    _validate_required_fields(
+        behaviors,
+        ("impression_id", "user_id", "timestamp", "impressions"),
+    )
+    _validate_unique_column(behaviors, "impression_id", "impression IDs")
+
+    try:
+        behaviors["timestamp"] = pd.to_datetime(
+            behaviors["timestamp"],
+            format="%m/%d/%Y %I:%M:%S %p",
+            errors="raise",
+        )
+    except (TypeError, ValueError) as error:
+        raise MindDataValidationError(
+            "Invalid MIND timestamp. Expected MM/DD/YYYY HH:MM:SS AM/PM."
+        ) from error
+
+    for row_number, value in enumerate(behaviors["impressions"], start=1):
+        try:
+            parse_impressions(value)
+        except MindDataValidationError as error:
+            raise MindDataValidationError(
+                f"Invalid impressions at row {row_number}: {error}"
+            ) from error
+
+    return behaviors
