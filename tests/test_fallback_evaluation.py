@@ -200,6 +200,43 @@ def test_report_is_json_serializable() -> None:
     assert report.to_dict()["category_analysis"]["k"] == 2
     assert report.to_dict()["exposure_analysis"]["k"] == 2
     assert report.to_dict()["uncertainty"]["k"] == 2
+    assert report.to_dict()["failure_analysis"]["k"] == 2
+
+
+def test_report_includes_source_specific_high_score_failure_analysis() -> None:
+    report = evaluate_fallback_baseline(
+        make_news(),
+        make_behaviors(),
+        validation_fraction=0.40,
+        k=1,
+        failure_score_quantile=0.50,
+        maximum_failures_per_source=5,
+    )
+    analysis = report.failure_analysis
+    thresholds = {threshold.source: threshold for threshold in analysis.source_thresholds}
+
+    assert analysis.total_impressions == report.validation_records
+    assert analysis.evaluated_impressions == report.metrics.evaluated_impressions
+    assert analysis.score_quantile == pytest.approx(0.50)
+    assert analysis.maximum_failures_per_source == 5
+    assert analysis.top_k_misses == 1
+    assert analysis.high_score_misses == 1
+
+    assert thresholds["content"].eligible_impressions == 1
+    assert thresholds["content"].top_k_misses == 0
+    assert thresholds["popularity"].eligible_impressions == 1
+    assert thresholds["popularity"].top_k_misses == 1
+    assert thresholds["popularity"].high_score_misses == 1
+
+    assert len(analysis.failures) == 1
+    failure = analysis.failures[0]
+    assert failure.impression_id == "I5"
+    assert failure.source == "popularity"
+    assert failure.history_length == 0
+    assert failure.candidate_count == 2
+    assert failure.relevant_items == ("N6",)
+    assert failure.ranked_items == ("N4",)
+    assert failure.ranked_scores == pytest.approx((1.0,))
 
 
 def test_report_includes_deterministic_bootstrap_uncertainty() -> None:
@@ -530,4 +567,40 @@ def test_evaluation_rejects_invalid_bootstrap_random_seed(
             make_news(),
             make_behaviors(),
             bootstrap_random_seed=invalid_seed,  # type: ignore[arg-type]
+        )
+
+
+@pytest.mark.parametrize(
+    "invalid_quantile",
+    [0.0, 1.0, -0.1, 1.1, True, "0.9"],
+)
+def test_evaluation_rejects_invalid_failure_score_quantile(
+    invalid_quantile: object,
+) -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="failure_score_quantile must be between 0 and 1",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            failure_score_quantile=invalid_quantile,  # type: ignore[arg-type]
+        )
+
+
+@pytest.mark.parametrize(
+    "invalid_maximum",
+    [0, -1, 1.5, True],
+)
+def test_evaluation_rejects_invalid_maximum_failures_per_source(
+    invalid_maximum: object,
+) -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="maximum_failures_per_source must be a positive integer",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            maximum_failures_per_source=invalid_maximum,  # type: ignore[arg-type]
         )

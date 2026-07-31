@@ -39,6 +39,12 @@ from .exposure import (
     ExposureEvaluationReport,
     evaluate_training_exposure_bands,
 )
+from .failures import (
+    FailureAnalysisError,
+    HighScoreFailureReport,
+    ScoredRankingExample,
+    analyze_high_score_failures,
+)
 from .segments import (
     HistorySegmentEvaluationError,
     HistorySegmentEvaluationReport,
@@ -85,6 +91,7 @@ class FallbackEvaluationReport:
     history_segments: HistorySegmentEvaluationReport
     category_analysis: CategoryEvaluationReport
     exposure_analysis: ExposureEvaluationReport
+    failure_analysis: HighScoreFailureReport
 
     @property
     def content_routed_fraction(self) -> float:
@@ -144,12 +151,14 @@ class FallbackEvaluationReport:
             "history_segments": self.history_segments.to_dict(),
             "category_analysis": self.category_analysis.to_dict(),
             "exposure_analysis": self.exposure_analysis.to_dict(),
+            "failure_analysis": self.failure_analysis.to_dict(),
         }
 
 
 @dataclass(frozen=True)
 class _FallbackExampleBuildResult:
     examples: list[RankingExample]
+    scored_examples: list[ScoredRankingExample]
     history_segment_examples: list[HistorySegmentExample]
     candidate_occurrences: int
     content_routed_impressions: int
@@ -216,6 +225,7 @@ def _build_ranking_examples(
     k: int,
 ) -> _FallbackExampleBuildResult:
     examples: list[RankingExample] = []
+    scored_examples: list[ScoredRankingExample] = []
     history_segment_examples: list[HistorySegmentExample] = []
     candidate_occurrences = 0
     content_routed_impressions = 0
@@ -274,8 +284,10 @@ def _build_ranking_examples(
 
         if sources == {RecommendationSource.CONTENT}:
             content_routed_impressions += 1
+            recommendation_source = RecommendationSource.CONTENT.value
         elif sources == {RecommendationSource.POPULARITY} or not recommendations:
             popularity_routed_impressions += 1
+            recommendation_source = RecommendationSource.POPULARITY.value
             fallback_reason = _classify_fallback_reason(
                 history_ids,
                 candidate_ids,
@@ -303,6 +315,17 @@ def _build_ranking_examples(
             relevant_items=relevant_items,
         )
         examples.append(ranking_example)
+        scored_examples.append(
+            ScoredRankingExample(
+                impression_id=impression_id,
+                ranked_items=ranking_example.ranked_items,
+                ranked_scores=tuple(recommendation.score for recommendation in recommendations),
+                relevant_items=relevant_items,
+                source=recommendation_source,
+                history_length=len(history_ids),
+                candidate_count=len(candidate_ids),
+            )
+        )
         history_segment_examples.append(
             HistorySegmentExample(
                 ranking=ranking_example,
@@ -312,6 +335,7 @@ def _build_ranking_examples(
 
     return _FallbackExampleBuildResult(
         examples=examples,
+        scored_examples=scored_examples,
         history_segment_examples=history_segment_examples,
         candidate_occurrences=candidate_occurrences,
         content_routed_impressions=content_routed_impressions,
@@ -335,6 +359,8 @@ def evaluate_fallback_baseline(
     bootstrap_samples: int = 1_000,
     bootstrap_confidence_level: float = 0.95,
     bootstrap_random_seed: int = 42,
+    failure_score_quantile: float = 0.90,
+    maximum_failures_per_source: int = 25,
 ) -> FallbackEvaluationReport:
     """Evaluate content ranking with training-only popularity fallback."""
 
@@ -381,6 +407,20 @@ def evaluate_fallback_baseline(
         or bootstrap_random_seed < 0
     ):
         raise FallbackEvaluationError("bootstrap_random_seed must be a non-negative integer.")
+
+    if (
+        isinstance(failure_score_quantile, bool)
+        or not isinstance(failure_score_quantile, (int, float))
+        or not 0.0 < float(failure_score_quantile) < 1.0
+    ):
+        raise FallbackEvaluationError("failure_score_quantile must be between 0 and 1.")
+
+    if (
+        isinstance(maximum_failures_per_source, bool)
+        or not isinstance(maximum_failures_per_source, int)
+        or maximum_failures_per_source <= 0
+    ):
+        raise FallbackEvaluationError("maximum_failures_per_source must be a positive integer.")
 
     required_columns = {
         "impression_id",
@@ -465,10 +505,17 @@ def evaluate_fallback_baseline(
             confidence_level=bootstrap_confidence_level,
             random_seed=bootstrap_random_seed,
         )
+        failure_analysis = analyze_high_score_failures(
+            build_result.scored_examples,
+            k=k,
+            score_quantile=failure_score_quantile,
+            maximum_failures_per_source=maximum_failures_per_source,
+        )
     except (
         BootstrapUncertaintyError,
         CategoryEvaluationError,
         ExposureEvaluationError,
+        FailureAnalysisError,
         HistorySegmentEvaluationError,
         RankingEvaluationError,
     ) as error:
@@ -496,4 +543,5 @@ def evaluate_fallback_baseline(
         history_segments=history_segments,
         category_analysis=category_analysis,
         exposure_analysis=exposure_analysis,
+        failure_analysis=failure_analysis,
     )
