@@ -11,10 +11,10 @@ assumptions, limitations, and non-claims.
 > Current status: Phase 4 ranking evaluation is in progress. NewsLens includes
 > validated MIND ingestion, reproducible dataset auditing, leakage-safe
 > chronological splitting, deterministic search and recommendation baselines,
-> formally tested ranking metrics, a model-independent evaluator, and a
-> reproducible MIND-small popularity evaluation. The project currently has
-> 120 automated tests. Formal evaluation of the content-based and cold-start
-> models remains in progress.
+> formally tested ranking metrics, a model-independent evaluator, and
+> reproducible MIND-small popularity and TF-IDF history-content evaluations.
+> The project currently has 141 automated tests. Formal evaluation of the
+> cold-start fallback and segment-level error analysis remain in progress.
 
 ## Why this project
 
@@ -76,13 +76,15 @@ NewsLens is designed to demonstrate:
 - explicit multiple-click and no-click semantics;
 - duplicate-ranking and invalid-input validation;
 - model-independent candidate-ranking evaluation;
-- reproducible popularity-evaluation command;
-- machine-readable popularity metrics;
+- reproducible popularity and content-evaluation commands;
+- machine-readable popularity and content metrics;
+- same-split baseline comparison;
+- explicit content abstention and cold-start accounting;
 - chronological MIND-small validation results; and
-- 120 automated tests.
+- 141 automated tests.
 
-Formal evaluation of the content-based recommender and cold-start fallback is
-the next Phase 4 milestone.
+Formal evaluation of the popularity cold-start fallback and segment-level error
+analysis are the next Phase 4 milestones.
 
 ## Quick start
 
@@ -119,7 +121,7 @@ Expected checks:
 
 ```text
 All checks passed!
-120 passed
+141 passed
 ```
 
 ## Repository structure
@@ -142,6 +144,7 @@ NewsLens/
 ├── notebooks/
 │   └── README.md
 ├── reports/
+│   ├── content_metrics.json
 │   ├── mindsmall_dev_audit.json
 │   ├── mindsmall_train_audit.json
 │   └── popularity_metrics.json
@@ -154,6 +157,7 @@ NewsLens/
 │       │   ├── audit.py
 │       │   └── mind.py
 │       ├── evaluation/
+│       │   ├── content.py
 │       │   ├── evaluator.py
 │       │   ├── metrics.py
 │       │   ├── popularity.py
@@ -430,6 +434,62 @@ The machine-readable report is stored at:
 reports/popularity_metrics.json
 ```
 
+## Reproducing the content evaluation
+
+The TF-IDF content recommender builds each user profile from the mean article
+vectors in that user's history and ranks only the candidates presented in that
+validation impression.
+
+The vocabulary and inverse-document frequencies are fitted using articles
+referenced by the chronological training partition. Validation interaction
+labels are not used during fitting.
+
+Run:
+
+```bash
+python -m newslens evaluate-content \
+  --data-dir data \
+  --k 10 \
+  --validation-fraction 0.20 \
+  --max-features 50000 \
+  --output reports/content_metrics.json
+```
+
+## Popularity versus content evaluation
+
+Both models use the same 125,572 training records, 31,393 later validation
+records, candidate sets, catalog, metric implementation, and ranking cutoff.
+
+| Metric @10 | Popularity | TF-IDF content | Relative change |
+|---|---:|---:|---:|
+| NDCG | 0.2853 | 0.3594 | +26.0% |
+| MRR | 0.2308 | 0.3133 | +35.7% |
+| Recall | 0.5047 | 0.5819 | +15.3% |
+| Hit Rate | 0.5705 | 0.6610 | +15.9% |
+| Catalog Coverage | 0.0402 | 0.0719 | +78.9% |
+| Unique recommended articles | 2,061 | 3,687 | +78.9% |
+| Empty rankings | 0 | 927 | — |
+
+The content model improves every recorded ranking-quality metric and expands
+catalog coverage from 4.02% to 7.19%. It produces a meaningful content ranking
+for 30,466 validation impressions, or 97.05%.
+
+The 927 content abstentions are retained in the evaluation as empty rankings,
+so they contribute zero rather than being excluded. They comprise 801 empty
+histories and 126 impressions whose candidates have zero TF-IDF similarity to
+the user profile. Consequently, the reported content metrics include its
+cold-start and zero-signal failures.
+
+These are internal chronological-validation results, not final holdout or
+online-product results. The official MIND-small development split remains
+untouched.
+
+The machine-readable content report is stored at:
+
+```text
+reports/content_metrics.json
+```
+
 See [docs/EVALUATION.md](docs/EVALUATION.md) for the complete protocol, metric
 semantics, interpretation, limitations, and next milestones.
 
@@ -469,7 +529,10 @@ frequencies can be fitted only on articles referenced by the chronological
 training partition. Available candidate metadata can then be transformed
 without using validation interaction labels.
 
-Formal content-based evaluation remains a Phase 4 milestone.
+Formal chronological evaluation is complete. The content model improves all
+recorded ranking metrics over popularity while abstaining on 2.95% of
+validation impressions. The separate popularity fallback has not yet been
+included in this content-only evaluation.
 
 ## Cold-start fallback
 
@@ -526,7 +589,7 @@ Apply automatic formatting:
 python -m ruff format .
 ```
 
-The 120-test suite covers:
+The 141-test suite covers:
 
 - malformed TSV schemas;
 - duplicate identifiers;
@@ -544,6 +607,9 @@ The 120-test suite covers:
 - metric boundary and invalid-input conditions;
 - model-independent evaluation;
 - reproducible popularity evaluation;
+- leakage-aware content evaluation;
+- content abstention and cold-start accounting;
+- reproducible content-evaluation CLI behavior;
 - CLI behavior;
 - model-not-fitted errors; and
 - deterministic outputs.
@@ -569,8 +635,8 @@ A feature is considered complete only when:
 1. **Foundation** — completed.
 2. **MIND ingestion and audit** — completed.
 3. **Evaluation-safe baselines** — completed.
-4. **Ranking evaluation** — in progress; metrics, evaluator, and popularity
-   evaluation completed.
+4. **Ranking evaluation** — in progress; metrics, evaluator, popularity
+   evaluation, and TF-IDF content evaluation completed.
 5. **Hybrid ranking** — planned.
 6. **Inference service** — planned.
 7. **MLOps and deployment** — planned.
@@ -581,9 +647,11 @@ deliverables.
 
 ## Current limitations and non-claims
 
-- Only the popularity baseline has completed formal ranking evaluation.
-- Content-based and cold-start fallback evaluations remain in progress.
-- A complete baseline-comparison table has not yet been published.
+- Popularity and TF-IDF content baselines have completed formal ranking
+  evaluation; the rule-based cold-start fallback has not.
+- The published comparison covers two baselines and does not yet include the
+  fallback or a learned hybrid model.
+- The content-only model abstains on 2.95% of validation impressions.
 - The official MIND-small development split has not yet been evaluated.
 - Popularity scores reflect historical exposure as well as user interest.
 - Popularity provides limited catalog coverage.

@@ -13,7 +13,8 @@ documentation, reproducible outputs, and continuous-integration checks pass.
   - ranking metrics — completed
   - model-independent evaluator — completed
   - popularity evaluation — completed
-  - content and fallback evaluation — next
+  - TF-IDF content evaluation — completed
+  - cold-start fallback evaluation — next
 - Phase 5: Hybrid ranking — planned
 - Phase 6: Serving — planned
 - Phase 7: MLOps and deployment — planned
@@ -224,8 +225,9 @@ tests/test_fallback.py
 ## Phase 4: Ranking evaluation
 
 Phase 4 is currently in progress. Formal metric implementation, the common
-evaluator, and popularity evaluation are complete. Evaluation of the
-content-based and fallback models remains pending.
+evaluator, popularity evaluation, and TF-IDF history-content evaluation are
+complete. Evaluation of the rule-based cold-start fallback and segment-level
+error analysis remain pending.
 
 ### Metric implementation
 
@@ -307,17 +309,73 @@ reports/popularity_metrics.json
 docs/EVALUATION.md
 ```
 
+### Reproducible TF-IDF content evaluation
+
+- [x] Create a content-specific evaluation pipeline
+- [x] Fit the TF-IDF vocabulary from training-referenced articles only
+- [x] Transform candidate metadata without using validation interaction labels
+- [x] Use the same chronological split and candidate sets as popularity
+- [x] Evaluate all 31,393 validation impressions
+- [x] Count empty rankings as zero-scoring outcomes
+- [x] Record content-ranked, cold-start, and zero-signal impressions
+- [x] Record vocabulary and indexed-catalog sizes
+- [x] Add a reproducible CLI command
+- [x] Write machine-readable evaluation results
+- [x] Confirm identical results across repeated runs
+- [x] Add unit, integration, and CLI tests
+- [x] Pass all 141 automated tests locally
+- [x] Pass Ruff locally
+- [ ] Pass GitHub Actions for the current Phase 4 pull request
+
+Popularity versus TF-IDF content results at `K = 10`:
+
+| Metric | Popularity | TF-IDF content | Relative change |
+|---|---:|---:|---:|
+| NDCG@10 | 0.2853 | 0.3594 | +26.0% |
+| MRR@10 | 0.2308 | 0.3133 | +35.7% |
+| Recall@10 | 0.5047 | 0.5819 | +15.3% |
+| Hit Rate@10 | 0.5705 | 0.6610 | +15.9% |
+| Catalog Coverage@10 | 0.0402 | 0.0719 | +78.9% |
+| Unique recommended articles | 2,061 | 3,687 | +78.9% |
+| Empty rankings | 0 | 927 | — |
+
+Content-evaluation accounting:
+
+| Property | Result |
+|---|---:|
+| Content-ranked impressions | 30,466 (97.05%) |
+| Empty-history impressions | 801 (2.55%) |
+| Zero-signal impressions | 126 (0.40%) |
+| Total abstentions | 927 (2.95%) |
+| Vocabulary articles | 47,367 |
+| Indexed articles | 51,282 |
+| Maximum vocabulary size | 50,000 |
+| Temporal leakage detected | No |
+
+All content abstentions remain in the metric denominator as empty rankings.
+
+Phase 4 content evidence:
+
+```text
+src/newslens/evaluation/content.py
+src/newslens/cli.py
+tests/test_content_evaluation.py
+tests/test_cli.py
+reports/content_metrics.json
+docs/EVALUATION.md
+```
+
 ### Remaining model evaluation
 
-- [ ] Evaluate the content-based history recommender
+- [x] Evaluate the content-based history recommender
 - [ ] Evaluate the cold-start fallback
-- [ ] Record content-model coverage
+- [x] Record content-model coverage
 - [ ] Record fallback frequency
 - [ ] Measure unseen-article ranking performance
 - [ ] Evaluate warm-start and cold-start impressions separately
-- [ ] Generate a baseline-comparison table
-- [ ] Compare all models using identical validation impressions
-- [ ] Reserve the official MIND-small development data for final evaluation
+- [x] Generate a two-baseline comparison table
+- [x] Compare popularity and content using identical validation impressions
+- [x] Reserve the official MIND-small development data for final evaluation
 - [ ] Run final evaluation on the reserved development split only after model
       selection is complete
 
@@ -345,9 +403,9 @@ docs/ERROR_ANALYSIS.md
 Suggested future commits:
 
 ```text
-feat: evaluate content and fallback baselines
-analysis: compare recommendation baselines
-docs: publish baseline comparison and error analysis
+feat: evaluate cold-start fallback baseline
+analysis: compare warm-start and cold-start segments
+docs: publish baseline error analysis
 ```
 
 ## Phase 5: Hybrid ranking
@@ -443,7 +501,9 @@ NewsLens will be considered portfolio-ready when it includes:
 - [x] a model-independent offline evaluator;
 - [x] a reproducible formal popularity evaluation;
 - [x] a machine-readable popularity evaluation report;
-- [ ] a reproducible held-out baseline comparison;
+- [x] a reproducible formal TF-IDF content evaluation;
+- [x] a machine-readable content evaluation report;
+- [x] a reproducible held-out two-baseline comparison;
 - [ ] error and user-segment analysis;
 - [ ] uncertainty estimates or confidence intervals;
 - [ ] a tested inference API;
