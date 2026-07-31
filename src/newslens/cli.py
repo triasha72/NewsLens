@@ -134,6 +134,9 @@ def _run_fallback_evaluation(
     k: int,
     validation_fraction: float,
     max_features: int,
+    bootstrap_samples: int,
+    bootstrap_confidence_level: float,
+    bootstrap_random_seed: int,
 ) -> None:
     split_path = data_dir / "MINDsmall_train"
 
@@ -146,6 +149,9 @@ def _run_fallback_evaluation(
         validation_fraction=validation_fraction,
         k=k,
         max_features=max_features,
+        bootstrap_samples=bootstrap_samples,
+        bootstrap_confidence_level=bootstrap_confidence_level,
+        bootstrap_random_seed=bootstrap_random_seed,
     )
 
     serialized = json.dumps(
@@ -287,6 +293,24 @@ def build_parser() -> argparse.ArgumentParser:
         default=50_000,
         help="Maximum TF-IDF vocabulary size.",
     )
+    fallback_parser.add_argument(
+        "--bootstrap-samples",
+        type=int,
+        default=1_000,
+        help="Number of impression-level bootstrap replicates.",
+    )
+    fallback_parser.add_argument(
+        "--bootstrap-confidence-level",
+        type=float,
+        default=0.95,
+        help="Confidence level for percentile-bootstrap intervals.",
+    )
+    fallback_parser.add_argument(
+        "--bootstrap-random-seed",
+        type=int,
+        default=42,
+        help="Random seed used for deterministic bootstrap resampling.",
+    )
 
     return parser
 
@@ -332,6 +356,9 @@ def main(
             args.k,
             args.validation_fraction,
             args.max_features,
+            args.bootstrap_samples,
+            args.bootstrap_confidence_level,
+            args.bootstrap_random_seed,
         )
         return
 
