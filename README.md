@@ -12,9 +12,9 @@ assumptions, limitations, and non-claims.
 > validated MIND ingestion, reproducible dataset auditing, leakage-safe
 > chronological splitting, deterministic search and recommendation baselines,
 > formally tested ranking metrics, a model-independent evaluator, and
-> reproducible MIND-small popularity and TF-IDF history-content evaluations.
-> The project currently has 141 automated tests. Formal evaluation of the
-> cold-start fallback and segment-level error analysis remain in progress.
+> reproducible MIND-small popularity, TF-IDF history-content, and rule-based
+> cold-start fallback evaluations. The project currently has 159 automated
+> tests. Segment-level error analysis remains in progress.
 
 ## Why this project
 
@@ -76,15 +76,16 @@ NewsLens is designed to demonstrate:
 - explicit multiple-click and no-click semantics;
 - duplicate-ranking and invalid-input validation;
 - model-independent candidate-ranking evaluation;
-- reproducible popularity and content-evaluation commands;
-- machine-readable popularity and content metrics;
-- same-split baseline comparison;
+- reproducible popularity, content, and fallback evaluation commands;
+- machine-readable popularity, content, and fallback metrics;
+- same-split three-model comparison;
 - explicit content abstention and cold-start accounting;
+- explicit fallback routing and recovery accounting;
 - chronological MIND-small validation results; and
-- 141 automated tests.
+- 159 automated tests.
 
-Formal evaluation of the popularity cold-start fallback and segment-level error
-analysis are the next Phase 4 milestones.
+Segment-level error analysis, uncertainty estimation, and final holdout
+evaluation are the next Phase 4 milestones.
 
 ## Quick start
 
@@ -121,7 +122,7 @@ Expected checks:
 
 ```text
 All checks passed!
-141 passed
+159 passed
 ```
 
 ## Repository structure
@@ -145,6 +146,7 @@ NewsLens/
 │   └── README.md
 ├── reports/
 │   ├── content_metrics.json
+│   ├── fallback_metrics.json
 │   ├── mindsmall_dev_audit.json
 │   ├── mindsmall_train_audit.json
 │   └── popularity_metrics.json
@@ -159,6 +161,7 @@ NewsLens/
 │       ├── evaluation/
 │       │   ├── content.py
 │       │   ├── evaluator.py
+│       │   ├── fallback.py
 │       │   ├── metrics.py
 │       │   ├── popularity.py
 │       │   └── split.py
@@ -455,39 +458,61 @@ python -m newslens evaluate-content \
   --output reports/content_metrics.json
 ```
 
-## Popularity versus content evaluation
+## Reproducing the fallback evaluation
 
-Both models use the same 125,572 training records, 31,393 later validation
-records, candidate sets, catalog, metric implementation, and ranking cutoff.
+The fallback system preserves TF-IDF content rankings whenever positive
+similarity is available. It routes only content abstentions to the popularity
+model fitted on the chronological training partition.
 
-| Metric @10 | Popularity | TF-IDF content | Relative change |
+Run:
+
+```bash
+python -m newslens evaluate-fallback \
+  --data-dir data \
+  --k 10 \
+  --validation-fraction 0.20 \
+  --max-features 50000 \
+  --output reports/fallback_metrics.json
+```
+
+## Three-model evaluation
+
+All three systems use the same 125,572 training records, 31,393 later
+validation records, candidate sets, catalog, metric implementation, and
+ranking cutoff.
+
+| Metric @10 | Popularity | TF-IDF content | Content + fallback |
 |---|---:|---:|---:|
-| NDCG | 0.2853 | 0.3594 | +26.0% |
-| MRR | 0.2308 | 0.3133 | +35.7% |
-| Recall | 0.5047 | 0.5819 | +15.3% |
-| Hit Rate | 0.5705 | 0.6610 | +15.9% |
-| Catalog Coverage | 0.0402 | 0.0719 | +78.9% |
-| Unique recommended articles | 2,061 | 3,687 | +78.9% |
-| Empty rankings | 0 | 927 | — |
+| NDCG | 0.2853 | 0.3594 | **0.3664** |
+| MRR | 0.2308 | 0.3133 | **0.3179** |
+| Recall | 0.5047 | 0.5819 | **0.5955** |
+| Hit Rate | 0.5705 | 0.6610 | **0.6762** |
+| Catalog Coverage | 0.0402 | **0.0719** | **0.0719** |
+| Unique recommended articles | 2,061 | **3,687** | **3,687** |
+| Empty rankings | 0 | 927 | **0** |
 
-The content model improves every recorded ranking-quality metric and expands
-catalog coverage from 4.02% to 7.19%. It produces a meaningful content ranking
-for 30,466 validation impressions, or 97.05%.
+Relative to content alone, fallback improves NDCG by 1.92%, MRR by 1.47%,
+Recall by 2.33%, and Hit Rate by 2.30%. Catalog coverage is unchanged.
 
-The 927 content abstentions are retained in the evaluation as empty rankings,
-so they contribute zero rather than being excluded. They comprise 801 empty
-histories and 126 impressions whose candidates have zero TF-IDF similarity to
-the user profile. Consequently, the reported content metrics include its
-cold-start and zero-signal failures.
+The content model produces a meaningful ranking for 30,466 validation
+impressions, or 97.05%. The remaining 927 impressions, or 2.95%, are routed to
+training-only popularity. Every routed impression receives a ranking, reducing
+empty rankings from 927 to zero.
+
+The fallback routes comprise 801 empty-history impressions and 126 impressions
+whose candidates have zero TF-IDF similarity to the user profile. There are no
+unknown-history or zero-profile cases in this validation partition.
 
 These are internal chronological-validation results, not final holdout or
 online-product results. The official MIND-small development split remains
 untouched.
 
-The machine-readable content report is stored at:
+The machine-readable reports are stored at:
 
 ```text
+reports/popularity_metrics.json
 reports/content_metrics.json
+reports/fallback_metrics.json
 ```
 
 See [docs/EVALUATION.md](docs/EVALUATION.md) for the complete protocol, metric
@@ -531,8 +556,8 @@ without using validation interaction labels.
 
 Formal chronological evaluation is complete. The content model improves all
 recorded ranking metrics over popularity while abstaining on 2.95% of
-validation impressions. The separate popularity fallback has not yet been
-included in this content-only evaluation.
+validation impressions. The content-only report intentionally retains those
+abstentions as zero-scoring empty rankings.
 
 ## Cold-start fallback
 
@@ -545,8 +570,11 @@ The system uses training-only popularity when:
 This is a rule-based fallback rather than a weighted hybrid model. Content and
 popularity scores are not blended.
 
-Formal evaluation of fallback frequency and ranking quality remains a Phase 4
-milestone.
+Formal chronological evaluation is complete. Content handles 30,466 validation
+impressions, while popularity handles the remaining 927 abstentions. The
+fallback recovers all 927 and eliminates empty rankings. Relative to content
+alone, it improves NDCG@10 by 1.92%, MRR@10 by 1.47%, Recall@10 by 2.33%, and
+Hit Rate@10 by 2.30%, while catalog coverage remains 7.19%.
 
 ## Reproducible baseline configuration
 
@@ -589,7 +617,7 @@ Apply automatic formatting:
 python -m ruff format .
 ```
 
-The 141-test suite covers:
+The 159-test suite covers:
 
 - malformed TSV schemas;
 - duplicate identifiers;
@@ -610,6 +638,9 @@ The 141-test suite covers:
 - leakage-aware content evaluation;
 - content abstention and cold-start accounting;
 - reproducible content-evaluation CLI behavior;
+- leakage-aware fallback evaluation;
+- content-versus-popularity routing and fallback-reason accounting;
+- reproducible fallback-evaluation CLI behavior;
 - CLI behavior;
 - model-not-fitted errors; and
 - deterministic outputs.
@@ -636,7 +667,8 @@ A feature is considered complete only when:
 2. **MIND ingestion and audit** — completed.
 3. **Evaluation-safe baselines** — completed.
 4. **Ranking evaluation** — in progress; metrics, evaluator, popularity
-   evaluation, and TF-IDF content evaluation completed.
+   evaluation, TF-IDF content evaluation, and cold-start fallback evaluation
+   completed. Segment-level analysis remains.
 5. **Hybrid ranking** — planned.
 6. **Inference service** — planned.
 7. **MLOps and deployment** — planned.
@@ -647,11 +679,13 @@ deliverables.
 
 ## Current limitations and non-claims
 
-- Popularity and TF-IDF content baselines have completed formal ranking
-  evaluation; the rule-based cold-start fallback has not.
-- The published comparison covers two baselines and does not yet include the
-  fallback or a learned hybrid model.
-- The content-only model abstains on 2.95% of validation impressions.
+- Popularity, TF-IDF content, and the rule-based cold-start fallback have
+  completed formal ranking evaluation; no learned hybrid model has been
+  evaluated.
+- The content-only model abstains on 2.95% of validation impressions; the
+  fallback fills those rankings using global training-only popularity.
+- Fallback removes empty rankings but does not improve catalog coverage over
+  content alone.
 - The official MIND-small development split has not yet been evaluated.
 - Popularity scores reflect historical exposure as well as user interest.
 - Popularity provides limited catalog coverage.
