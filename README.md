@@ -16,9 +16,10 @@ assumptions, limitations, and non-claims.
 > cold-start fallback evaluations. It also includes exhaustive history-length
 > subgroup evaluation and overlapping clicked-category evaluation with exact
 > accounting, plus overlapping training-exposure cohorts for unseen and
-> low-exposure diagnostics. The project currently has 222 automated tests.
-> Uncertainty estimation and high-confidence failure inspection remain in
-> progress.
+> low-exposure diagnostics. Deterministic impression-level bootstrap intervals
+> now quantify uncertainty in the final fallback relevance metrics. The
+> project currently has 267 automated tests. High-confidence failure
+> inspection remains in progress.
 
 ## Why this project
 
@@ -93,11 +94,14 @@ NewsLens is designed to demonstrate:
   high-exposure clicked articles;
 - exposure-specific relevance, recommendation coverage, and overlap
   accounting;
+- deterministic nonparametric bootstrap confidence intervals for final
+  fallback relevance metrics;
+- configurable bootstrap sample count, confidence level, and random seed;
 - chronological MIND-small validation results; and
-- 222 automated tests.
+- 267 automated tests.
 
-Uncertainty estimation, high-confidence failure inspection, and final holdout
-evaluation are the next Phase 4 milestones.
+High-confidence failure inspection and final holdout evaluation are the next
+Phase 4 milestones.
 
 ## Quick start
 
@@ -134,7 +138,7 @@ Expected checks:
 
 ```text
 All checks passed!
-159 passed
+267 passed
 ```
 
 ## Repository structure
@@ -179,7 +183,8 @@ NewsLens/
 │       │   ├── metrics.py
 │       │   ├── popularity.py
 │       │   ├── segments.py
-│       │   └── split.py
+│       │   ├── split.py
+│       │   └── uncertainty.py
 │       ├── models/
 │       │   ├── content.py
 │       │   ├── fallback.py
@@ -487,12 +492,45 @@ python -m newslens evaluate-fallback \
   --k 10 \
   --validation-fraction 0.20 \
   --max-features 50000 \
+  --bootstrap-samples 1000 \
+  --bootstrap-confidence-level 0.95 \
+  --bootstrap-random-seed 42 \
   --output reports/fallback_metrics.json
 ```
 
-The fallback report also includes exhaustive `history_segments`. Segment
-membership depends only on the number of articles in each impression's user
-history; validation click labels do not affect assignment.
+The fallback report includes exhaustive `history_segments`, overlapping
+`category_analysis`, overlapping `exposure_analysis`, and deterministic
+`uncertainty`. Segment membership depends only on the number of articles in
+each impression's user history; validation click labels do not affect
+assignment.
+
+## Bootstrap uncertainty evaluation
+
+NewsLens estimates uncertainty for the final fallback model's NDCG@10, MRR@10,
+Recall@10, and Hit Rate@10 using a nonparametric percentile bootstrap. One
+evaluated impression is the resampling unit. Each of 1,000 replicates samples
+31,393 impressions with replacement, using the original sample size. The
+configured confidence level is 95%, and random seed 42 makes the report
+deterministic.
+
+| Metric | Estimate | Lower 95% | Upper 95% | Bootstrap standard error |
+|---|---:|---:|---:|---:|
+| NDCG@10 | 0.3664 | 0.3627 | 0.3703 | 0.0019 |
+| MRR@10 | 0.3179 | 0.3140 | 0.3218 | 0.0020 |
+| Recall@10 | 0.5955 | 0.5907 | 0.6003 | 0.0026 |
+| Hit Rate@10 | 0.6762 | 0.6712 | 0.6815 | 0.0027 |
+
+The bootstrap point estimates exactly reproduce the common evaluator's
+metrics. Two complete runs with identical inputs and configuration produced
+byte-identical JSON reports. Catalog coverage is excluded from this bootstrap
+summary because it is a set-level statistic, not an average of independent
+impression-level values.
+
+These intervals estimate impression-sampling variability conditional on the
+fixed dataset, chronological split, fitted model, candidate sets, and metric
+definitions. They do not quantify model-selection uncertainty, temporal
+drift, online impact, or the significance of paired differences between
+models.
 
 ## Three-model evaluation
 
@@ -553,8 +591,9 @@ be treated as interchangeable.
 
 Because 70.78% of impressions are in the long-history group, these subgroup
 results are descriptive associations under this split, not evidence that
-longer histories causally improve recommendations. Confidence intervals have
-not yet been estimated.
+longer histories causally improve recommendations. The reported bootstrap
+intervals apply to the overall fallback metrics; subgroup-specific intervals
+have not yet been estimated.
 
 ## Article-category evaluation
 
@@ -744,7 +783,7 @@ Apply automatic formatting:
 python -m ruff format .
 ```
 
-The 222-test suite covers:
+The 267-test suite covers:
 
 - malformed TSV schemas;
 - duplicate identifiers;
@@ -781,6 +820,10 @@ The 222-test suite covers:
 - overlapping multi-band clicked-impression accounting;
 - exposure-band support, recommendation coverage, and deterministic JSON;
 - fallback integration of chronological-training exposure counts;
+- deterministic impression-level bootstrap resampling;
+- bootstrap point-estimate agreement with the common evaluator;
+- confidence-interval accounting and invalid-configuration handling;
+- fallback-report and CLI integration of reproducible uncertainty settings;
 - reproducible fallback-evaluation CLI behavior;
 - CLI behavior;
 - model-not-fitted errors; and
@@ -810,8 +853,8 @@ A feature is considered complete only when:
 4. **Ranking evaluation** — in progress; metrics, evaluator, popularity
    evaluation, TF-IDF content evaluation, and cold-start fallback evaluation
    completed. History-length, article-category, and training-exposure
-   evaluations are complete; uncertainty estimation and high-confidence
-   failure inspection remain.
+   evaluations and overall fallback uncertainty estimation are complete;
+   high-confidence failure inspection remains.
 5. **Hybrid ranking** — planned.
 6. **Inference service** — planned.
 7. **MLOps and deployment** — planned.
@@ -838,7 +881,9 @@ deliverables.
 - Article publication timestamps are unavailable in the local metadata.
 - The fallback switches strategies instead of learning a joint ranker.
 - No neural recommendation model has been trained.
-- No uncertainty estimates or statistical-significance tests are reported.
+- Overall fallback relevance metrics include deterministic 95% bootstrap
+  intervals. Paired model-difference intervals, subgroup-specific intervals,
+  and statistical-significance tests are not reported.
 - History-length segment sizes are highly imbalanced: 70.78% of validation
   impressions belong to the long-history group.
 - History-length results are descriptive associations, not causal estimates.

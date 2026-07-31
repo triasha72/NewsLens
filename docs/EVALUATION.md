@@ -15,8 +15,9 @@ evaluations of:
 All three systems are evaluated on the same strict chronological validation
 partition. NewsLens also includes tested, exhaustive history-length subgroup
 evaluation, overlapping clicked-category evaluation, and overlapping
-training-exposure evaluation. Uncertainty estimation and high-confidence
-failure inspection remain in progress.
+training-exposure evaluation. Deterministic impression-level bootstrap
+intervals are complete for the overall fallback relevance metrics.
+High-confidence failure inspection remains in progress.
 
 ## Evaluation protocol
 
@@ -111,6 +112,23 @@ of catalog articles in the focal exposure band.
 It does not mean that article text is missing or that the complete article is
 out of vocabulary.
 
+### Bootstrap uncertainty
+
+Uncertainty estimation operates only after the final validation rankings have
+been produced. One evaluated impression is the nonparametric resampling unit.
+Each bootstrap replicate samples the evaluated impressions with replacement
+while preserving the original evaluated sample size.
+
+The analysis reports percentile intervals and bootstrap standard errors for
+NDCG, MRR, Recall, and Hit Rate. No-click impressions follow the shared
+evaluator's denominator policy: they are counted but excluded from relevance
+metrics. The current MIND-small validation split contains no no-click
+impressions.
+
+Catalog coverage is intentionally excluded because it is a set-level statistic
+rather than the mean of independent impression-level values. The sample count,
+confidence level, and random seed are recorded in the report.
+
 ### Shared evaluation
 
 All three systems use:
@@ -176,6 +194,9 @@ python -m newslens evaluate-fallback \
   --k 10 \
   --validation-fraction 0.20 \
   --max-features 50000 \
+  --bootstrap-samples 1000 \
+  --bootstrap-confidence-level 0.95 \
+  --bootstrap-random-seed 42 \
   --output reports/fallback_metrics.json
 ```
 
@@ -183,9 +204,10 @@ All three commands validate and load the local data, build the chronological
 split, fit the selected model, evaluate every validation impression, print the
 result, and write a deterministic JSON report.
 
-The fallback report also records `history_segments`, `category_analysis`, and
-`exposure_analysis`, including subgroup accounting, ranking metrics,
-within-group recommendation coverage, overlap, and support indicators.
+The fallback report also records `history_segments`, `category_analysis`,
+`exposure_analysis`, and `uncertainty`, including subgroup accounting, ranking
+metrics, within-group recommendation coverage, overlap, support indicators,
+and deterministic confidence-interval configuration.
 
 Repeated runs with identical parameters produced byte-identical reports.
 
@@ -212,6 +234,36 @@ by 15.3%, Hit Rate by 15.9%, and catalog coverage by 78.9%.
 Relative to content alone, fallback improves NDCG by 1.92%, MRR by 1.47%,
 Recall by 2.33%, and Hit Rate by 2.30%. Catalog coverage is unchanged. These
 values describe this specific internal chronological validation protocol.
+
+## Bootstrap uncertainty findings
+
+The final fallback evaluation uses 1,000 nonparametric bootstrap replicates, a
+95% confidence level, and random seed 42. The resampling population contains
+all 31,393 validation impressions.
+
+| Metric | Estimate | Lower 95% | Upper 95% | Bootstrap standard error |
+|---|---:|---:|---:|---:|
+| NDCG@10 | 0.3664 | 0.3627 | 0.3703 | 0.0019 |
+| MRR@10 | 0.3179 | 0.3140 | 0.3218 | 0.0020 |
+| Recall@10 | 0.5955 | 0.5907 | 0.6003 | 0.0026 |
+| Hit Rate@10 | 0.6762 | 0.6712 | 0.6815 | 0.0027 |
+
+The bootstrap point estimates exactly match the common evaluator. Two complete
+runs with identical data and configuration produced byte-identical JSON
+reports, establishing deterministic reproduction for the implemented random
+resampling path.
+
+The intervals are narrow under this fixed internal validation sample: their
+full widths range from approximately 0.0076 for NDCG to 0.0103 for Hit Rate.
+This indicates limited impression-sampling variability for the final fallback
+metrics at this sample size. It does not establish robustness to a different
+time period, data split, candidate policy, model configuration, or online
+environment.
+
+These are single-model intervals, not paired bootstrap intervals for the
+difference between fallback, content, and popularity. They therefore should
+not be interpreted as statistical-significance tests of the improvements in
+the three-model table.
 
 ## Popularity findings
 
@@ -437,7 +489,7 @@ and still receive a useful TF-IDF representation.
 This remains a descriptive result rather than evidence that unseen status
 causes better ranking. Newer content, category mix, candidate difficulty, and
 lexical alignment may differ across the bands. The current analysis does not
-control for those factors or estimate uncertainty.
+control for those factors or estimate cohort-specific uncertainty.
 
 ## Interpretation
 
@@ -468,9 +520,13 @@ The same-split comparison supports ten conclusions:
 10. Training exposure and relevance are not monotonically related in this
     split: unseen articles lead relevance, while high-exposure articles lead
     within-band coverage.
+11. Overall fallback relevance metrics have narrow impression-level bootstrap
+    intervals under the fixed validation sample, while broader sources of
+    uncertainty and paired model differences remain unquantified.
 
-The next analysis should estimate uncertainty around the recorded differences
-and inspect high-confidence failures before moving to a learned hybrid ranker.
+The next analysis should inspect high-confidence failures and then add paired
+model-difference or subgroup uncertainty where it materially supports model
+selection.
 
 ## Reproducibility artifacts
 
@@ -493,6 +549,7 @@ src/newslens/evaluation/fallback.py
 src/newslens/evaluation/segments.py
 src/newslens/evaluation/categories.py
 src/newslens/evaluation/exposure.py
+src/newslens/evaluation/uncertainty.py
 tests/test_metrics.py
 tests/test_evaluator.py
 tests/test_popularity_evaluation.py
@@ -501,13 +558,14 @@ tests/test_fallback_evaluation.py
 tests/test_segments.py
 tests/test_categories.py
 tests/test_exposure.py
+tests/test_uncertainty.py
 tests/test_cli.py
 ```
 
 ## Remaining work
 
 - inspect high-confidence failures;
-- add uncertainty estimates or confidence intervals;
+- consider paired model-difference and subgroup intervals;
 - publish a complete error analysis; and
 - use the official development split only after model selection is complete.
 
@@ -525,7 +583,9 @@ tests/test_cli.py
 - Fallback inherits popularity's exposure bias for routed impressions.
 - Fallback removes empty rankings but does not improve catalog coverage over
   content alone.
-- No confidence intervals or statistical-significance tests are reported.
+- Deterministic 95% bootstrap intervals are reported only for overall fallback
+  relevance metrics. Paired model-difference intervals, subgroup-specific
+  intervals, and statistical-significance tests are not reported.
 - History-length segment sizes are highly imbalanced: 70.78% of validation
   impressions belong to the long-history group.
 - History-length results are descriptive associations, not causal estimates.
