@@ -58,10 +58,19 @@ from .split import (
     ChronologicalSplitError,
     chronological_train_validation_split,
 )
+from .uncertainty import (
+    BootstrapInterval,
+    BootstrapUncertaintyError,
+    BootstrapUncertaintyReport,
+    bootstrap_ranking_uncertainty,
+)
 
 __all__ = [
     "DEFAULT_HISTORY_LENGTH_SEGMENTS",
     "DEFAULT_TRAINING_EXPOSURE_BANDS",
+    "BootstrapInterval",
+    "BootstrapUncertaintyError",
+    "BootstrapUncertaintyReport",
     "CategoryEvaluationError",
     "CategoryEvaluationReport",
     "CategoryResult",
@@ -86,6 +95,7 @@ __all__ = [
     "RankingExample",
     "RankingMetricError",
     "TrainingExposureBand",
+    "bootstrap_ranking_uncertainty",
     "catalog_coverage",
     "chronological_train_validation_split",
     "evaluate_article_categories",
