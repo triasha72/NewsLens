@@ -34,6 +34,11 @@ from .evaluator import (
     RankingExample,
     evaluate_rankings,
 )
+from .exposure import (
+    ExposureEvaluationError,
+    ExposureEvaluationReport,
+    evaluate_training_exposure_bands,
+)
 from .segments import (
     HistorySegmentEvaluationError,
     HistorySegmentEvaluationReport,
@@ -73,6 +78,7 @@ class FallbackEvaluationReport:
     metrics: RankingEvaluationResult
     history_segments: HistorySegmentEvaluationReport
     category_analysis: CategoryEvaluationReport
+    exposure_analysis: ExposureEvaluationReport
 
     @property
     def content_routed_fraction(self) -> float:
@@ -130,6 +136,7 @@ class FallbackEvaluationReport:
             "metrics": self.metrics.to_dict(),
             "history_segments": self.history_segments.to_dict(),
             "category_analysis": self.category_analysis.to_dict(),
+            "exposure_analysis": self.exposure_analysis.to_dict(),
         }
 
 
@@ -317,6 +324,7 @@ def evaluate_fallback_baseline(
     k: int = 10,
     max_features: int = 50_000,
     minimum_category_impressions: int = 100,
+    minimum_exposure_impressions: int = 100,
 ) -> FallbackEvaluationReport:
     """Evaluate content ranking with training-only popularity fallback."""
 
@@ -332,6 +340,13 @@ def evaluate_fallback_baseline(
         or minimum_category_impressions <= 0
     ):
         raise FallbackEvaluationError("minimum_category_impressions must be a positive integer.")
+
+    if (
+        isinstance(minimum_exposure_impressions, bool)
+        or not isinstance(minimum_exposure_impressions, int)
+        or minimum_exposure_impressions <= 0
+    ):
+        raise FallbackEvaluationError("minimum_exposure_impressions must be a positive integer.")
 
     required_columns = {
         "impression_id",
@@ -361,6 +376,9 @@ def evaluate_fallback_baseline(
             vocabulary_news_ids=vocabulary_news_ids,
         )
         popularity_model = PopularityRecommender().fit(split.train)
+        training_exposures = {
+            news_id: popularity_model.statistics(news_id).exposures for news_id in catalog
+        }
         fallback_model = ContentPopularityFallbackRecommender(
             content_model,
             popularity_model,
@@ -399,8 +417,16 @@ def evaluate_fallback_baseline(
             k=k,
             minimum_relevant_impressions=minimum_category_impressions,
         )
+        exposure_analysis = evaluate_training_exposure_bands(
+            build_result.examples,
+            catalog,
+            training_exposures,
+            k=k,
+            minimum_relevant_impressions=minimum_exposure_impressions,
+        )
     except (
         CategoryEvaluationError,
+        ExposureEvaluationError,
         HistorySegmentEvaluationError,
         RankingEvaluationError,
     ) as error:
@@ -426,4 +452,5 @@ def evaluate_fallback_baseline(
         metrics=metrics,
         history_segments=history_segments,
         category_analysis=category_analysis,
+        exposure_analysis=exposure_analysis,
     )

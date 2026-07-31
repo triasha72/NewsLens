@@ -198,6 +198,7 @@ def test_report_is_json_serializable() -> None:
     assert report.to_dict()["metrics"]["k"] == 2
     assert report.to_dict()["history_segments"]["k"] == 2
     assert report.to_dict()["category_analysis"]["k"] == 2
+    assert report.to_dict()["exposure_analysis"]["k"] == 2
 
 
 def test_report_includes_exhaustive_history_segments() -> None:
@@ -255,6 +256,46 @@ def test_report_includes_overlapping_clicked_category_analysis() -> None:
     assert categories["finance"].metrics is None
     assert categories["sports"].relevant_impressions == 0
     assert categories["sports"].metrics is None
+
+
+def test_report_includes_training_exposure_analysis() -> None:
+    report = evaluate_fallback_baseline(
+        make_news(),
+        make_behaviors(),
+        validation_fraction=0.40,
+        k=2,
+        minimum_exposure_impressions=1,
+    )
+    bands = {band.definition.name: band for band in report.exposure_analysis.bands}
+
+    assert report.exposure_analysis.overall_metrics == report.metrics
+    assert report.exposure_analysis.clicked_impressions == report.validation_records
+    assert report.exposure_analysis.multi_band_clicked_impressions == 0
+    assert report.exposure_analysis.impression_band_pairs == 2
+    assert not report.exposure_analysis.band_membership_is_overlapping
+
+    unseen = bands["unseen"]
+    assert unseen.catalog_articles == 2
+    assert unseen.relevant_impressions == 1
+    assert unseen.meets_minimum_support
+    assert unseen.metrics is not None
+    assert unseen.metrics.ndcg_at_k == pytest.approx(1.0 / log2(3))
+    assert unseen.metrics.mrr_at_k == pytest.approx(0.5)
+    assert unseen.catalog_coverage_at_k == pytest.approx(0.5)
+
+    low = bands["low_exposure"]
+    assert low.catalog_articles == 4
+    assert low.relevant_impressions == 1
+    assert low.meets_minimum_support
+    assert low.metrics is not None
+    assert low.metrics.ndcg_at_k == pytest.approx(1.0)
+    assert low.metrics.mrr_at_k == pytest.approx(1.0)
+    assert low.catalog_coverage_at_k == pytest.approx(0.75)
+
+    assert bands["medium_exposure"].catalog_articles == 0
+    assert bands["medium_exposure"].metrics is None
+    assert bands["high_exposure"].catalog_articles == 0
+    assert bands["high_exposure"].metrics is None
 
 
 def test_evaluation_requires_article_categories() -> None:
@@ -372,4 +413,22 @@ def test_evaluation_rejects_invalid_minimum_category_impressions(
             make_news(),
             make_behaviors(),
             minimum_category_impressions=invalid_minimum,  # type: ignore[arg-type]
+        )
+
+
+@pytest.mark.parametrize(
+    "invalid_minimum",
+    [0, -1, 1.5, True],
+)
+def test_evaluation_rejects_invalid_minimum_exposure_impressions(
+    invalid_minimum: object,
+) -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="minimum_exposure_impressions must be a positive integer",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            minimum_exposure_impressions=invalid_minimum,  # type: ignore[arg-type]
         )
