@@ -30,6 +30,15 @@ from .popularity import (
     PopularityEvaluationReport,
     evaluate_popularity_baseline,
 )
+from .segments import (
+    DEFAULT_HISTORY_LENGTH_SEGMENTS,
+    HistoryLengthSegment,
+    HistorySegmentEvaluationError,
+    HistorySegmentEvaluationReport,
+    HistorySegmentExample,
+    HistorySegmentResult,
+    evaluate_history_segments,
+)
 from .split import (
     ChronologicalSplit,
     ChronologicalSplitError,
@@ -37,12 +46,18 @@ from .split import (
 )
 
 __all__ = [
+    "DEFAULT_HISTORY_LENGTH_SEGMENTS",
     "ChronologicalSplit",
     "ChronologicalSplitError",
     "ContentEvaluationError",
     "ContentEvaluationReport",
     "FallbackEvaluationError",
     "FallbackEvaluationReport",
+    "HistoryLengthSegment",
+    "HistorySegmentEvaluationError",
+    "HistorySegmentEvaluationReport",
+    "HistorySegmentExample",
+    "HistorySegmentResult",
     "PopularityEvaluationError",
     "PopularityEvaluationReport",
     "RankingEvaluationError",
@@ -53,6 +68,7 @@ __all__ = [
     "chronological_train_validation_split",
     "evaluate_content_baseline",
     "evaluate_fallback_baseline",
+    "evaluate_history_segments",
     "evaluate_popularity_baseline",
     "evaluate_rankings",
     "hit_rate_at_k",
