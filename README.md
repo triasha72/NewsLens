@@ -13,8 +13,10 @@ assumptions, limitations, and non-claims.
 > chronological splitting, deterministic search and recommendation baselines,
 > formally tested ranking metrics, a model-independent evaluator, and
 > reproducible MIND-small popularity, TF-IDF history-content, and rule-based
-> cold-start fallback evaluations. The project currently has 159 automated
-> tests. Segment-level error analysis remains in progress.
+> cold-start fallback evaluations. It also includes exhaustive history-length
+> subgroup evaluation with exact impression accounting. The project currently
+> has 171 automated tests. Category-level analysis, unseen-article analysis,
+> and uncertainty estimation remain in progress.
 
 ## Why this project
 
@@ -81,11 +83,12 @@ NewsLens is designed to demonstrate:
 - same-split three-model comparison;
 - explicit content abstention and cold-start accounting;
 - explicit fallback routing and recovery accounting;
+- exhaustive history-length segmentation with per-segment ranking metrics;
 - chronological MIND-small validation results; and
-- 159 automated tests.
+- 171 automated tests.
 
-Segment-level error analysis, uncertainty estimation, and final holdout
-evaluation are the next Phase 4 milestones.
+Category-level analysis, unseen-article analysis, uncertainty estimation, and
+final holdout evaluation are the next Phase 4 milestones.
 
 ## Quick start
 
@@ -164,6 +167,7 @@ NewsLens/
 │       │   ├── fallback.py
 │       │   ├── metrics.py
 │       │   ├── popularity.py
+│       │   ├── segments.py
 │       │   └── split.py
 │       ├── models/
 │       │   ├── content.py
@@ -475,6 +479,10 @@ python -m newslens evaluate-fallback \
   --output reports/fallback_metrics.json
 ```
 
+The fallback report also includes exhaustive `history_segments`. Segment
+membership depends only on the number of articles in each impression's user
+history; validation click labels do not affect assignment.
+
 ## Three-model evaluation
 
 All three systems use the same 125,572 training records, 31,393 later
@@ -506,6 +514,36 @@ unknown-history or zero-profile cases in this validation partition.
 These are internal chronological-validation results, not final holdout or
 online-product results. The official MIND-small development split remains
 untouched.
+
+## History-length segment evaluation
+
+The fallback system's validation impressions are partitioned into four
+mutually exclusive, exhaustive history-length groups:
+
+| Segment | History articles | Impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Cold start | 0 | 801 | 2.55% | 0.2954 | 0.2334 | 0.5339 | 0.6017 |
+| Short history | 1–4 | 3,379 | 10.76% | 0.3471 | 0.2809 | 0.5911 | 0.6324 |
+| Medium history | 5–9 | 4,994 | 15.91% | **0.3767** | 0.3184 | **0.6148** | 0.6676 |
+| Long history | 10+ | 22,219 | 70.78% | 0.3695 | **0.3265** | 0.5940 | **0.6875** |
+
+All 31,393 validation impressions are assigned exactly once, and recombining
+the segment results reproduces the overall fallback metrics. Cold-start
+impressions are weakest across all four relevance metrics, while usable
+history generally improves ranking quality. The pattern is not uniformly
+monotonic: medium histories achieve the highest NDCG and Recall, whereas long
+histories achieve the highest MRR and Hit Rate.
+
+The 801 cold-start impressions exactly match the empty-history fallback
+routes. The additional 126 zero-signal fallback routes have nonempty histories
+and therefore belong to the short-, medium-, or long-history groups. History
+segments and fallback-reason groups answer different questions and should not
+be treated as interchangeable.
+
+Because 70.78% of impressions are in the long-history group, these subgroup
+results are descriptive associations under this split, not evidence that
+longer histories causally improve recommendations. Confidence intervals have
+not yet been estimated.
 
 The machine-readable reports are stored at:
 
@@ -617,7 +655,7 @@ Apply automatic formatting:
 python -m ruff format .
 ```
 
-The 159-test suite covers:
+The 171-test suite covers:
 
 - malformed TSV schemas;
 - duplicate identifiers;
@@ -640,6 +678,10 @@ The 159-test suite covers:
 - reproducible content-evaluation CLI behavior;
 - leakage-aware fallback evaluation;
 - content-versus-popularity routing and fallback-reason accounting;
+- exhaustive and non-overlapping history-segment definitions;
+- empty-history and no-click segment accounting;
+- model-independent per-segment ranking evaluation;
+- fallback integration and deterministic segment JSON output;
 - reproducible fallback-evaluation CLI behavior;
 - CLI behavior;
 - model-not-fitted errors; and
@@ -668,7 +710,8 @@ A feature is considered complete only when:
 3. **Evaluation-safe baselines** — completed.
 4. **Ranking evaluation** — in progress; metrics, evaluator, popularity
    evaluation, TF-IDF content evaluation, and cold-start fallback evaluation
-   completed. Segment-level analysis remains.
+   completed. History-length segment evaluation is complete; category-level,
+   unseen-article, and uncertainty analyses remain.
 5. **Hybrid ranking** — planned.
 6. **Inference service** — planned.
 7. **MLOps and deployment** — planned.
@@ -696,7 +739,10 @@ deliverables.
 - The fallback switches strategies instead of learning a joint ranker.
 - No neural recommendation model has been trained.
 - No uncertainty estimates or statistical-significance tests are reported.
-- No user-history or category-level subgroup analysis has been completed.
+- History-length segment sizes are highly imbalanced: 70.78% of validation
+  impressions belong to the long-history group.
+- History-length results are descriptive associations, not causal estimates.
+- No category-level subgroup analysis has been completed.
 - No inference API has been implemented or deployed.
 - No online experiment has been conducted.
 - Passing tests and offline metrics do not establish online product impact.

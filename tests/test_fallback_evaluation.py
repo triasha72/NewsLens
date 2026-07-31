@@ -196,6 +196,32 @@ def test_report_is_json_serializable() -> None:
 
     assert '"model_name": "tfidf_content_with_popularity_fallback"' in serialized
     assert report.to_dict()["metrics"]["k"] == 2
+    assert report.to_dict()["history_segments"]["k"] == 2
+
+
+def test_report_includes_exhaustive_history_segments() -> None:
+    report = evaluate_fallback_baseline(
+        make_news(),
+        make_behaviors(),
+        validation_fraction=0.40,
+        k=2,
+    )
+
+    segments = {segment.definition.name: segment for segment in report.history_segments.segments}
+
+    assert report.history_segments.overall_metrics == report.metrics
+    assert (
+        sum(segment.total_impressions for segment in report.history_segments.segments)
+        == report.validation_records
+    )
+    assert segments["cold_start"].total_impressions == 1
+    assert segments["cold_start"].metrics is not None
+    assert segments["short_history"].total_impressions == 1
+    assert segments["short_history"].metrics is not None
+    assert segments["medium_history"].total_impressions == 0
+    assert segments["medium_history"].metrics is None
+    assert segments["long_history"].total_impressions == 0
+    assert segments["long_history"].metrics is None
 
 
 def test_evaluation_requires_behavior_columns() -> None:
