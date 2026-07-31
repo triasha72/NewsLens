@@ -8,7 +8,9 @@ def test_package_version() -> None:
     assert __version__ == "0.1.0"
 
 
-def test_cli_reports_next_milestone(capsys: object) -> None:
+def test_cli_reports_available_commands(capsys: object) -> None:
     main()
     captured = capsys.readouterr()  # type: ignore[attr-defined]
-    assert "implement validated MIND data ingestion" in captured.out
+
+    assert f"NewsLens {__version__} is ready." in captured.out
+    assert "Use --help to view available commands." in captured.out

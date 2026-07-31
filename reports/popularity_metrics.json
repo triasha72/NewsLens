@@ -1,0 +1,27 @@
+{
+  "actual_validation_fraction": 0.2,
+  "candidate_occurrences": 1264253,
+  "cutoff_timestamp": "2019-11-13T20:36:26",
+  "metrics": {
+    "catalog_coverage_at_k": 0.04018954018954019,
+    "catalog_size": 51282,
+    "empty_ranking_impressions": 0,
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 31393,
+    "hit_rate_at_k": 0.570477494982958,
+    "k": 10,
+    "mrr_at_k": 0.2308225496635333,
+    "ndcg_at_k": 0.28526233059191086,
+    "recall_at_k": 0.5046507560117974,
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 31393,
+    "unique_recommended_items": 2061
+  },
+  "model_name": "training_click_count_popularity",
+  "requested_validation_fraction": 0.2,
+  "training_records": 125572,
+  "unseen_candidate_fraction": 0.30362198072695895,
+  "unseen_candidate_occurrences": 383855,
+  "unseen_validation_impressions": 30036,
+  "validation_records": 31393
+}

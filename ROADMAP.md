@@ -2,14 +2,18 @@
 
 NewsLens is being developed through small, testable feature branches and pull
 requests. A phase is complete only when its implementation, tests,
-documentation, and continuous-integration checks pass.
+documentation, reproducible outputs, and continuous-integration checks pass.
 
 ## Current status
 
 - Phase 1: Foundation — completed
 - Phase 2: MIND ingestion and audit — completed
 - Phase 3: Evaluation-safe baselines — completed
-- Phase 4: Ranking evaluation — next
+- Phase 4: Ranking evaluation — in progress
+  - ranking metrics — completed
+  - model-independent evaluator — completed
+  - popularity evaluation — completed
+  - content and fallback evaluation — next
 - Phase 5: Hybrid ranking — planned
 - Phase 6: Serving — planned
 - Phase 7: MLOps and deployment — planned
@@ -83,7 +87,7 @@ reports/mindsmall_dev_audit.json
 - [ ] Add checksums for locally downloaded dataset archives
 - [ ] Add structured validation-error reports
 
-These are useful improvements but are not blockers for the current tabular
+These improvements are useful but are not blockers for the current tabular
 baseline pipeline.
 
 ## Phase 3: Evaluation-safe baselines
@@ -137,7 +141,8 @@ Preliminary diagnostic:
 | Unseen candidate occurrence rate | 30.36% |
 | Temporal leakage detected | No |
 
-These values are preliminary. Formal ranking metrics belong to Phase 4.
+These preliminary results have now been confirmed and extended using the formal
+Phase 4 ranking evaluator.
 
 ### TF-IDF article search
 
@@ -185,7 +190,7 @@ These values are preliminary. Formal ranking metrics belong to Phase 4.
 - [x] Document preliminary diagnostics
 - [x] Document known limitations and non-claims
 - [x] Add unit and integration tests
-- [x] Pass all 66 automated tests
+- [x] Pass all 66 Phase 3 automated tests
 - [x] Pass Ruff and GitHub Actions checks
 
 Completed commits include:
@@ -218,58 +223,130 @@ tests/test_fallback.py
 
 ## Phase 4: Ranking evaluation
 
+Phase 4 is currently in progress. Formal metric implementation, the common
+evaluator, and popularity evaluation are complete. Evaluation of the
+content-based and fallback models remains pending.
+
 ### Metric implementation
 
-- [ ] Implement NDCG@K
-- [ ] Implement mean reciprocal rank
-- [ ] Implement Recall@K
-- [ ] Implement Hit Rate@K
-- [ ] Implement catalog coverage
-- [ ] Define behavior for impressions with multiple clicked articles
-- [ ] Define behavior for impressions without a clicked article
-- [ ] Validate every metric with hand-calculated examples
-- [ ] Add boundary and invalid-input tests
+- [x] Implement binary NDCG@K
+- [x] Implement Mean Reciprocal Rank@K
+- [x] Implement Recall@K
+- [x] Implement Hit Rate@K
+- [x] Implement catalog coverage
+- [x] Define behavior for impressions with multiple clicked articles
+- [x] Define behavior for impressions without a clicked article
+- [x] Define behavior for rankings shorter than `K`
+- [x] Reject duplicate recommended identifiers
+- [x] Validate cutoff and catalog inputs
+- [x] Validate every metric with hand-calculated examples
+- [x] Add boundary and invalid-input tests
+- [x] Export the metrics through the evaluation package
 
-### Reproducible evaluation
+### Model-independent evaluation
 
-- [ ] Create a common candidate-ranking interface
-- [ ] Create a reproducible evaluation command
-- [ ] Evaluate popularity on chronological validation data
-- [ ] Evaluate content recommendations on chronological validation data
+- [x] Create a common candidate-ranking interface
+- [x] Separate model ranking from metric computation
+- [x] Evaluate multiple-click impressions consistently
+- [x] Track evaluated and skipped impressions
+- [x] Track empty rankings
+- [x] Track unique recommended articles
+- [x] Calculate catalog coverage
+- [x] Add synthetic evaluator tests
+- [x] Add invalid-ranker and invalid-ranking tests
+- [x] Confirm deterministic evaluation behavior
+
+### Reproducible popularity evaluation
+
+- [x] Create a popularity-specific evaluation pipeline
+- [x] Load the real MIND-small training data
+- [x] Apply the strict chronological split
+- [x] Fit popularity only on chronological training interactions
+- [x] Rank later validation candidate sets
+- [x] Evaluate popularity using all formal ranking metrics
+- [x] Measure unseen candidate occurrences
+- [x] Record training and validation sizes
+- [x] Record the chronological cutoff
+- [x] Add a reproducible CLI command
+- [x] Write machine-readable evaluation results
+- [x] Confirm identical results across repeated runs
+- [x] Evaluate all 31,393 validation impressions
+- [x] Produce no empty rankings
+- [x] Add unit, integration, and CLI tests
+- [x] Pass all 120 automated tests locally
+- [x] Pass Ruff locally
+- [ ] Pass GitHub Actions for the current Phase 4 pull request
+
+Popularity results at `K = 10`:
+
+| Metric | Result |
+|---|---:|
+| NDCG@10 | 0.2853 |
+| MRR@10 | 0.2308 |
+| Recall@10 | 0.5047 |
+| Hit Rate@10 | 0.5705 |
+| Catalog Coverage@10 | 0.0402 |
+| Evaluated impressions | 31,393 |
+| Empty rankings | 0 |
+| Unique recommended articles | 2,061 |
+| Unseen candidate occurrence rate | 30.36% |
+| Temporal leakage detected | No |
+
+Phase 4 popularity evidence:
+
+```text
+src/newslens/evaluation/metrics.py
+src/newslens/evaluation/evaluator.py
+src/newslens/evaluation/popularity.py
+tests/test_metrics.py
+tests/test_evaluator.py
+tests/test_popularity_evaluation.py
+tests/test_cli.py
+tests/test_smoke.py
+reports/popularity_metrics.json
+docs/EVALUATION.md
+```
+
+### Remaining model evaluation
+
+- [ ] Evaluate the content-based history recommender
 - [ ] Evaluate the cold-start fallback
-- [ ] Record model coverage and fallback frequency
-- [ ] Measure unseen-article performance
-- [ ] Store machine-readable evaluation results
+- [ ] Record content-model coverage
+- [ ] Record fallback frequency
+- [ ] Measure unseen-article ranking performance
+- [ ] Evaluate warm-start and cold-start impressions separately
 - [ ] Generate a baseline-comparison table
-- [ ] Reserve MIND-small development data as the final holdout
+- [ ] Compare all models using identical validation impressions
+- [ ] Reserve the official MIND-small development data for final evaluation
+- [ ] Run final evaluation on the reserved development split only after model
+      selection is complete
 
-### Analysis
+### Remaining analysis
 
 - [ ] Compare performance across user-history lengths
 - [ ] Compare warm-start and cold-start users
 - [ ] Analyze performance by article category
 - [ ] Analyze unseen and low-exposure articles
 - [ ] Inspect high-confidence failures
-- [ ] Document positive and negative findings
+- [x] Document initial popularity findings
+- [x] Document popularity limitations and non-claims
+- [ ] Document positive and negative findings across all baselines
 - [ ] Add uncertainty estimates or confidence intervals
-- [ ] Document metric limitations
+- [ ] Document complete metric and comparison limitations
 
-Expected outputs:
+Expected remaining outputs:
 
 ```text
-src/newslens/evaluation/metrics.py
-src/newslens/evaluation/evaluator.py
-tests/test_metrics.py
-tests/test_evaluator.py
-reports/baseline_metrics.json
+reports/baseline_comparison.json
 reports/baseline_comparison.md
+docs/ERROR_ANALYSIS.md
 ```
 
-Suggested commits:
+Suggested future commits:
 
 ```text
-feat: add tested ranking metrics
-feat: add reproducible baseline evaluator
+feat: evaluate content and fallback baselines
+analysis: compare recommendation baselines
 docs: publish baseline comparison and error analysis
 ```
 
@@ -362,7 +439,10 @@ NewsLens will be considered portfolio-ready when it includes:
 - [x] an explicit cold-start policy;
 - [x] automated tests and continuous integration;
 - [x] documented assumptions and model limitations;
-- [ ] correct ranking metrics with unit tests;
+- [x] correct ranking metrics with hand-validated tests;
+- [x] a model-independent offline evaluator;
+- [x] a reproducible formal popularity evaluation;
+- [x] a machine-readable popularity evaluation report;
 - [ ] a reproducible held-out baseline comparison;
 - [ ] error and user-segment analysis;
 - [ ] uncertainty estimates or confidence intervals;
