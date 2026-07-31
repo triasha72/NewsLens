@@ -6,6 +6,123 @@
   "cutoff_timestamp": "2019-11-13T20:36:26",
   "empty_history_fallback_impressions": 801,
   "fallback_recovery_fraction": 1.0,
+  "history_segments": {
+    "k": 10,
+    "overall_metrics": {
+      "catalog_coverage_at_k": 0.07189657189657189,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "hit_rate_at_k": 0.6762335552511707,
+      "k": 10,
+      "mrr_at_k": 0.31794652432374215,
+      "ndcg_at_k": 0.3663605124218536,
+      "recall_at_k": 0.5954741541538584,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393,
+      "unique_recommended_items": 3687
+    },
+    "segments": [
+      {
+        "clicked_impressions": 801,
+        "fraction_of_all_impressions": 0.02551524225145733,
+        "maximum_history_length": 0,
+        "metrics": {
+          "catalog_coverage_at_k": 0.011856011856011857,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 801,
+          "hit_rate_at_k": 0.6017478152309613,
+          "k": 10,
+          "mrr_at_k": 0.2334264708796544,
+          "ndcg_at_k": 0.2954016005771288,
+          "recall_at_k": 0.5339099934605552,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 801,
+          "unique_recommended_items": 608
+        },
+        "minimum_history_length": 0,
+        "name": "cold_start",
+        "no_click_impressions": 0,
+        "total_impressions": 801
+      },
+      {
+        "clicked_impressions": 3379,
+        "fraction_of_all_impressions": 0.10763546013442488,
+        "maximum_history_length": 4,
+        "metrics": {
+          "catalog_coverage_at_k": 0.0335010335010335,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 3379,
+          "hit_rate_at_k": 0.6324356318437407,
+          "k": 10,
+          "mrr_at_k": 0.2809339430751091,
+          "ndcg_at_k": 0.3470765536159218,
+          "recall_at_k": 0.5910701954649867,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 3379,
+          "unique_recommended_items": 1718
+        },
+        "minimum_history_length": 1,
+        "name": "short_history",
+        "no_click_impressions": 0,
+        "total_impressions": 3379
+      },
+      {
+        "clicked_impressions": 4994,
+        "fraction_of_all_impressions": 0.15908004969260664,
+        "maximum_history_length": 9,
+        "metrics": {
+          "catalog_coverage_at_k": 0.038298038298038295,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 4994,
+          "hit_rate_at_k": 0.6676011213456148,
+          "k": 10,
+          "mrr_at_k": 0.3183671199089701,
+          "ndcg_at_k": 0.3767440778937734,
+          "recall_at_k": 0.614806259574982,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 4994,
+          "unique_recommended_items": 1964
+        },
+        "minimum_history_length": 5,
+        "name": "medium_history",
+        "no_click_impressions": 0,
+        "total_impressions": 4994
+      },
+      {
+        "clicked_impressions": 22219,
+        "fraction_of_all_impressions": 0.7077692479215112,
+        "maximum_history_length": null,
+        "metrics": {
+          "catalog_coverage_at_k": 0.06347256347256347,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 22219,
+          "hit_rate_at_k": 0.6875196903551015,
+          "k": 10,
+          "mrr_at_k": 0.32652772151962034,
+          "ndcg_at_k": 0.3695174078368632,
+          "recall_at_k": 0.5940181630944922,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 22219,
+          "unique_recommended_items": 3255
+        },
+        "minimum_history_length": 10,
+        "name": "long_history",
+        "no_click_impressions": 0,
+        "total_impressions": 22219
+      }
+    ],
+    "total_impressions": 31393
+  },
   "indexed_article_count": 51282,
   "metrics": {
     "catalog_coverage_at_k": 0.07189657189657189,
