@@ -199,6 +199,39 @@ def test_report_is_json_serializable() -> None:
     assert report.to_dict()["history_segments"]["k"] == 2
     assert report.to_dict()["category_analysis"]["k"] == 2
     assert report.to_dict()["exposure_analysis"]["k"] == 2
+    assert report.to_dict()["uncertainty"]["k"] == 2
+
+
+def test_report_includes_deterministic_bootstrap_uncertainty() -> None:
+    first = evaluate_fallback_baseline(
+        make_news(),
+        make_behaviors(),
+        validation_fraction=0.40,
+        k=2,
+        bootstrap_samples=200,
+        bootstrap_confidence_level=0.90,
+        bootstrap_random_seed=2026,
+    )
+    second = evaluate_fallback_baseline(
+        make_news(),
+        make_behaviors(),
+        validation_fraction=0.40,
+        k=2,
+        bootstrap_samples=200,
+        bootstrap_confidence_level=0.90,
+        bootstrap_random_seed=2026,
+    )
+
+    assert first.uncertainty == second.uncertainty
+    assert first.uncertainty.bootstrap_samples == 200
+    assert first.uncertainty.confidence_level == pytest.approx(0.90)
+    assert first.uncertainty.random_seed == 2026
+    assert first.uncertainty.total_impressions == first.validation_records
+    assert first.uncertainty.evaluated_impressions == first.metrics.evaluated_impressions
+    assert first.uncertainty.ndcg_at_k.point_estimate == first.metrics.ndcg_at_k
+    assert first.uncertainty.mrr_at_k.point_estimate == first.metrics.mrr_at_k
+    assert first.uncertainty.recall_at_k.point_estimate == first.metrics.recall_at_k
+    assert first.uncertainty.hit_rate_at_k.point_estimate == first.metrics.hit_rate_at_k
 
 
 def test_report_includes_exhaustive_history_segments() -> None:
@@ -431,4 +464,70 @@ def test_evaluation_rejects_invalid_minimum_exposure_impressions(
             make_news(),
             make_behaviors(),
             minimum_exposure_impressions=invalid_minimum,  # type: ignore[arg-type]
+        )
+
+
+@pytest.mark.parametrize(
+    "invalid_samples",
+    [0, -1, 1.5, True],
+)
+def test_evaluation_rejects_invalid_bootstrap_samples(
+    invalid_samples: object,
+) -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="bootstrap_samples must be a positive integer",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            bootstrap_samples=invalid_samples,  # type: ignore[arg-type]
+        )
+
+
+def test_evaluation_requires_at_least_two_bootstrap_samples() -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="bootstrap_samples must be at least 2",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            bootstrap_samples=1,
+        )
+
+
+@pytest.mark.parametrize(
+    "invalid_level",
+    [0.0, 1.0, -0.1, 1.1, True, "0.95"],
+)
+def test_evaluation_rejects_invalid_bootstrap_confidence_level(
+    invalid_level: object,
+) -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="bootstrap_confidence_level must be between 0 and 1",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            bootstrap_confidence_level=invalid_level,  # type: ignore[arg-type]
+        )
+
+
+@pytest.mark.parametrize(
+    "invalid_seed",
+    [-1, 1.5, True],
+)
+def test_evaluation_rejects_invalid_bootstrap_random_seed(
+    invalid_seed: object,
+) -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="bootstrap_random_seed must be a non-negative integer",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            bootstrap_random_seed=invalid_seed,  # type: ignore[arg-type]
         )
