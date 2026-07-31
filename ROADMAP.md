@@ -16,7 +16,8 @@ documentation, reproducible outputs, and continuous-integration checks pass.
   - TF-IDF content evaluation — completed
   - cold-start fallback evaluation — completed
   - history-length segment evaluation — completed
-  - category-level and unseen-article analysis — next
+  - article-category evaluation — completed
+  - unseen-article analysis — next
   - uncertainty estimation — next
 - Phase 5: Hybrid ranking — planned
 - Phase 6: Serving — planned
@@ -230,8 +231,9 @@ tests/test_fallback.py
 Phase 4 is currently in progress. Formal metric implementation, the common
 evaluator, popularity evaluation, and TF-IDF history-content evaluation are
 complete. Rule-based cold-start fallback evaluation is also complete.
-History-length segment evaluation is complete. Category-level analysis,
-unseen-article analysis, and uncertainty estimation remain pending.
+History-length segment evaluation and overlapping article-category evaluation
+are complete. Unseen-article analysis and uncertainty estimation remain
+pending.
 
 ### Metric implementation
 
@@ -475,6 +477,76 @@ reports/fallback_metrics.json
 docs/EVALUATION.md
 ```
 
+### Reproducible article-category evaluation
+
+- [x] Define category cohorts from clicked article metadata
+- [x] Preserve original global ranking positions within every cohort
+- [x] Support impressions containing clicks from multiple categories
+- [x] Record overlapping impression-category memberships explicitly
+- [x] Compute per-category NDCG, MRR, Recall, and Hit Rate
+- [x] Compute exposure using each category's own catalog denominator
+- [x] Apply a minimum-support threshold without dropping categories
+- [x] Preserve overall fallback and history-segment metrics
+- [x] Integrate category results into the deterministic fallback JSON report
+- [x] Add unit and integration tests
+- [x] Pass all 195 automated tests locally
+- [x] Pass Ruff locally
+
+Category-evaluation accounting:
+
+| Property | Result |
+|---|---:|
+| Validation impressions | 31,393 |
+| Clicked impressions | 31,393 |
+| Impression-category pairs | 43,413 |
+| Multi-category clicked impressions | 8,074 (25.72%) |
+| Minimum support | 100 relevant impressions |
+| Supported categories | 14 |
+| Zero-support categories | 3 |
+| Overall fallback metrics changed | No |
+| History-segment metrics changed | No |
+
+Supported category results at `K = 10`:
+
+| Category | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Coverage@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| News | 10,338 | 32.93% | 0.3361 | 0.2680 | 0.5804 | 0.6106 | 0.0641 |
+| Lifestyle | 6,594 | 21.00% | 0.3894 | 0.3297 | 0.6016 | 0.6175 | **0.1291** |
+| Sports | 3,564 | 11.35% | 0.3151 | 0.2546 | 0.5287 | 0.5485 | 0.0540 |
+| Finance | 3,464 | 11.03% | 0.2819 | 0.2169 | 0.5025 | 0.5141 | 0.1033 |
+| Music | 2,967 | 9.45% | 0.2234 | 0.1550 | 0.4520 | 0.4604 | 0.1014 |
+| Food and drink | 2,500 | 7.96% | 0.2577 | 0.2027 | 0.4530 | 0.4704 | 0.0894 |
+| TV | 2,312 | 7.36% | 0.2779 | 0.2069 | 0.5168 | 0.5238 | 0.0810 |
+| Health | 2,268 | 7.22% | 0.2124 | 0.1581 | 0.3978 | 0.4114 | 0.1119 |
+| Travel | 1,920 | 6.12% | 0.1772 | 0.1267 | 0.3493 | 0.3563 | 0.0728 |
+| Entertainment | 1,663 | 5.30% | 0.3230 | 0.2574 | 0.5441 | 0.5538 | 0.1227 |
+| Weather | 1,640 | 5.22% | **0.4764** | **0.3932** | **0.7359** | **0.7366** | 0.0420 |
+| Video | 1,558 | 4.96% | 0.1917 | 0.1346 | 0.3883 | 0.3928 | 0.0662 |
+| Autos | 1,469 | 4.68% | 0.2296 | 0.1764 | 0.4210 | 0.4391 | 0.0811 |
+| Movies | 1,156 | 3.68% | 0.2448 | 0.1705 | 0.4942 | 0.4957 | 0.1040 |
+
+Weather leads every supported relevance metric but has only 0.0420 category
+coverage. Lifestyle has the broadest supported category exposure at 0.1291.
+Travel has the weakest supported relevance results. `kids`, `middleeast`, and
+`northamerica` have no clicked validation support and therefore have no
+relevance metrics.
+
+The 43,413 memberships exceed the 31,393 impressions because an impression can
+belong to multiple clicked-category cohorts. The shares are not a partition
+and must not be summed. Results are descriptive, outcome-conditioned subgroup
+diagnostics rather than causal or candidate-availability-adjusted comparisons.
+
+Phase 4 category-evaluation evidence:
+
+```text
+src/newslens/evaluation/categories.py
+src/newslens/evaluation/fallback.py
+tests/test_categories.py
+tests/test_fallback_evaluation.py
+reports/fallback_metrics.json
+docs/EVALUATION.md
+```
+
 ### Remaining model evaluation
 
 - [x] Evaluate the content-based history recommender
@@ -494,7 +566,7 @@ docs/EVALUATION.md
 
 - [x] Compare performance across user-history lengths
 - [x] Compare warm-start and cold-start users
-- [ ] Analyze performance by article category
+- [x] Analyze performance by article category
 - [ ] Analyze unseen and low-exposure articles
 - [ ] Inspect high-confidence failures
 - [x] Document initial popularity findings
@@ -514,7 +586,7 @@ docs/ERROR_ANALYSIS.md
 Suggested future commits:
 
 ```text
-analysis: compare article-category and unseen-item segments
+analysis: compare unseen and low-exposure item segments
 analysis: add uncertainty estimates to baseline comparisons
 ```
 
@@ -534,6 +606,15 @@ feat: add tested history-segment evaluator
 feat: integrate history segments with fallback evaluation
 results: record MIND history-segment metrics
 docs: publish history-segment evaluation
+```
+
+Completed article-category commits include:
+
+```text
+feat: add tested article-category evaluator
+feat: integrate category analysis with fallback evaluation
+results: record MIND article-category metrics
+docs: publish article-category evaluation
 ```
 
 ## Phase 5: Hybrid ranking
@@ -635,7 +716,8 @@ NewsLens will be considered portfolio-ready when it includes:
 - [x] a machine-readable fallback evaluation report;
 - [x] a reproducible same-split three-model comparison;
 - [x] history-length user-segment analysis;
-- [ ] category-level and high-confidence error analysis;
+- [x] category-level analysis;
+- [ ] high-confidence error analysis;
 - [ ] uncertainty estimates or confidence intervals;
 - [ ] a tested inference API;
 - [ ] containerization;

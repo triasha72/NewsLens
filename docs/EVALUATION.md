@@ -14,8 +14,8 @@ evaluations of:
 
 All three systems are evaluated on the same strict chronological validation
 partition. NewsLens also includes tested, exhaustive history-length subgroup
-evaluation. Category-level behavior, unseen-article performance, and
-uncertainty remain in progress.
+evaluation and overlapping clicked-category evaluation. Unseen-article
+performance and uncertainty remain in progress.
 
 ## Evaluation protocol
 
@@ -78,6 +78,20 @@ four, five to nine, and ten or more history articles. Tests reject gaps,
 overlaps, duplicate names, invalid bounds, and incomplete assignments. Every
 validation impression must be assigned exactly once before segment metrics are
 accepted.
+
+### Article-category analysis
+
+Category cohorts are assigned from the categories of clicked candidates after
+rankings have been produced. The labels are used for diagnostic evaluation,
+not model fitting or fallback routing. An impression belongs to every category
+represented by its clicked candidates, so category membership can overlap.
+
+The evaluator preserves each item's original global ranking position. It does
+not filter out other categories and then re-rank the remaining candidates.
+Category exposure is counted separately from relevance and is normalized by
+the number of catalog articles in the focal category. A category must have at
+least 100 relevant impressions to be treated as supported, but unsupported
+categories remain in the report.
 
 ### Shared evaluation
 
@@ -151,8 +165,9 @@ All three commands validate and load the local data, build the chronological
 split, fit the selected model, evaluate every validation impression, print the
 result, and write a deterministic JSON report.
 
-The fallback report also records `history_segments`, including segment
-definitions, impression counts, shares, and per-segment ranking metrics.
+The fallback report also records `history_segments` and `category_analysis`,
+including subgroup accounting, ranking metrics, category exposure, and support
+indicators.
 
 Repeated runs with identical parameters produced byte-identical reports.
 
@@ -298,9 +313,67 @@ chronological split, not causal evidence that increasing a user's history
 would improve recommendations. Confidence intervals and significance tests
 have not yet been estimated.
 
+## Article-category findings
+
+All 31,393 validation impressions contain at least one clicked candidate. The
+category analysis records 43,413 impression-category pairs because 8,074
+impressions (25.72%) contain clicks from more than one category. Category
+membership is therefore overlapping rather than a mutually exclusive
+partition, and category shares do not sum to 100%.
+
+| Accounting property | Result |
+|---|---:|
+| Validation impressions | 31,393 |
+| Clicked impressions | 31,393 |
+| Impression-category pairs | 43,413 |
+| Multi-category clicked impressions | 8,074 (25.72%) |
+| Average category memberships per impression | 1.3829 |
+| Minimum relevant-impression support | 100 |
+| Supported categories | 14 |
+| Zero-support categories | 3 |
+| Overall fallback metrics changed | No |
+| History-segment metrics changed | No |
+
+Supported category results at `K = 10`:
+
+| Category | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Category Coverage@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| News | 10,338 | 32.93% | 0.3361 | 0.2680 | 0.5804 | 0.6106 | 0.0641 |
+| Lifestyle | 6,594 | 21.00% | 0.3894 | 0.3297 | 0.6016 | 0.6175 | **0.1291** |
+| Sports | 3,564 | 11.35% | 0.3151 | 0.2546 | 0.5287 | 0.5485 | 0.0540 |
+| Finance | 3,464 | 11.03% | 0.2819 | 0.2169 | 0.5025 | 0.5141 | 0.1033 |
+| Music | 2,967 | 9.45% | 0.2234 | 0.1550 | 0.4520 | 0.4604 | 0.1014 |
+| Food and drink | 2,500 | 7.96% | 0.2577 | 0.2027 | 0.4530 | 0.4704 | 0.0894 |
+| TV | 2,312 | 7.36% | 0.2779 | 0.2069 | 0.5168 | 0.5238 | 0.0810 |
+| Health | 2,268 | 7.22% | 0.2124 | 0.1581 | 0.3978 | 0.4114 | 0.1119 |
+| Travel | 1,920 | 6.12% | 0.1772 | 0.1267 | 0.3493 | 0.3563 | 0.0728 |
+| Entertainment | 1,663 | 5.30% | 0.3230 | 0.2574 | 0.5441 | 0.5538 | 0.1227 |
+| Weather | 1,640 | 5.22% | **0.4764** | **0.3932** | **0.7359** | **0.7366** | 0.0420 |
+| Video | 1,558 | 4.96% | 0.1917 | 0.1346 | 0.3883 | 0.3928 | 0.0662 |
+| Autos | 1,469 | 4.68% | 0.2296 | 0.1764 | 0.4210 | 0.4391 | 0.0811 |
+| Movies | 1,156 | 3.68% | 0.2448 | 0.1705 | 0.4942 | 0.4957 | 0.1040 |
+
+Unsupported categories:
+
+| Category | Relevant impressions | Recorded exposure | Relevance metrics |
+|---|---:|---:|---|
+| Kids | 0 | 0 | Not reported |
+| Middle East | 0 | 0 | Not reported |
+| North America | 0 | 0 | Not reported |
+
+Weather has the highest supported NDCG, MRR, Recall, and Hit Rate. Its category
+coverage is only 0.0420, however, indicating strong relevance within a narrow
+portion of its catalog. Lifestyle has the highest supported category coverage
+at 0.1291. Travel has the weakest supported relevance metrics, followed by
+video and health on NDCG.
+
+The unsupported categories do not establish model failure. They have no
+clicked validation support, and the current report does not adjust results for
+whether each category was available in an impression's candidate set.
+
 ## Interpretation
 
-The same-split comparison supports six conclusions:
+The same-split comparison supports eight conclusions:
 
 1. User-history text contains useful ranking signal beyond global click
    frequency under this validation protocol.
@@ -316,10 +389,15 @@ The same-split comparison supports six conclusions:
 6. The value associated with additional history is metric-specific rather than
    uniformly increasing: medium histories lead NDCG and Recall, while long
    histories lead MRR and Hit Rate.
+7. Ranking quality varies materially by clicked article category: weather is
+   strongest on all supported relevance metrics, while travel is weakest.
+8. Relevance and exposure are distinct objectives: weather combines the best
+   relevance with low category coverage, while lifestyle has the broadest
+   supported category coverage.
 
-The next analysis should examine article categories, unseen or low-exposure
-articles, and uncertainty around the recorded differences. These diagnostics
-are needed before moving to a learned hybrid ranker.
+The next analysis should examine unseen or low-exposure articles and
+uncertainty around the recorded differences. These diagnostics are needed
+before moving to a learned hybrid ranker.
 
 ## Reproducibility artifacts
 
@@ -340,19 +418,20 @@ src/newslens/evaluation/popularity.py
 src/newslens/evaluation/content.py
 src/newslens/evaluation/fallback.py
 src/newslens/evaluation/segments.py
+src/newslens/evaluation/categories.py
 tests/test_metrics.py
 tests/test_evaluator.py
 tests/test_popularity_evaluation.py
 tests/test_content_evaluation.py
 tests/test_fallback_evaluation.py
 tests/test_segments.py
+tests/test_categories.py
 tests/test_cli.py
 ```
 
 ## Remaining work
 
 - measure unseen-article performance directly;
-- analyze results by article category;
 - inspect high-confidence failures;
 - add uncertainty estimates or confidence intervals;
 - publish a complete error analysis; and
@@ -376,7 +455,15 @@ tests/test_cli.py
 - History-length segment sizes are highly imbalanced: 70.78% of validation
   impressions belong to the long-history group.
 - History-length results are descriptive associations, not causal estimates.
-- No category-level subgroup analysis is reported.
+- Article-category cohorts overlap because an impression can contain clicked
+  candidates from multiple categories; their shares cannot be summed or used
+  as mixture weights for the overall metrics.
+- Category cohorts are conditioned on observed clicks. They are descriptive
+  diagnostics, not causal comparisons of category effects.
+- Category coverage is not adjusted for whether a category appears in each
+  impression's candidate set.
+- `kids`, `middleeast`, and `northamerica` have no clicked validation support,
+  so no relevance conclusion is reported for them.
 - No neural recommendation model has been trained.
 - No online experiment has been conducted.
 - Results should not be compared directly with systems using different data

@@ -1,5 +1,11 @@
 """Evaluation and leakage-prevention utilities for NewsLens."""
 
+from .categories import (
+    CategoryEvaluationError,
+    CategoryEvaluationReport,
+    CategoryResult,
+    evaluate_article_categories,
+)
 from .content import (
     ContentEvaluationError,
     ContentEvaluationReport,
@@ -47,6 +53,9 @@ from .split import (
 
 __all__ = [
     "DEFAULT_HISTORY_LENGTH_SEGMENTS",
+    "CategoryEvaluationError",
+    "CategoryEvaluationReport",
+    "CategoryResult",
     "ChronologicalSplit",
     "ChronologicalSplitError",
     "ContentEvaluationError",
@@ -66,6 +75,7 @@ __all__ = [
     "RankingMetricError",
     "catalog_coverage",
     "chronological_train_validation_split",
+    "evaluate_article_categories",
     "evaluate_content_baseline",
     "evaluate_fallback_baseline",
     "evaluate_history_segments",
