@@ -14,8 +14,9 @@ evaluations of:
 
 All three systems are evaluated on the same strict chronological validation
 partition. NewsLens also includes tested, exhaustive history-length subgroup
-evaluation and overlapping clicked-category evaluation. Unseen-article
-performance and uncertainty remain in progress.
+evaluation, overlapping clicked-category evaluation, and overlapping
+training-exposure evaluation. Uncertainty estimation and high-confidence
+failure inspection remain in progress.
 
 ## Evaluation protocol
 
@@ -93,6 +94,23 @@ the number of catalog articles in the focal category. A category must have at
 least 100 relevant impressions to be treated as supported, but unsupported
 categories remain in the report.
 
+### Training-exposure analysis
+
+Candidate-exposure counts are fitted using only the earlier chronological
+training partition. Catalog articles are assigned to four contiguous bands:
+zero, one to nine, ten to 99, and 100 or more training candidate exposures.
+Articles absent from training candidates receive an exposure count of zero.
+
+Exposure bands are used only for diagnostic evaluation after rankings have
+been produced. An impression belongs to every band represented among its
+clicked candidates, so membership can overlap. The original global ranking
+positions are preserved. Recommendation coverage is normalized by the number
+of catalog articles in the focal exposure band.
+
+“Unseen” therefore means zero candidate appearances in chronological training.
+It does not mean that article text is missing or that the complete article is
+out of vocabulary.
+
 ### Shared evaluation
 
 All three systems use:
@@ -165,9 +183,9 @@ All three commands validate and load the local data, build the chronological
 split, fit the selected model, evaluate every validation impression, print the
 result, and write a deterministic JSON report.
 
-The fallback report also records `history_segments` and `category_analysis`,
-including subgroup accounting, ranking metrics, category exposure, and support
-indicators.
+The fallback report also records `history_segments`, `category_analysis`, and
+`exposure_analysis`, including subgroup accounting, ranking metrics,
+within-group recommendation coverage, overlap, and support indicators.
 
 Repeated runs with identical parameters produced byte-identical reports.
 
@@ -371,9 +389,59 @@ The unsupported categories do not establish model failure. They have no
 clicked validation support, and the current report does not adjust results for
 whether each category was available in an impression's candidate set.
 
+## Training-exposure findings
+
+Training candidate appearances divide the 51,282-article catalog into four
+bands. The zero-exposure band contains 34,450 articles, or 67.18% of the
+catalog. All four bands exceed the 100-relevant-impression support threshold.
+
+The 31,393 clicked validation impressions produce 39,633 impression-band
+pairs. Of these impressions, 6,627 (21.11%) contain clicked articles from more
+than one exposure band. Band shares therefore overlap and sum to more than
+100%.
+
+| Accounting property | Result |
+|---|---:|
+| Validation impressions | 31,393 |
+| Clicked impressions | 31,393 |
+| Impression-band pairs | 39,633 |
+| Multi-band clicked impressions | 6,627 (21.11%) |
+| Average band memberships per impression | 1.2625 |
+| Minimum relevant-impression support | 100 |
+| Supported bands | 4 |
+| Overall fallback metrics changed | No |
+| History-segment metrics changed | No |
+| Article-category metrics changed | No |
+
+Exposure-band results at `K = 10`:
+
+| Band | Training exposures | Catalog articles | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Band Coverage@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Unseen | 0 | 34,450 | 15,003 | 47.79% | **0.3924** | **0.3291** | **0.6298** | **0.6655** | 0.0577 |
+| Low exposure | 1–9 | 9,648 | 13,038 | 41.53% | 0.2807 | 0.2159 | 0.5162 | 0.5512 | 0.0470 |
+| Medium exposure | 10–99 | 4,405 | 3,012 | 9.59% | 0.2916 | 0.2246 | 0.5136 | 0.5196 | 0.0854 |
+| High exposure | 100+ | 2,779 | 8,580 | 27.33% | 0.2740 | 0.2265 | 0.4697 | 0.5169 | **0.3127** |
+
+Unseen clicked articles lead every reported relevance metric. High-exposure
+articles have the highest within-band catalog coverage but the lowest NDCG,
+Recall, and Hit Rate; low-exposure articles have the lowest MRR. Relevance is
+therefore not monotonically related to training candidate exposure under this
+split.
+
+The unseen result is plausible for this content-based system. The vocabulary
+and inverse-document frequencies are fitted from training-referenced text, but
+catalog article text can be transformed after fitting without using validation
+click labels. An article may therefore have zero training candidate exposures
+and still receive a useful TF-IDF representation.
+
+This remains a descriptive result rather than evidence that unseen status
+causes better ranking. Newer content, category mix, candidate difficulty, and
+lexical alignment may differ across the bands. The current analysis does not
+control for those factors or estimate uncertainty.
+
 ## Interpretation
 
-The same-split comparison supports eight conclusions:
+The same-split comparison supports ten conclusions:
 
 1. User-history text contains useful ranking signal beyond global click
    frequency under this validation protocol.
@@ -394,10 +462,15 @@ The same-split comparison supports eight conclusions:
 8. Relevance and exposure are distinct objectives: weather combines the best
    relevance with low category coverage, while lifestyle has the broadest
    supported category coverage.
+9. The TF-IDF fallback system can rank clicked articles with zero training
+   candidate exposures because text metadata remains available for
+   transformation under the training-fitted vocabulary.
+10. Training exposure and relevance are not monotonically related in this
+    split: unseen articles lead relevance, while high-exposure articles lead
+    within-band coverage.
 
-The next analysis should examine unseen or low-exposure articles and
-uncertainty around the recorded differences. These diagnostics are needed
-before moving to a learned hybrid ranker.
+The next analysis should estimate uncertainty around the recorded differences
+and inspect high-confidence failures before moving to a learned hybrid ranker.
 
 ## Reproducibility artifacts
 
@@ -419,6 +492,7 @@ src/newslens/evaluation/content.py
 src/newslens/evaluation/fallback.py
 src/newslens/evaluation/segments.py
 src/newslens/evaluation/categories.py
+src/newslens/evaluation/exposure.py
 tests/test_metrics.py
 tests/test_evaluator.py
 tests/test_popularity_evaluation.py
@@ -426,12 +500,12 @@ tests/test_content_evaluation.py
 tests/test_fallback_evaluation.py
 tests/test_segments.py
 tests/test_categories.py
+tests/test_exposure.py
 tests/test_cli.py
 ```
 
 ## Remaining work
 
-- measure unseen-article performance directly;
 - inspect high-confidence failures;
 - add uncertainty estimates or confidence intervals;
 - publish a complete error analysis; and
@@ -464,6 +538,17 @@ tests/test_cli.py
   impression's candidate set.
 - `kids`, `middleeast`, and `northamerica` have no clicked validation support,
   so no relevance conclusion is reported for them.
+- Training-exposure cohorts overlap when an impression contains clicked items
+  from multiple bands; their shares cannot be summed or used as mixture
+  weights for overall metrics.
+- “Unseen” means zero candidate appearances in chronological training, not
+  unavailable article text or a fully out-of-vocabulary document.
+- Exposure-band comparisons are descriptive and may be confounded by article
+  recency, category mix, candidate composition, and lexical difficulty.
+- The fixed 0, 1–9, 10–99, and 100+ thresholds are diagnostic choices rather
+  than optimized or statistically identified cut points.
+- Band coverage uses band-specific catalog denominators, so differences in
+  coverage do not directly measure differences in relevance.
 - No neural recommendation model has been trained.
 - No online experiment has been conducted.
 - Results should not be compared directly with systems using different data

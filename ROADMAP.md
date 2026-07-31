@@ -17,7 +17,7 @@ documentation, reproducible outputs, and continuous-integration checks pass.
   - cold-start fallback evaluation — completed
   - history-length segment evaluation — completed
   - article-category evaluation — completed
-  - unseen-article analysis — next
+  - unseen and training-exposure analysis — completed
   - uncertainty estimation — next
 - Phase 5: Hybrid ranking — planned
 - Phase 6: Serving — planned
@@ -232,8 +232,8 @@ Phase 4 is currently in progress. Formal metric implementation, the common
 evaluator, popularity evaluation, and TF-IDF history-content evaluation are
 complete. Rule-based cold-start fallback evaluation is also complete.
 History-length segment evaluation and overlapping article-category evaluation
-are complete. Unseen-article analysis and uncertainty estimation remain
-pending.
+are complete. Unseen and training-exposure analysis is also complete.
+Uncertainty estimation and high-confidence failure inspection remain pending.
 
 ### Metric implementation
 
@@ -547,13 +547,77 @@ reports/fallback_metrics.json
 docs/EVALUATION.md
 ```
 
+### Reproducible training-exposure evaluation
+
+- [x] Define unseen as zero chronological-training candidate exposures
+- [x] Define contiguous low-, medium-, and high-exposure intervals
+- [x] Fit exposure counts using only the earlier training partition
+- [x] Preserve original global ranking positions within every cohort
+- [x] Support impressions with clicked items from multiple exposure bands
+- [x] Record overlapping impression-band memberships explicitly
+- [x] Compute per-band NDCG, MRR, Recall, and Hit Rate
+- [x] Compute recommendation coverage using each band's catalog denominator
+- [x] Apply a minimum-support threshold without dropping bands
+- [x] Preserve overall, history-segment, and category metrics
+- [x] Integrate exposure results into the deterministic fallback report
+- [x] Add unit and integration tests
+- [x] Pass all 222 automated tests locally
+- [x] Pass Ruff locally
+
+Exposure-evaluation accounting:
+
+| Property | Result |
+|---|---:|
+| Validation impressions | 31,393 |
+| Clicked impressions | 31,393 |
+| Impression-band pairs | 39,633 |
+| Multi-band clicked impressions | 6,627 (21.11%) |
+| Average band memberships per impression | 1.2625 |
+| Minimum support | 100 relevant impressions |
+| Supported bands | 4 |
+| Overall fallback metrics changed | No |
+| History-segment metrics changed | No |
+| Article-category metrics changed | No |
+
+Training-exposure results at `K = 10`:
+
+| Band | Exposures | Catalog articles | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Coverage@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Unseen | 0 | 34,450 | 15,003 | 47.79% | **0.3924** | **0.3291** | **0.6298** | **0.6655** | 0.0577 |
+| Low exposure | 1–9 | 9,648 | 13,038 | 41.53% | 0.2807 | 0.2159 | 0.5162 | 0.5512 | 0.0470 |
+| Medium exposure | 10–99 | 4,405 | 3,012 | 9.59% | 0.2916 | 0.2246 | 0.5136 | 0.5196 | 0.0854 |
+| High exposure | 100+ | 2,779 | 8,580 | 27.33% | 0.2740 | 0.2265 | 0.4697 | 0.5169 | **0.3127** |
+
+Unseen clicked articles have the strongest recorded relevance metrics, while
+high-exposure articles have the broadest within-band catalog coverage. The
+result is compatible with TF-IDF generalizing to catalog text that had zero
+training candidate appearances. It is not evidence that zero exposure causes
+better ranking: recency, category mix, candidate difficulty, and lexical
+alignment remain possible explanations.
+
+The cohorts overlap because multi-click impressions can contain relevant items
+from several exposure bands. “Unseen” refers specifically to zero candidate
+exposures in chronological training, not missing article text or an
+out-of-vocabulary document.
+
+Phase 4 exposure-evaluation evidence:
+
+```text
+src/newslens/evaluation/exposure.py
+src/newslens/evaluation/fallback.py
+tests/test_exposure.py
+tests/test_fallback_evaluation.py
+reports/fallback_metrics.json
+docs/EVALUATION.md
+```
+
 ### Remaining model evaluation
 
 - [x] Evaluate the content-based history recommender
 - [x] Evaluate the cold-start fallback
 - [x] Record content-model coverage
 - [x] Record fallback frequency
-- [ ] Measure unseen-article ranking performance
+- [x] Measure unseen-article ranking performance
 - [x] Evaluate warm-start and cold-start impressions separately
 - [x] Generate a three-model comparison table
 - [x] Compare popularity, content, and fallback using identical validation
@@ -567,7 +631,7 @@ docs/EVALUATION.md
 - [x] Compare performance across user-history lengths
 - [x] Compare warm-start and cold-start users
 - [x] Analyze performance by article category
-- [ ] Analyze unseen and low-exposure articles
+- [x] Analyze unseen and low-exposure articles
 - [ ] Inspect high-confidence failures
 - [x] Document initial popularity findings
 - [x] Document popularity limitations and non-claims
@@ -586,7 +650,7 @@ docs/ERROR_ANALYSIS.md
 Suggested future commits:
 
 ```text
-analysis: compare unseen and low-exposure item segments
+analysis: inspect high-confidence ranking failures
 analysis: add uncertainty estimates to baseline comparisons
 ```
 
@@ -615,6 +679,15 @@ feat: add tested article-category evaluator
 feat: integrate category analysis with fallback evaluation
 results: record MIND article-category metrics
 docs: publish article-category evaluation
+```
+
+Completed training-exposure commits include:
+
+```text
+feat: add tested training-exposure evaluator
+feat: integrate exposure analysis with fallback evaluation
+results: record MIND training-exposure metrics
+docs: publish training-exposure evaluation
 ```
 
 ## Phase 5: Hybrid ranking
@@ -717,6 +790,7 @@ NewsLens will be considered portfolio-ready when it includes:
 - [x] a reproducible same-split three-model comparison;
 - [x] history-length user-segment analysis;
 - [x] category-level analysis;
+- [x] unseen and low-exposure item analysis;
 - [ ] high-confidence error analysis;
 - [ ] uncertainty estimates or confidence intervals;
 - [ ] a tested inference API;
