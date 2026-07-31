@@ -29,6 +29,12 @@ from .evaluator import (
     RankingExample,
     evaluate_rankings,
 )
+from .segments import (
+    HistorySegmentEvaluationError,
+    HistorySegmentEvaluationReport,
+    HistorySegmentExample,
+    evaluate_history_segments,
+)
 from .split import (
     ChronologicalSplitError,
     chronological_train_validation_split,
@@ -60,6 +66,7 @@ class FallbackEvaluationReport:
     zero_profile_fallback_impressions: int
     zero_signal_fallback_impressions: int
     metrics: RankingEvaluationResult
+    history_segments: HistorySegmentEvaluationReport
 
     @property
     def content_routed_fraction(self) -> float:
@@ -90,10 +97,7 @@ class FallbackEvaluationReport:
 
     def to_dict(
         self,
-    ) -> dict[
-        str,
-        str | int | float | dict[str, int | float],
-    ]:
+    ) -> dict[str, object]:
         """Return a JSON-compatible evaluation report."""
 
         return {
@@ -118,12 +122,14 @@ class FallbackEvaluationReport:
             "recovered_fallback_impressions": self.recovered_fallback_impressions,
             "fallback_recovery_fraction": self.fallback_recovery_fraction,
             "metrics": self.metrics.to_dict(),
+            "history_segments": self.history_segments.to_dict(),
         }
 
 
 @dataclass(frozen=True)
 class _FallbackExampleBuildResult:
     examples: list[RankingExample]
+    history_segment_examples: list[HistorySegmentExample]
     candidate_occurrences: int
     content_routed_impressions: int
     popularity_routed_impressions: int
@@ -172,6 +178,7 @@ def _build_ranking_examples(
     k: int,
 ) -> _FallbackExampleBuildResult:
     examples: list[RankingExample] = []
+    history_segment_examples: list[HistorySegmentExample] = []
     candidate_occurrences = 0
     content_routed_impressions = 0
     popularity_routed_impressions = 0
@@ -252,16 +259,22 @@ def _build_ranking_examples(
                 f"Impression '{impression_id}' returned an unknown recommendation source."
             )
 
-        examples.append(
-            RankingExample(
-                impression_id=impression_id,
-                ranked_items=tuple(recommendation.news_id for recommendation in recommendations),
-                relevant_items=relevant_items,
+        ranking_example = RankingExample(
+            impression_id=impression_id,
+            ranked_items=tuple(recommendation.news_id for recommendation in recommendations),
+            relevant_items=relevant_items,
+        )
+        examples.append(ranking_example)
+        history_segment_examples.append(
+            HistorySegmentExample(
+                ranking=ranking_example,
+                history_length=len(history_ids),
             )
         )
 
     return _FallbackExampleBuildResult(
         examples=examples,
+        history_segment_examples=history_segment_examples,
         candidate_occurrences=candidate_occurrences,
         content_routed_impressions=content_routed_impressions,
         popularity_routed_impressions=popularity_routed_impressions,
@@ -342,7 +355,12 @@ def evaluate_fallback_baseline(
             catalog,
             k=k,
         )
-    except RankingEvaluationError as error:
+        history_segments = evaluate_history_segments(
+            build_result.history_segment_examples,
+            catalog,
+            k=k,
+        )
+    except (RankingEvaluationError, HistorySegmentEvaluationError) as error:
         raise FallbackEvaluationError(str(error)) from error
 
     return FallbackEvaluationReport(
@@ -363,4 +381,5 @@ def evaluate_fallback_baseline(
         zero_profile_fallback_impressions=(build_result.zero_profile_fallback_impressions),
         zero_signal_fallback_impressions=(build_result.zero_signal_fallback_impressions),
         metrics=metrics,
+        history_segments=history_segments,
     )
