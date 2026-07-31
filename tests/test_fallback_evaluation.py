@@ -197,6 +197,7 @@ def test_report_is_json_serializable() -> None:
     assert '"model_name": "tfidf_content_with_popularity_fallback"' in serialized
     assert report.to_dict()["metrics"]["k"] == 2
     assert report.to_dict()["history_segments"]["k"] == 2
+    assert report.to_dict()["category_analysis"]["k"] == 2
 
 
 def test_report_includes_exhaustive_history_segments() -> None:
@@ -222,6 +223,59 @@ def test_report_includes_exhaustive_history_segments() -> None:
     assert segments["medium_history"].metrics is None
     assert segments["long_history"].total_impressions == 0
     assert segments["long_history"].metrics is None
+
+
+def test_report_includes_overlapping_clicked_category_analysis() -> None:
+    report = evaluate_fallback_baseline(
+        make_news(),
+        make_behaviors(),
+        validation_fraction=0.40,
+        k=2,
+        minimum_category_impressions=1,
+    )
+    categories = {category.name: category for category in report.category_analysis.categories}
+
+    assert report.category_analysis.overall_metrics == report.metrics
+    assert report.category_analysis.clicked_impressions == report.validation_records
+    assert report.category_analysis.multi_category_clicked_impressions == 0
+    assert report.category_analysis.impression_category_pairs == 2
+    assert not report.category_analysis.category_membership_is_overlapping
+
+    assert categories["science"].relevant_impressions == 1
+    assert categories["science"].meets_minimum_support
+    assert categories["science"].metrics is not None
+    assert categories["science"].metrics.ndcg_at_k == pytest.approx(1.0)
+
+    assert categories["food"].relevant_impressions == 1
+    assert categories["food"].meets_minimum_support
+    assert categories["food"].metrics is not None
+    assert categories["food"].metrics.ndcg_at_k == pytest.approx(1.0 / log2(3))
+
+    assert categories["finance"].relevant_impressions == 0
+    assert categories["finance"].metrics is None
+    assert categories["sports"].relevant_impressions == 0
+    assert categories["sports"].metrics is None
+
+
+def test_evaluation_requires_article_categories() -> None:
+    news = make_news().drop(columns="category")
+
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="Missing required article columns: category",
+    ):
+        evaluate_fallback_baseline(news, make_behaviors())
+
+
+def test_evaluation_rejects_empty_article_categories() -> None:
+    news = make_news()
+    news.loc[0, "category"] = " "
+
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="Article categories cannot be empty",
+    ):
+        evaluate_fallback_baseline(news, make_behaviors())
 
 
 def test_evaluation_requires_behavior_columns() -> None:
@@ -300,4 +354,22 @@ def test_evaluation_rejects_invalid_max_features(
             make_news(),
             make_behaviors(),
             max_features=invalid_max_features,  # type: ignore[arg-type]
+        )
+
+
+@pytest.mark.parametrize(
+    "invalid_minimum",
+    [0, -1, 1.5, True],
+)
+def test_evaluation_rejects_invalid_minimum_category_impressions(
+    invalid_minimum: object,
+) -> None:
+    with pytest.raises(
+        FallbackEvaluationError,
+        match="minimum_category_impressions must be a positive integer",
+    ):
+        evaluate_fallback_baseline(
+            make_news(),
+            make_behaviors(),
+            minimum_category_impressions=invalid_minimum,  # type: ignore[arg-type]
         )

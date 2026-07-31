@@ -17,6 +17,11 @@ from ..models import (
     PopularityRecommender,
     RecommendationSource,
 )
+from .categories import (
+    CategoryEvaluationError,
+    CategoryEvaluationReport,
+    evaluate_article_categories,
+)
 from .content import (
     ContentEvaluationError,
     _parse_history,
@@ -67,6 +72,7 @@ class FallbackEvaluationReport:
     zero_signal_fallback_impressions: int
     metrics: RankingEvaluationResult
     history_segments: HistorySegmentEvaluationReport
+    category_analysis: CategoryEvaluationReport
 
     @property
     def content_routed_fraction(self) -> float:
@@ -123,6 +129,7 @@ class FallbackEvaluationReport:
             "fallback_recovery_fraction": self.fallback_recovery_fraction,
             "metrics": self.metrics.to_dict(),
             "history_segments": self.history_segments.to_dict(),
+            "category_analysis": self.category_analysis.to_dict(),
         }
 
 
@@ -137,6 +144,23 @@ class _FallbackExampleBuildResult:
     unknown_history_fallback_impressions: int
     zero_profile_fallback_impressions: int
     zero_signal_fallback_impressions: int
+
+
+def _prepare_item_categories(news: pd.DataFrame) -> dict[str, str]:
+    required_columns = {"news_id", "category"}
+    missing_columns = required_columns.difference(news.columns)
+
+    if missing_columns:
+        formatted = ", ".join(sorted(missing_columns))
+        raise FallbackEvaluationError(f"Missing required article columns: {formatted}.")
+
+    news_ids = news["news_id"].fillna("").astype(str).str.strip()
+    categories = news["category"].fillna("").astype(str).str.strip()
+
+    if categories.eq("").any():
+        raise FallbackEvaluationError("Article categories cannot be empty.")
+
+    return dict(zip(news_ids, categories, strict=True))
 
 
 def _classify_fallback_reason(
@@ -292,6 +316,7 @@ def evaluate_fallback_baseline(
     validation_fraction: float = 0.20,
     k: int = 10,
     max_features: int = 50_000,
+    minimum_category_impressions: int = 100,
 ) -> FallbackEvaluationReport:
     """Evaluate content ranking with training-only popularity fallback."""
 
@@ -300,6 +325,13 @@ def evaluate_fallback_baseline(
 
     if isinstance(max_features, bool) or not isinstance(max_features, int) or max_features <= 0:
         raise FallbackEvaluationError("max_features must be a positive integer.")
+
+    if (
+        isinstance(minimum_category_impressions, bool)
+        or not isinstance(minimum_category_impressions, int)
+        or minimum_category_impressions <= 0
+    ):
+        raise FallbackEvaluationError("minimum_category_impressions must be a positive integer.")
 
     required_columns = {
         "impression_id",
@@ -315,6 +347,7 @@ def evaluate_fallback_baseline(
 
     try:
         catalog = _prepare_catalog(news)
+        item_categories = _prepare_item_categories(news)
         split = chronological_train_validation_split(
             behaviors,
             validation_fraction=validation_fraction,
@@ -360,7 +393,17 @@ def evaluate_fallback_baseline(
             catalog,
             k=k,
         )
-    except (RankingEvaluationError, HistorySegmentEvaluationError) as error:
+        category_analysis = evaluate_article_categories(
+            build_result.examples,
+            item_categories,
+            k=k,
+            minimum_relevant_impressions=minimum_category_impressions,
+        )
+    except (
+        CategoryEvaluationError,
+        HistorySegmentEvaluationError,
+        RankingEvaluationError,
+    ) as error:
         raise FallbackEvaluationError(str(error)) from error
 
     return FallbackEvaluationReport(
@@ -382,4 +425,5 @@ def evaluate_fallback_baseline(
         zero_signal_fallback_impressions=(build_result.zero_signal_fallback_impressions),
         metrics=metrics,
         history_segments=history_segments,
+        category_analysis=category_analysis,
     )
