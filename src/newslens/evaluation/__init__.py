@@ -17,6 +17,14 @@ from .evaluator import (
     RankingExample,
     evaluate_rankings,
 )
+from .exposure import (
+    DEFAULT_TRAINING_EXPOSURE_BANDS,
+    ExposureBandResult,
+    ExposureEvaluationError,
+    ExposureEvaluationReport,
+    TrainingExposureBand,
+    evaluate_training_exposure_bands,
+)
 from .fallback import (
     FallbackEvaluationError,
     FallbackEvaluationReport,
@@ -53,6 +61,7 @@ from .split import (
 
 __all__ = [
     "DEFAULT_HISTORY_LENGTH_SEGMENTS",
+    "DEFAULT_TRAINING_EXPOSURE_BANDS",
     "CategoryEvaluationError",
     "CategoryEvaluationReport",
     "CategoryResult",
@@ -60,6 +69,9 @@ __all__ = [
     "ChronologicalSplitError",
     "ContentEvaluationError",
     "ContentEvaluationReport",
+    "ExposureBandResult",
+    "ExposureEvaluationError",
+    "ExposureEvaluationReport",
     "FallbackEvaluationError",
     "FallbackEvaluationReport",
     "HistoryLengthSegment",
@@ -73,6 +85,7 @@ __all__ = [
     "RankingEvaluationResult",
     "RankingExample",
     "RankingMetricError",
+    "TrainingExposureBand",
     "catalog_coverage",
     "chronological_train_validation_split",
     "evaluate_article_categories",
@@ -81,6 +94,7 @@ __all__ = [
     "evaluate_history_segments",
     "evaluate_popularity_baseline",
     "evaluate_rankings",
+    "evaluate_training_exposure_bands",
     "hit_rate_at_k",
     "mean_reciprocal_rank_at_k",
     "ndcg_at_k",

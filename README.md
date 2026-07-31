@@ -15,8 +15,10 @@ assumptions, limitations, and non-claims.
 > reproducible MIND-small popularity, TF-IDF history-content, and rule-based
 > cold-start fallback evaluations. It also includes exhaustive history-length
 > subgroup evaluation and overlapping clicked-category evaluation with exact
-> accounting. The project currently has 195 automated tests. Unseen-article
-> analysis and uncertainty estimation remain in progress.
+> accounting, plus overlapping training-exposure cohorts for unseen and
+> low-exposure diagnostics. The project currently has 222 automated tests.
+> Uncertainty estimation and high-confidence failure inspection remain in
+> progress.
 
 ## Why this project
 
@@ -87,11 +89,15 @@ NewsLens is designed to demonstrate:
 - overlapping clicked-category cohorts with category-specific relevance and
   exposure metrics;
 - explicit minimum-support and multi-category membership accounting;
+- leakage-safe training-exposure bands for unseen, low-, medium-, and
+  high-exposure clicked articles;
+- exposure-specific relevance, recommendation coverage, and overlap
+  accounting;
 - chronological MIND-small validation results; and
-- 195 automated tests.
+- 222 automated tests.
 
-Unseen-article analysis, uncertainty estimation, and final holdout evaluation
-are the next Phase 4 milestones.
+Uncertainty estimation, high-confidence failure inspection, and final holdout
+evaluation are the next Phase 4 milestones.
 
 ## Quick start
 
@@ -168,6 +174,7 @@ NewsLens/
 │       │   ├── categories.py
 │       │   ├── content.py
 │       │   ├── evaluator.py
+│       │   ├── exposure.py
 │       │   ├── fallback.py
 │       │   ├── metrics.py
 │       │   ├── popularity.py
@@ -591,6 +598,42 @@ no recorded exposure in this split, so no relevance conclusion is made for
 them. Category cohorts are conditioned on observed clicks and are descriptive,
 not causal or candidate-availability-adjusted comparisons.
 
+## Training-exposure evaluation
+
+Articles are assigned to four bands using candidate exposures observed only in
+the chronological training partition:
+
+| Band | Training candidate exposures |
+|---|---:|
+| Unseen | 0 |
+| Low exposure | 1–9 |
+| Medium exposure | 10–99 |
+| High exposure | 100+ |
+
+An impression belongs to every band represented by its clicked articles, so
+the cohorts can overlap. Original global ranking positions are preserved. In
+this validation split, 6,627 impressions (21.11%) belong to multiple bands,
+producing 39,633 impression-band memberships across 31,393 impressions.
+
+| Band | Catalog articles | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Band Coverage@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Unseen | 34,450 | 15,003 | 47.79% | **0.3924** | **0.3291** | **0.6298** | **0.6655** | 0.0577 |
+| Low exposure | 9,648 | 13,038 | 41.53% | 0.2807 | 0.2159 | 0.5162 | 0.5512 | 0.0470 |
+| Medium exposure | 4,405 | 3,012 | 9.59% | 0.2916 | 0.2246 | 0.5136 | 0.5196 | 0.0854 |
+| High exposure | 2,779 | 8,580 | 27.33% | 0.2740 | 0.2265 | 0.4697 | 0.5169 | **0.3127** |
+
+All four bands exceed the 100-impression support threshold. Unseen clicked
+articles have the strongest recorded relevance metrics, while high-exposure
+articles have the broadest within-band recommendation coverage. This does not
+mean that zero exposure causes better performance. The TF-IDF vocabulary is
+fitted from training-referenced text, but catalog article text can still be
+transformed after fitting without using validation clicks. Recency, category
+mix, candidate difficulty, and lexical alignment may therefore contribute to
+the result.
+
+Here, “unseen” means zero candidate appearances in chronological training. It
+does not mean missing article metadata or an out-of-vocabulary document.
+
 The machine-readable reports are stored at:
 
 ```text
@@ -701,7 +744,7 @@ Apply automatic formatting:
 python -m ruff format .
 ```
 
-The 195-test suite covers:
+The 222-test suite covers:
 
 - malformed TSV schemas;
 - duplicate identifiers;
@@ -732,6 +775,12 @@ The 195-test suite covers:
 - overlapping multi-category impression accounting;
 - category-specific catalog exposure and minimum-support reporting;
 - fallback integration and deterministic category JSON output;
+- contiguous training-exposure band definitions;
+- zero-exposure assignment for articles absent from training candidates;
+- preservation of global ranking positions across exposure cohorts;
+- overlapping multi-band clicked-impression accounting;
+- exposure-band support, recommendation coverage, and deterministic JSON;
+- fallback integration of chronological-training exposure counts;
 - reproducible fallback-evaluation CLI behavior;
 - CLI behavior;
 - model-not-fitted errors; and
@@ -760,8 +809,9 @@ A feature is considered complete only when:
 3. **Evaluation-safe baselines** — completed.
 4. **Ranking evaluation** — in progress; metrics, evaluator, popularity
    evaluation, TF-IDF content evaluation, and cold-start fallback evaluation
-   completed. History-length and article-category evaluations are complete;
-   unseen-article and uncertainty analyses remain.
+   completed. History-length, article-category, and training-exposure
+   evaluations are complete; uncertainty estimation and high-confidence
+   failure inspection remain.
 5. **Hybrid ranking** — planned.
 6. **Inference service** — planned.
 7. **MLOps and deployment** — planned.
@@ -799,6 +849,16 @@ deliverables.
   impression's candidate set.
 - Three categories have no clicked validation support, so no relevance claim
   is made for them.
+- Training-exposure cohorts overlap when an impression contains clicked items
+  from multiple bands; their shares cannot be summed.
+- “Unseen” means zero chronological-training candidate exposures, not absent
+  text metadata or an out-of-vocabulary document.
+- Exposure-band results are descriptive and may be confounded by recency,
+  category, candidate composition, and lexical difficulty.
+- Exposure thresholds are fixed diagnostic intervals rather than optimized or
+  statistically identified cut points.
+- Band coverage uses different catalog denominators and should not be read as a
+  direct relevance comparison.
 - No inference API has been implemented or deployed.
 - No online experiment has been conducted.
 - Passing tests and offline metrics do not establish online product impact.
