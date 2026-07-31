@@ -14,9 +14,9 @@ assumptions, limitations, and non-claims.
 > formally tested ranking metrics, a model-independent evaluator, and
 > reproducible MIND-small popularity, TF-IDF history-content, and rule-based
 > cold-start fallback evaluations. It also includes exhaustive history-length
-> subgroup evaluation with exact impression accounting. The project currently
-> has 171 automated tests. Category-level analysis, unseen-article analysis,
-> and uncertainty estimation remain in progress.
+> subgroup evaluation and overlapping clicked-category evaluation with exact
+> accounting. The project currently has 195 automated tests. Unseen-article
+> analysis and uncertainty estimation remain in progress.
 
 ## Why this project
 
@@ -84,11 +84,14 @@ NewsLens is designed to demonstrate:
 - explicit content abstention and cold-start accounting;
 - explicit fallback routing and recovery accounting;
 - exhaustive history-length segmentation with per-segment ranking metrics;
+- overlapping clicked-category cohorts with category-specific relevance and
+  exposure metrics;
+- explicit minimum-support and multi-category membership accounting;
 - chronological MIND-small validation results; and
-- 171 automated tests.
+- 195 automated tests.
 
-Category-level analysis, unseen-article analysis, uncertainty estimation, and
-final holdout evaluation are the next Phase 4 milestones.
+Unseen-article analysis, uncertainty estimation, and final holdout evaluation
+are the next Phase 4 milestones.
 
 ## Quick start
 
@@ -162,6 +165,7 @@ NewsLens/
 │       │   ├── audit.py
 │       │   └── mind.py
 │       ├── evaluation/
+│       │   ├── categories.py
 │       │   ├── content.py
 │       │   ├── evaluator.py
 │       │   ├── fallback.py
@@ -545,6 +549,48 @@ results are descriptive associations under this split, not evidence that
 longer histories causally improve recommendations. Confidence intervals have
 not yet been estimated.
 
+## Article-category evaluation
+
+NewsLens also evaluates the final fallback rankings within cohorts defined by
+the categories of clicked articles. An impression belongs to every category
+represented among its clicked candidates, so the cohorts intentionally
+overlap. The original global ranking positions are preserved when calculating
+category relevance metrics; items outside the focal category are not removed
+or re-ranked.
+
+All 31,393 clicked validation impressions are included. They produce 43,413
+impression-category memberships, and 8,074 impressions (25.72%) contain clicks
+from more than one category. Category shares therefore do not sum to 100%.
+Results below use a minimum-support threshold of 100 relevant impressions.
+
+| Category | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Category Coverage@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| News | 10,338 | 32.93% | 0.3361 | 0.2680 | 0.5804 | 0.6106 | 0.0641 |
+| Lifestyle | 6,594 | 21.00% | 0.3894 | 0.3297 | 0.6016 | 0.6175 | **0.1291** |
+| Sports | 3,564 | 11.35% | 0.3151 | 0.2546 | 0.5287 | 0.5485 | 0.0540 |
+| Finance | 3,464 | 11.03% | 0.2819 | 0.2169 | 0.5025 | 0.5141 | 0.1033 |
+| Music | 2,967 | 9.45% | 0.2234 | 0.1550 | 0.4520 | 0.4604 | 0.1014 |
+| Food and drink | 2,500 | 7.96% | 0.2577 | 0.2027 | 0.4530 | 0.4704 | 0.0894 |
+| TV | 2,312 | 7.36% | 0.2779 | 0.2069 | 0.5168 | 0.5238 | 0.0810 |
+| Health | 2,268 | 7.22% | 0.2124 | 0.1581 | 0.3978 | 0.4114 | 0.1119 |
+| Travel | 1,920 | 6.12% | 0.1772 | 0.1267 | 0.3493 | 0.3563 | 0.0728 |
+| Entertainment | 1,663 | 5.30% | 0.3230 | 0.2574 | 0.5441 | 0.5538 | 0.1227 |
+| Weather | 1,640 | 5.22% | **0.4764** | **0.3932** | **0.7359** | **0.7366** | 0.0420 |
+| Video | 1,558 | 4.96% | 0.1917 | 0.1346 | 0.3883 | 0.3928 | 0.0662 |
+| Autos | 1,469 | 4.68% | 0.2296 | 0.1764 | 0.4210 | 0.4391 | 0.0811 |
+| Movies | 1,156 | 3.68% | 0.2448 | 0.1705 | 0.4942 | 0.4957 | 0.1040 |
+
+Weather has the strongest recorded relevance metrics, whereas travel is the
+weakest supported category. Weather's category coverage is only 0.0420,
+showing that strong relevance and broad within-category exposure are distinct
+objectives. Lifestyle has the highest category coverage among supported
+categories at 0.1291.
+
+`kids`, `middleeast`, and `northamerica` have no clicked validation support and
+no recorded exposure in this split, so no relevance conclusion is made for
+them. Category cohorts are conditioned on observed clicks and are descriptive,
+not causal or candidate-availability-adjusted comparisons.
+
 The machine-readable reports are stored at:
 
 ```text
@@ -655,7 +701,7 @@ Apply automatic formatting:
 python -m ruff format .
 ```
 
-The 171-test suite covers:
+The 195-test suite covers:
 
 - malformed TSV schemas;
 - duplicate identifiers;
@@ -682,6 +728,10 @@ The 171-test suite covers:
 - empty-history and no-click segment accounting;
 - model-independent per-segment ranking evaluation;
 - fallback integration and deterministic segment JSON output;
+- preservation of global ranking positions in category cohorts;
+- overlapping multi-category impression accounting;
+- category-specific catalog exposure and minimum-support reporting;
+- fallback integration and deterministic category JSON output;
 - reproducible fallback-evaluation CLI behavior;
 - CLI behavior;
 - model-not-fitted errors; and
@@ -710,8 +760,8 @@ A feature is considered complete only when:
 3. **Evaluation-safe baselines** — completed.
 4. **Ranking evaluation** — in progress; metrics, evaluator, popularity
    evaluation, TF-IDF content evaluation, and cold-start fallback evaluation
-   completed. History-length segment evaluation is complete; category-level,
-   unseen-article, and uncertainty analyses remain.
+   completed. History-length and article-category evaluations are complete;
+   unseen-article and uncertainty analyses remain.
 5. **Hybrid ranking** — planned.
 6. **Inference service** — planned.
 7. **MLOps and deployment** — planned.
@@ -742,7 +792,13 @@ deliverables.
 - History-length segment sizes are highly imbalanced: 70.78% of validation
   impressions belong to the long-history group.
 - History-length results are descriptive associations, not causal estimates.
-- No category-level subgroup analysis has been completed.
+- Article-category cohorts overlap and are conditioned on clicked categories;
+  their shares cannot be summed and their metrics are descriptive rather than
+  causal comparisons.
+- Category coverage is not adjusted for category availability in each
+  impression's candidate set.
+- Three categories have no clicked validation support, so no relevance claim
+  is made for them.
 - No inference API has been implemented or deployed.
 - No online experiment has been conducted.
 - Passing tests and offline metrics do not establish online product impact.
