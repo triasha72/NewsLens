@@ -15,7 +15,9 @@ documentation, reproducible outputs, and continuous-integration checks pass.
   - popularity evaluation — completed
   - TF-IDF content evaluation — completed
   - cold-start fallback evaluation — completed
-  - segment-level error analysis — next
+  - history-length segment evaluation — completed
+  - category-level and unseen-article analysis — next
+  - uncertainty estimation — next
 - Phase 5: Hybrid ranking — planned
 - Phase 6: Serving — planned
 - Phase 7: MLOps and deployment — planned
@@ -228,7 +230,8 @@ tests/test_fallback.py
 Phase 4 is currently in progress. Formal metric implementation, the common
 evaluator, popularity evaluation, and TF-IDF history-content evaluation are
 complete. Rule-based cold-start fallback evaluation is also complete.
-Segment-level error analysis and uncertainty estimation remain pending.
+History-length segment evaluation is complete. Category-level analysis,
+unseen-article analysis, and uncertainty estimation remain pending.
 
 ### Metric implementation
 
@@ -381,9 +384,9 @@ docs/EVALUATION.md
 - [x] Write machine-readable evaluation results
 - [x] Confirm identical results across repeated runs
 - [x] Add unit, integration, and CLI tests
-- [x] Pass all 159 automated tests locally
+- [x] Pass all 159 automated tests in the fallback-evaluation scope locally
 - [x] Pass Ruff locally
-- [ ] Pass GitHub Actions for the fallback-evaluation pull request
+- [x] Pass GitHub Actions for the fallback-evaluation pull request
 
 Three-model results at `K = 10`:
 
@@ -427,6 +430,51 @@ reports/fallback_metrics.json
 docs/EVALUATION.md
 ```
 
+### Reproducible history-length segment evaluation
+
+- [x] Define mutually exclusive, exhaustive history-length intervals
+- [x] Assign every validation impression exactly once
+- [x] Keep segment membership independent of validation click labels
+- [x] Evaluate the same fallback rankings within every segment
+- [x] Record per-segment NDCG, MRR, Recall, Hit Rate, and coverage
+- [x] Preserve the overall fallback metrics after segmentation
+- [x] Integrate segment results into the deterministic fallback JSON report
+- [x] Add unit and integration tests
+- [x] Pass all 171 automated tests locally
+- [x] Pass Ruff locally
+
+History-length results at `K = 10`:
+
+| Segment | History articles | Impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Cold start | 0 | 801 | 2.55% | 0.2954 | 0.2334 | 0.5339 | 0.6017 |
+| Short history | 1–4 | 3,379 | 10.76% | 0.3471 | 0.2809 | 0.5911 | 0.6324 |
+| Medium history | 5–9 | 4,994 | 15.91% | **0.3767** | 0.3184 | **0.6148** | 0.6676 |
+| Long history | 10+ | 22,219 | 70.78% | 0.3695 | **0.3265** | 0.5940 | **0.6875** |
+
+Cold-start impressions are weakest across all four relevance metrics. Usable
+history is associated with stronger ranking performance, but the pattern is
+metric-specific rather than uniformly monotonic: medium histories lead NDCG
+and Recall, while long histories lead MRR and Hit Rate. The 801 cold-start
+impressions equal the empty-history fallback routes; the separate 126
+zero-signal routes have nonempty histories and are assigned among the other
+history groups.
+
+The distribution is highly imbalanced because 70.78% of validation
+impressions have long histories. These are descriptive subgroup findings, not
+causal claims, and uncertainty estimates remain pending.
+
+Phase 4 history-segment evidence:
+
+```text
+src/newslens/evaluation/segments.py
+src/newslens/evaluation/fallback.py
+tests/test_segments.py
+tests/test_fallback_evaluation.py
+reports/fallback_metrics.json
+docs/EVALUATION.md
+```
+
 ### Remaining model evaluation
 
 - [x] Evaluate the content-based history recommender
@@ -434,7 +482,7 @@ docs/EVALUATION.md
 - [x] Record content-model coverage
 - [x] Record fallback frequency
 - [ ] Measure unseen-article ranking performance
-- [ ] Evaluate warm-start and cold-start impressions separately
+- [x] Evaluate warm-start and cold-start impressions separately
 - [x] Generate a three-model comparison table
 - [x] Compare popularity, content, and fallback using identical validation
       impressions
@@ -444,8 +492,8 @@ docs/EVALUATION.md
 
 ### Remaining analysis
 
-- [ ] Compare performance across user-history lengths
-- [ ] Compare warm-start and cold-start users
+- [x] Compare performance across user-history lengths
+- [x] Compare warm-start and cold-start users
 - [ ] Analyze performance by article category
 - [ ] Analyze unseen and low-exposure articles
 - [ ] Inspect high-confidence failures
@@ -466,8 +514,8 @@ docs/ERROR_ANALYSIS.md
 Suggested future commits:
 
 ```text
-analysis: compare warm-start and cold-start segments
-docs: publish baseline error analysis
+analysis: compare article-category and unseen-item segments
+analysis: add uncertainty estimates to baseline comparisons
 ```
 
 Completed fallback-evaluation commits include:
@@ -477,6 +525,15 @@ feat: add tested cold-start fallback evaluation
 feat: add fallback evaluation command
 results: record MIND fallback evaluation metrics
 docs: publish fallback evaluation
+```
+
+Completed history-segment commits include:
+
+```text
+feat: add tested history-segment evaluator
+feat: integrate history segments with fallback evaluation
+results: record MIND history-segment metrics
+docs: publish history-segment evaluation
 ```
 
 ## Phase 5: Hybrid ranking
@@ -577,7 +634,8 @@ NewsLens will be considered portfolio-ready when it includes:
 - [x] a reproducible formal cold-start fallback evaluation;
 - [x] a machine-readable fallback evaluation report;
 - [x] a reproducible same-split three-model comparison;
-- [ ] error and user-segment analysis;
+- [x] history-length user-segment analysis;
+- [ ] category-level and high-confidence error analysis;
 - [ ] uncertainty estimates or confidence intervals;
 - [ ] a tested inference API;
 - [ ] containerization;

@@ -13,8 +13,9 @@ evaluations of:
 - TF-IDF content with a rule-based training-only popularity fallback.
 
 All three systems are evaluated on the same strict chronological validation
-partition. Subgroup behavior, unseen-article performance, and uncertainty
-remain in progress.
+partition. NewsLens also includes tested, exhaustive history-length subgroup
+evaluation. Category-level behavior, unseen-article performance, and
+uncertainty remain in progress.
 
 ## Evaluation protocol
 
@@ -65,6 +66,18 @@ candidate has positive similarity to the user profile. Empty-history,
 unusable-profile, and zero-similarity cases are routed to popularity.
 
 Validation clicks never influence routing or either fitted model.
+
+### History-length segmentation
+
+History segments are assigned using only the number of articles in the user
+history attached to each validation impression. Click labels, ranking scores,
+and evaluation outcomes do not affect membership.
+
+The configured intervals are mutually exclusive and exhaustive: zero, one to
+four, five to nine, and ten or more history articles. Tests reject gaps,
+overlaps, duplicate names, invalid bounds, and incomplete assignments. Every
+validation impression must be assigned exactly once before segment metrics are
+accepted.
 
 ### Shared evaluation
 
@@ -137,6 +150,9 @@ python -m newslens evaluate-fallback \
 All three commands validate and load the local data, build the chronological
 split, fit the selected model, evaluate every validation impression, print the
 result, and write a deterministic JSON report.
+
+The fallback report also records `history_segments`, including segment
+definitions, impression counts, shares, and per-segment ranking metrics.
 
 Repeated runs with identical parameters produced byte-identical reports.
 
@@ -250,9 +266,41 @@ over content alone. The popularity routes therefore improve relevance and
 availability for abstaining impressions without expanding the aggregate
 article set exposed by the content system.
 
+## History-length segment findings
+
+The fallback validation set is partitioned by the number of articles in each
+user history. All 31,393 impressions are assigned exactly once, and the
+overall fallback metrics remain unchanged when segment results are added.
+
+| Segment | History articles | Impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Cold start | 0 | 801 | 2.55% | 0.2954 | 0.2334 | 0.5339 | 0.6017 |
+| Short history | 1–4 | 3,379 | 10.76% | 0.3471 | 0.2809 | 0.5911 | 0.6324 |
+| Medium history | 5–9 | 4,994 | 15.91% | **0.3767** | 0.3184 | **0.6148** | 0.6676 |
+| Long history | 10+ | 22,219 | 70.78% | 0.3695 | **0.3265** | 0.5940 | **0.6875** |
+
+Cold-start impressions are weakest across NDCG, MRR, Recall, and Hit Rate.
+Ranking quality is generally stronger when usable history exists, although
+the relationship is not uniformly monotonic. Medium histories achieve the
+highest NDCG and Recall, while long histories achieve the highest MRR and Hit
+Rate.
+
+The 801 cold-start impressions exactly match the 801 empty-history fallback
+routes. The other 126 fallback routes are zero-signal cases with nonempty
+histories, so they are assigned to the short-, medium-, or long-history
+segments. History-length groups describe available profile depth; fallback
+reasons describe why content ranking abstained. They are related but distinct
+groupings.
+
+The segment distribution is highly imbalanced: 70.78% of impressions have
+long histories. These results are descriptive associations under this
+chronological split, not causal evidence that increasing a user's history
+would improve recommendations. Confidence intervals and significance tests
+have not yet been estimated.
+
 ## Interpretation
 
-The same-split comparison supports four conclusions:
+The same-split comparison supports six conclusions:
 
 1. User-history text contains useful ranking signal beyond global click
    frequency under this validation protocol.
@@ -263,9 +311,14 @@ The same-split comparison supports four conclusions:
    2.95% of validation impressions.
 4. Fallback does not improve catalog coverage, so broader exposure requires a
    different ranking or re-ranking strategy rather than simple routing.
+5. Cold-start impressions are the weakest history-length segment across every
+   reported relevance metric, reinforcing the need for an explicit fallback.
+6. The value associated with additional history is metric-specific rather than
+   uniformly increasing: medium histories lead NDCG and Recall, while long
+   histories lead MRR and Hit Rate.
 
-The next analysis should compare warm-start and fallback-routed segments,
-history-length groups, and unseen or low-exposure articles. These diagnostics
+The next analysis should examine article categories, unseen or low-exposure
+articles, and uncertainty around the recorded differences. These diagnostics
 are needed before moving to a learned hybrid ranker.
 
 ## Reproducibility artifacts
@@ -286,19 +339,20 @@ src/newslens/evaluation/evaluator.py
 src/newslens/evaluation/popularity.py
 src/newslens/evaluation/content.py
 src/newslens/evaluation/fallback.py
+src/newslens/evaluation/segments.py
 tests/test_metrics.py
 tests/test_evaluator.py
 tests/test_popularity_evaluation.py
 tests/test_content_evaluation.py
 tests/test_fallback_evaluation.py
+tests/test_segments.py
 tests/test_cli.py
 ```
 
 ## Remaining work
 
-- compare warm-start and cold-start segments;
 - measure unseen-article performance directly;
-- analyze results by history length and article category;
+- analyze results by article category;
 - inspect high-confidence failures;
 - add uncertainty estimates or confidence intervals;
 - publish a complete error analysis; and
@@ -319,7 +373,10 @@ tests/test_cli.py
 - Fallback removes empty rankings but does not improve catalog coverage over
   content alone.
 - No confidence intervals or statistical-significance tests are reported.
-- No category-level or history-length subgroup analysis is reported.
+- History-length segment sizes are highly imbalanced: 70.78% of validation
+  impressions belong to the long-history group.
+- History-length results are descriptive associations, not causal estimates.
+- No category-level subgroup analysis is reported.
 - No neural recommendation model has been trained.
 - No online experiment has been conducted.
 - Results should not be compared directly with systems using different data
