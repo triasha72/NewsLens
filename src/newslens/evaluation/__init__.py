@@ -11,6 +11,11 @@ from .evaluator import (
     RankingExample,
     evaluate_rankings,
 )
+from .fallback import (
+    FallbackEvaluationError,
+    FallbackEvaluationReport,
+    evaluate_fallback_baseline,
+)
 from .metrics import (
     RankingMetricError,
     catalog_coverage,
@@ -36,6 +41,8 @@ __all__ = [
     "ChronologicalSplitError",
     "ContentEvaluationError",
     "ContentEvaluationReport",
+    "FallbackEvaluationError",
+    "FallbackEvaluationReport",
     "PopularityEvaluationError",
     "PopularityEvaluationReport",
     "RankingEvaluationError",
@@ -45,6 +52,7 @@ __all__ = [
     "catalog_coverage",
     "chronological_train_validation_split",
     "evaluate_content_baseline",
+    "evaluate_fallback_baseline",
     "evaluate_popularity_baseline",
     "evaluate_rankings",
     "hit_rate_at_k",

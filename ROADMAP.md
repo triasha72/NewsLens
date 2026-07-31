@@ -14,7 +14,8 @@ documentation, reproducible outputs, and continuous-integration checks pass.
   - model-independent evaluator — completed
   - popularity evaluation — completed
   - TF-IDF content evaluation — completed
-  - cold-start fallback evaluation — next
+  - cold-start fallback evaluation — completed
+  - segment-level error analysis — next
 - Phase 5: Hybrid ranking — planned
 - Phase 6: Serving — planned
 - Phase 7: MLOps and deployment — planned
@@ -226,8 +227,8 @@ tests/test_fallback.py
 
 Phase 4 is currently in progress. Formal metric implementation, the common
 evaluator, popularity evaluation, and TF-IDF history-content evaluation are
-complete. Evaluation of the rule-based cold-start fallback and segment-level
-error analysis remain pending.
+complete. Rule-based cold-start fallback evaluation is also complete.
+Segment-level error analysis and uncertainty estimation remain pending.
 
 ### Metric implementation
 
@@ -277,7 +278,7 @@ error analysis remain pending.
 - [x] Add unit, integration, and CLI tests
 - [x] Pass all 120 automated tests locally
 - [x] Pass Ruff locally
-- [ ] Pass GitHub Actions for the current Phase 4 pull request
+- [x] Merge the popularity-evaluation pull request into main
 
 Popularity results at `K = 10`:
 
@@ -325,7 +326,7 @@ docs/EVALUATION.md
 - [x] Add unit, integration, and CLI tests
 - [x] Pass all 141 automated tests locally
 - [x] Pass Ruff locally
-- [ ] Pass GitHub Actions for the current Phase 4 pull request
+- [x] Merge the content-evaluation pull request into main
 
 Popularity versus TF-IDF content results at `K = 10`:
 
@@ -365,16 +366,78 @@ reports/content_metrics.json
 docs/EVALUATION.md
 ```
 
+### Reproducible cold-start fallback evaluation
+
+- [x] Create a fallback-specific evaluation pipeline
+- [x] Fit content and popularity only from chronological training information
+- [x] Preserve content rankings when positive similarity is available
+- [x] Route content abstentions to training-only popularity
+- [x] Record content and popularity routing frequencies
+- [x] Record empty-history, unknown-history, zero-profile, and zero-signal routes
+- [x] Evaluate all 31,393 validation impressions
+- [x] Recover all 927 content abstentions
+- [x] Produce no empty rankings
+- [x] Add a reproducible CLI command
+- [x] Write machine-readable evaluation results
+- [x] Confirm identical results across repeated runs
+- [x] Add unit, integration, and CLI tests
+- [x] Pass all 159 automated tests locally
+- [x] Pass Ruff locally
+- [ ] Pass GitHub Actions for the fallback-evaluation pull request
+
+Three-model results at `K = 10`:
+
+| Metric | Popularity | TF-IDF content | Content + fallback |
+|---|---:|---:|---:|
+| NDCG@10 | 0.2853 | 0.3594 | **0.3664** |
+| MRR@10 | 0.2308 | 0.3133 | **0.3179** |
+| Recall@10 | 0.5047 | 0.5819 | **0.5955** |
+| Hit Rate@10 | 0.5705 | 0.6610 | **0.6762** |
+| Catalog Coverage@10 | 0.0402 | **0.0719** | **0.0719** |
+| Unique recommended articles | 2,061 | **3,687** | **3,687** |
+| Empty rankings | 0 | 927 | **0** |
+
+Fallback routing accounting:
+
+| Property | Result |
+|---|---:|
+| Content-routed impressions | 30,466 (97.05%) |
+| Popularity-routed impressions | 927 (2.95%) |
+| Empty-history fallback routes | 801 |
+| Unknown-history fallback routes | 0 |
+| Zero-profile fallback routes | 0 |
+| Zero-signal fallback routes | 126 |
+| Recovered fallback impressions | 927 (100%) |
+| Empty rankings after fallback | 0 |
+| Temporal leakage detected | No |
+
+Relative to content alone, fallback improves NDCG@10 by 1.92%, MRR@10 by
+1.47%, Recall@10 by 2.33%, and Hit Rate@10 by 2.30%. Catalog coverage is
+unchanged because fallback recommendations do not expand the union of articles
+already recommended by the content system.
+
+Phase 4 fallback evidence:
+
+```text
+src/newslens/evaluation/fallback.py
+src/newslens/cli.py
+tests/test_fallback_evaluation.py
+tests/test_cli.py
+reports/fallback_metrics.json
+docs/EVALUATION.md
+```
+
 ### Remaining model evaluation
 
 - [x] Evaluate the content-based history recommender
-- [ ] Evaluate the cold-start fallback
+- [x] Evaluate the cold-start fallback
 - [x] Record content-model coverage
-- [ ] Record fallback frequency
+- [x] Record fallback frequency
 - [ ] Measure unseen-article ranking performance
 - [ ] Evaluate warm-start and cold-start impressions separately
-- [x] Generate a two-baseline comparison table
-- [x] Compare popularity and content using identical validation impressions
+- [x] Generate a three-model comparison table
+- [x] Compare popularity, content, and fallback using identical validation
+      impressions
 - [x] Reserve the official MIND-small development data for final evaluation
 - [ ] Run final evaluation on the reserved development split only after model
       selection is complete
@@ -388,7 +451,7 @@ docs/EVALUATION.md
 - [ ] Inspect high-confidence failures
 - [x] Document initial popularity findings
 - [x] Document popularity limitations and non-claims
-- [ ] Document positive and negative findings across all baselines
+- [x] Document positive and negative findings across all evaluated baselines
 - [ ] Add uncertainty estimates or confidence intervals
 - [ ] Document complete metric and comparison limitations
 
@@ -403,9 +466,17 @@ docs/ERROR_ANALYSIS.md
 Suggested future commits:
 
 ```text
-feat: evaluate cold-start fallback baseline
 analysis: compare warm-start and cold-start segments
 docs: publish baseline error analysis
+```
+
+Completed fallback-evaluation commits include:
+
+```text
+feat: add tested cold-start fallback evaluation
+feat: add fallback evaluation command
+results: record MIND fallback evaluation metrics
+docs: publish fallback evaluation
 ```
 
 ## Phase 5: Hybrid ranking
@@ -503,7 +574,9 @@ NewsLens will be considered portfolio-ready when it includes:
 - [x] a machine-readable popularity evaluation report;
 - [x] a reproducible formal TF-IDF content evaluation;
 - [x] a machine-readable content evaluation report;
-- [x] a reproducible held-out two-baseline comparison;
+- [x] a reproducible formal cold-start fallback evaluation;
+- [x] a machine-readable fallback evaluation report;
+- [x] a reproducible same-split three-model comparison;
 - [ ] error and user-segment analysis;
 - [ ] uncertainty estimates or confidence intervals;
 - [ ] a tested inference API;
