@@ -9,7 +9,10 @@ from pathlib import Path
 
 from . import __version__
 from .data import audit_dataset, load_behaviors, load_news
-from .evaluation import evaluate_popularity_baseline
+from .evaluation import (
+    evaluate_content_baseline,
+    evaluate_popularity_baseline,
+)
 
 
 def _run_data_audit(
@@ -86,6 +89,44 @@ def _run_popularity_evaluation(
     print(f"Popularity evaluation report written to {output}")
 
 
+def _run_content_evaluation(
+    data_dir: Path,
+    output: Path,
+    k: int,
+    validation_fraction: float,
+    max_features: int,
+) -> None:
+    split_path = data_dir / "MINDsmall_train"
+
+    news = load_news(split_path / "news.tsv")
+    behaviors = load_behaviors(split_path / "behaviors.tsv")
+
+    report = evaluate_content_baseline(
+        news,
+        behaviors,
+        validation_fraction=validation_fraction,
+        k=k,
+        max_features=max_features,
+    )
+
+    serialized = json.dumps(
+        report.to_dict(),
+        indent=2,
+        sort_keys=True,
+    )
+    print(serialized)
+
+    output.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    output.write_text(
+        f"{serialized}\n",
+        encoding="utf-8",
+    )
+    print(f"Content evaluation report written to {output}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Create the NewsLens command-line parser."""
 
@@ -112,32 +153,66 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
     )
 
-    evaluation_parser = subparsers.add_parser(
+    popularity_parser = subparsers.add_parser(
         "evaluate-popularity",
         help=("Evaluate training-only popularity on a chronological validation split."),
     )
-    evaluation_parser.add_argument(
+    popularity_parser.add_argument(
         "--data-dir",
         type=Path,
         default=Path("data"),
         help=("Directory containing the extracted MIND-small folders."),
     )
-    evaluation_parser.add_argument(
+    popularity_parser.add_argument(
         "--output",
         type=Path,
         default=Path("reports/popularity_metrics.json"),
     )
-    evaluation_parser.add_argument(
+    popularity_parser.add_argument(
         "--k",
         type=int,
         default=10,
         help="Ranking cutoff used for all metrics.",
     )
-    evaluation_parser.add_argument(
+    popularity_parser.add_argument(
         "--validation-fraction",
         type=float,
         default=0.20,
         help=("Chronological fraction reserved for validation."),
+    )
+
+    content_parser = subparsers.add_parser(
+        "evaluate-content",
+        help=("Evaluate TF-IDF history recommendations on a chronological validation split."),
+    )
+    content_parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path("data"),
+        help=("Directory containing the extracted MIND-small folders."),
+    )
+    content_parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("reports/content_metrics.json"),
+    )
+    content_parser.add_argument(
+        "--k",
+        type=int,
+        default=10,
+        help="Ranking cutoff used for all metrics.",
+    )
+    content_parser.add_argument(
+        "--validation-fraction",
+        type=float,
+        default=0.20,
+        help=("Chronological fraction reserved for validation."),
+    )
+    content_parser.add_argument(
+        "--max-features",
+        type=int,
+        default=50_000,
+        help="Maximum TF-IDF vocabulary size.",
     )
 
     return parser
@@ -164,6 +239,16 @@ def main(
             args.output,
             args.k,
             args.validation_fraction,
+        )
+        return
+
+    if args.command == "evaluate-content":
+        _run_content_evaluation(
+            args.data_dir,
+            args.output,
+            args.k,
+            args.validation_fraction,
+            args.max_features,
         )
         return
 
