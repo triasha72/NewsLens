@@ -11,6 +11,7 @@ from . import __version__
 from .data import audit_dataset, load_behaviors, load_news
 from .evaluation import (
     evaluate_content_baseline,
+    evaluate_fallback_baseline,
     evaluate_popularity_baseline,
 )
 
@@ -127,6 +128,44 @@ def _run_content_evaluation(
     print(f"Content evaluation report written to {output}")
 
 
+def _run_fallback_evaluation(
+    data_dir: Path,
+    output: Path,
+    k: int,
+    validation_fraction: float,
+    max_features: int,
+) -> None:
+    split_path = data_dir / "MINDsmall_train"
+
+    news = load_news(split_path / "news.tsv")
+    behaviors = load_behaviors(split_path / "behaviors.tsv")
+
+    report = evaluate_fallback_baseline(
+        news,
+        behaviors,
+        validation_fraction=validation_fraction,
+        k=k,
+        max_features=max_features,
+    )
+
+    serialized = json.dumps(
+        report.to_dict(),
+        indent=2,
+        sort_keys=True,
+    )
+    print(serialized)
+
+    output.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    output.write_text(
+        f"{serialized}\n",
+        encoding="utf-8",
+    )
+    print(f"Fallback evaluation report written to {output}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Create the NewsLens command-line parser."""
 
@@ -215,6 +254,40 @@ def build_parser() -> argparse.ArgumentParser:
         help="Maximum TF-IDF vocabulary size.",
     )
 
+    fallback_parser = subparsers.add_parser(
+        "evaluate-fallback",
+        help=("Evaluate TF-IDF history recommendations with training-only popularity fallback."),
+    )
+    fallback_parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path("data"),
+        help=("Directory containing the extracted MIND-small folders."),
+    )
+    fallback_parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("reports/fallback_metrics.json"),
+    )
+    fallback_parser.add_argument(
+        "--k",
+        type=int,
+        default=10,
+        help="Ranking cutoff used for all metrics.",
+    )
+    fallback_parser.add_argument(
+        "--validation-fraction",
+        type=float,
+        default=0.20,
+        help=("Chronological fraction reserved for validation."),
+    )
+    fallback_parser.add_argument(
+        "--max-features",
+        type=int,
+        default=50_000,
+        help="Maximum TF-IDF vocabulary size.",
+    )
+
     return parser
 
 
@@ -244,6 +317,16 @@ def main(
 
     if args.command == "evaluate-content":
         _run_content_evaluation(
+            args.data_dir,
+            args.output,
+            args.k,
+            args.validation_fraction,
+            args.max_features,
+        )
+        return
+
+    if args.command == "evaluate-fallback":
+        _run_fallback_evaluation(
             args.data_dir,
             args.output,
             args.k,

@@ -191,3 +191,43 @@ def test_content_evaluation_command_writes_report(
     assert report["metrics"]["k"] == 2
     assert report["metrics"]["mrr_at_k"] == 0.5
     assert "Content evaluation report written" in captured.out
+
+
+def test_fallback_evaluation_command_writes_report(
+    tmp_path: Path,
+    capsys: object,
+) -> None:
+    data_dir = tmp_path / "data"
+    _write_content_fixture(data_dir)
+
+    output = tmp_path / "reports" / "fallback_metrics.json"
+
+    main(
+        [
+            "evaluate-fallback",
+            "--data-dir",
+            str(data_dir),
+            "--output",
+            str(output),
+            "--k",
+            "2",
+            "--validation-fraction",
+            "0.40",
+            "--max-features",
+            "100",
+        ]
+    )
+
+    report = json.loads(output.read_text(encoding="utf-8"))
+    captured = capsys.readouterr()  # type: ignore[attr-defined]
+
+    assert report["model_name"] == "tfidf_content_with_popularity_fallback"
+    assert report["training_records"] == 3
+    assert report["validation_records"] == 2
+    assert report["content_routed_impressions"] == 1
+    assert report["popularity_routed_impressions"] == 1
+    assert report["empty_history_fallback_impressions"] == 1
+    assert report["recovered_fallback_impressions"] == 1
+    assert report["metrics"]["k"] == 2
+    assert report["metrics"]["mrr_at_k"] == 0.75
+    assert "Fallback evaluation report written" in captured.out
