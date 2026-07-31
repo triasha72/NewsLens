@@ -25,6 +25,14 @@ from .exposure import (
     TrainingExposureBand,
     evaluate_training_exposure_bands,
 )
+from .failures import (
+    FailureAnalysisError,
+    HighScoreFailure,
+    HighScoreFailureReport,
+    ScoredRankingExample,
+    SourceScoreThreshold,
+    analyze_high_score_failures,
+)
 from .fallback import (
     FallbackEvaluationError,
     FallbackEvaluationReport,
@@ -81,8 +89,11 @@ __all__ = [
     "ExposureBandResult",
     "ExposureEvaluationError",
     "ExposureEvaluationReport",
+    "FailureAnalysisError",
     "FallbackEvaluationError",
     "FallbackEvaluationReport",
+    "HighScoreFailure",
+    "HighScoreFailureReport",
     "HistoryLengthSegment",
     "HistorySegmentEvaluationError",
     "HistorySegmentEvaluationReport",
@@ -94,7 +105,10 @@ __all__ = [
     "RankingEvaluationResult",
     "RankingExample",
     "RankingMetricError",
+    "ScoredRankingExample",
+    "SourceScoreThreshold",
     "TrainingExposureBand",
+    "analyze_high_score_failures",
     "bootstrap_ranking_uncertainty",
     "catalog_coverage",
     "chronological_train_validation_split",
