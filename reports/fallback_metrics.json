@@ -730,6 +730,44 @@
   "recovered_fallback_impressions": 927,
   "requested_validation_fraction": 0.2,
   "training_records": 125572,
+  "uncertainty": {
+    "bootstrap_samples": 1000,
+    "confidence_level": 0.95,
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 31393,
+    "k": 10,
+    "method": "nonparametric_percentile_bootstrap",
+    "metrics": {
+      "hit_rate_at_k": {
+        "lower_bound": 0.6711679355270284,
+        "point_estimate": 0.6762335552511707,
+        "standard_error": 0.0026720184705929487,
+        "upper_bound": 0.6814592425062912
+      },
+      "mrr_at_k": {
+        "lower_bound": 0.31397349253625545,
+        "point_estimate": 0.31794652432374215,
+        "standard_error": 0.0020254726744660576,
+        "upper_bound": 0.32179567252633506
+      },
+      "ndcg_at_k": {
+        "lower_bound": 0.36274319456000015,
+        "point_estimate": 0.3663605124218536,
+        "standard_error": 0.0019399203901806666,
+        "upper_bound": 0.3702819698737955
+      },
+      "recall_at_k": {
+        "lower_bound": 0.5907253175240572,
+        "point_estimate": 0.5954741541538584,
+        "standard_error": 0.0025509678712138818,
+        "upper_bound": 0.6003375832127914
+      }
+    },
+    "random_seed": 42,
+    "resampling_unit": "evaluated_impression",
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 31393
+  },
   "unknown_history_fallback_impressions": 0,
   "validation_records": 31393,
   "vocabulary_article_count": 47367,
