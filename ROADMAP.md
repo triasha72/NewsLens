@@ -18,7 +18,8 @@ documentation, reproducible outputs, and continuous-integration checks pass.
   - history-length segment evaluation — completed
   - article-category evaluation — completed
   - unseen and training-exposure analysis — completed
-  - uncertainty estimation — next
+  - overall fallback uncertainty estimation — completed
+  - high-confidence failure inspection — next
 - Phase 5: Hybrid ranking — planned
 - Phase 6: Serving — planned
 - Phase 7: MLOps and deployment — planned
@@ -233,7 +234,8 @@ evaluator, popularity evaluation, and TF-IDF history-content evaluation are
 complete. Rule-based cold-start fallback evaluation is also complete.
 History-length segment evaluation and overlapping article-category evaluation
 are complete. Unseen and training-exposure analysis is also complete.
-Uncertainty estimation and high-confidence failure inspection remain pending.
+Deterministic overall fallback uncertainty estimation is complete.
+High-confidence failure inspection remains pending.
 
 ### Metric implementation
 
@@ -464,7 +466,8 @@ history groups.
 
 The distribution is highly imbalanced because 70.78% of validation
 impressions have long histories. These are descriptive subgroup findings, not
-causal claims, and uncertainty estimates remain pending.
+causal claims. The completed overall fallback intervals do not replace
+subgroup-specific uncertainty estimates, which remain pending.
 
 Phase 4 history-segment evidence:
 
@@ -611,6 +614,52 @@ reports/fallback_metrics.json
 docs/EVALUATION.md
 ```
 
+### Reproducible bootstrap uncertainty estimation
+
+- [x] Use one evaluated impression as the nonparametric resampling unit
+- [x] Preserve the original evaluated sample size in every replicate
+- [x] Compute percentile intervals for NDCG, MRR, Recall, and Hit Rate
+- [x] Record bootstrap standard errors
+- [x] Make sample count, confidence level, and random seed configurable
+- [x] Exclude no-click impressions using the shared evaluator denominator
+- [x] Reproduce the common evaluator's point estimates exactly
+- [x] Integrate uncertainty into the fallback JSON report
+- [x] Expose reproducible settings through the fallback CLI
+- [x] Run 1,000 replicates at 95% confidence with random seed 42
+- [x] Confirm two complete MIND-small runs are byte-identical
+- [x] Preserve overall, history, category, and exposure results
+- [x] Pass all 267 automated tests locally
+- [x] Pass Ruff locally
+
+Overall fallback uncertainty results at `K = 10`:
+
+| Metric | Estimate | Lower 95% | Upper 95% | Standard error |
+|---|---:|---:|---:|---:|
+| NDCG@10 | 0.3664 | 0.3627 | 0.3703 | 0.0019 |
+| MRR@10 | 0.3179 | 0.3140 | 0.3218 | 0.0020 |
+| Recall@10 | 0.5955 | 0.5907 | 0.6003 | 0.0026 |
+| Hit Rate@10 | 0.6762 | 0.6712 | 0.6815 | 0.0027 |
+
+These intervals quantify impression-sampling variability conditional on the
+fixed internal validation split, model, candidate sets, and metric semantics.
+They are not paired model-comparison intervals and do not quantify temporal
+drift, model-selection uncertainty, or online impact. Catalog coverage is not
+included because it is a set-level statistic rather than the mean of an
+impression-level value.
+
+Phase 4 uncertainty evidence:
+
+```text
+src/newslens/evaluation/uncertainty.py
+src/newslens/evaluation/fallback.py
+src/newslens/cli.py
+tests/test_uncertainty.py
+tests/test_fallback_evaluation.py
+tests/test_cli.py
+reports/fallback_metrics.json
+docs/EVALUATION.md
+```
+
 ### Remaining model evaluation
 
 - [x] Evaluate the content-based history recommender
@@ -636,7 +685,7 @@ docs/EVALUATION.md
 - [x] Document initial popularity findings
 - [x] Document popularity limitations and non-claims
 - [x] Document positive and negative findings across all evaluated baselines
-- [ ] Add uncertainty estimates or confidence intervals
+- [x] Add uncertainty estimates or confidence intervals
 - [ ] Document complete metric and comparison limitations
 
 Expected remaining outputs:
@@ -651,7 +700,6 @@ Suggested future commits:
 
 ```text
 analysis: inspect high-confidence ranking failures
-analysis: add uncertainty estimates to baseline comparisons
 ```
 
 Completed fallback-evaluation commits include:
@@ -688,6 +736,16 @@ feat: add tested training-exposure evaluator
 feat: integrate exposure analysis with fallback evaluation
 results: record MIND training-exposure metrics
 docs: publish training-exposure evaluation
+```
+
+Completed bootstrap-uncertainty commits include:
+
+```text
+feat: add bootstrap ranking uncertainty
+feat: integrate bootstrap uncertainty with fallback evaluation
+feat: expose bootstrap configuration in fallback CLI
+results: record MIND bootstrap confidence intervals
+docs: publish bootstrap uncertainty evaluation
 ```
 
 ## Phase 5: Hybrid ranking
@@ -792,7 +850,7 @@ NewsLens will be considered portfolio-ready when it includes:
 - [x] category-level analysis;
 - [x] unseen and low-exposure item analysis;
 - [ ] high-confidence error analysis;
-- [ ] uncertainty estimates or confidence intervals;
+- [x] uncertainty estimates or confidence intervals;
 - [ ] a tested inference API;
 - [ ] containerization;
 - [ ] experiment tracking;

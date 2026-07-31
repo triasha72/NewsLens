@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from newslens.cli import main
+from newslens.cli import build_parser, main
 
 
 def test_audit_command_writes_json_report(
@@ -215,6 +215,12 @@ def test_fallback_evaluation_command_writes_report(
             "0.40",
             "--max-features",
             "100",
+            "--bootstrap-samples",
+            "200",
+            "--bootstrap-confidence-level",
+            "0.90",
+            "--bootstrap-random-seed",
+            "2026",
         ]
     )
 
@@ -230,4 +236,16 @@ def test_fallback_evaluation_command_writes_report(
     assert report["recovered_fallback_impressions"] == 1
     assert report["metrics"]["k"] == 2
     assert report["metrics"]["mrr_at_k"] == 0.75
+    assert report["uncertainty"]["bootstrap_samples"] == 200
+    assert report["uncertainty"]["confidence_level"] == 0.90
+    assert report["uncertainty"]["random_seed"] == 2026
+    assert report["uncertainty"]["metrics"]["mrr_at_k"]["point_estimate"] == 0.75
     assert "Fallback evaluation report written" in captured.out
+
+
+def test_fallback_cli_uses_reproducible_bootstrap_defaults() -> None:
+    args = build_parser().parse_args(["evaluate-fallback"])
+
+    assert args.bootstrap_samples == 1_000
+    assert args.bootstrap_confidence_level == 0.95
+    assert args.bootstrap_random_seed == 42

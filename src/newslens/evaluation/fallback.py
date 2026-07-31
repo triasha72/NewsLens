@@ -49,6 +49,11 @@ from .split import (
     ChronologicalSplitError,
     chronological_train_validation_split,
 )
+from .uncertainty import (
+    BootstrapUncertaintyError,
+    BootstrapUncertaintyReport,
+    bootstrap_ranking_uncertainty,
+)
 
 
 class FallbackEvaluationError(ValueError):
@@ -76,6 +81,7 @@ class FallbackEvaluationReport:
     zero_profile_fallback_impressions: int
     zero_signal_fallback_impressions: int
     metrics: RankingEvaluationResult
+    uncertainty: BootstrapUncertaintyReport
     history_segments: HistorySegmentEvaluationReport
     category_analysis: CategoryEvaluationReport
     exposure_analysis: ExposureEvaluationReport
@@ -134,6 +140,7 @@ class FallbackEvaluationReport:
             "recovered_fallback_impressions": self.recovered_fallback_impressions,
             "fallback_recovery_fraction": self.fallback_recovery_fraction,
             "metrics": self.metrics.to_dict(),
+            "uncertainty": self.uncertainty.to_dict(),
             "history_segments": self.history_segments.to_dict(),
             "category_analysis": self.category_analysis.to_dict(),
             "exposure_analysis": self.exposure_analysis.to_dict(),
@@ -325,6 +332,9 @@ def evaluate_fallback_baseline(
     max_features: int = 50_000,
     minimum_category_impressions: int = 100,
     minimum_exposure_impressions: int = 100,
+    bootstrap_samples: int = 1_000,
+    bootstrap_confidence_level: float = 0.95,
+    bootstrap_random_seed: int = 42,
 ) -> FallbackEvaluationReport:
     """Evaluate content ranking with training-only popularity fallback."""
 
@@ -347,6 +357,30 @@ def evaluate_fallback_baseline(
         or minimum_exposure_impressions <= 0
     ):
         raise FallbackEvaluationError("minimum_exposure_impressions must be a positive integer.")
+
+    if (
+        isinstance(bootstrap_samples, bool)
+        or not isinstance(bootstrap_samples, int)
+        or bootstrap_samples <= 0
+    ):
+        raise FallbackEvaluationError("bootstrap_samples must be a positive integer.")
+
+    if bootstrap_samples < 2:
+        raise FallbackEvaluationError("bootstrap_samples must be at least 2.")
+
+    if (
+        isinstance(bootstrap_confidence_level, bool)
+        or not isinstance(bootstrap_confidence_level, (int, float))
+        or not 0.0 < float(bootstrap_confidence_level) < 1.0
+    ):
+        raise FallbackEvaluationError("bootstrap_confidence_level must be between 0 and 1.")
+
+    if (
+        isinstance(bootstrap_random_seed, bool)
+        or not isinstance(bootstrap_random_seed, int)
+        or bootstrap_random_seed < 0
+    ):
+        raise FallbackEvaluationError("bootstrap_random_seed must be a non-negative integer.")
 
     required_columns = {
         "impression_id",
@@ -424,7 +458,15 @@ def evaluate_fallback_baseline(
             k=k,
             minimum_relevant_impressions=minimum_exposure_impressions,
         )
+        uncertainty = bootstrap_ranking_uncertainty(
+            build_result.examples,
+            k=k,
+            bootstrap_samples=bootstrap_samples,
+            confidence_level=bootstrap_confidence_level,
+            random_seed=bootstrap_random_seed,
+        )
     except (
+        BootstrapUncertaintyError,
         CategoryEvaluationError,
         ExposureEvaluationError,
         HistorySegmentEvaluationError,
@@ -450,6 +492,7 @@ def evaluate_fallback_baseline(
         zero_profile_fallback_impressions=(build_result.zero_profile_fallback_impressions),
         zero_signal_fallback_impressions=(build_result.zero_signal_fallback_impressions),
         metrics=metrics,
+        uncertainty=uncertainty,
         history_segments=history_segments,
         category_analysis=category_analysis,
         exposure_analysis=exposure_analysis,
