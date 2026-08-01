@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from . import __version__
+from .artifacts import export_fallback_artifact
 from .data import audit_dataset, load_behaviors, load_news
 from .evaluation import (
     evaluate_content_baseline,
@@ -176,6 +177,37 @@ def _run_fallback_evaluation(
     print(f"Fallback evaluation report written to {output}")
 
 
+def _run_model_export(
+    data_dir: Path,
+    output: Path,
+    artifact_version: str,
+    k: int,
+    max_features: int,
+) -> None:
+    split_path = data_dir / "MINDsmall_train"
+
+    news = load_news(split_path / "news.tsv")
+    behaviors = load_behaviors(split_path / "behaviors.tsv")
+
+    result = export_fallback_artifact(
+        news,
+        behaviors,
+        output,
+        artifact_version=artifact_version,
+        ranking_cutoff=k,
+        max_features=max_features,
+    )
+
+    print(
+        json.dumps(
+            result.to_dict(),
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    print(f"Model artifact written to {result.path}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Create the NewsLens command-line parser."""
 
@@ -328,6 +360,40 @@ def build_parser() -> argparse.ArgumentParser:
         help="Maximum number of failure examples retained per recommendation source.",
     )
 
+    export_parser = subparsers.add_parser(
+        "export-model",
+        help=("Train on the full MIND-small training split and export a model artifact."),
+    )
+    export_parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path("data"),
+        help=("Directory containing the extracted MIND-small folders."),
+    )
+    export_parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("artifacts/newslens-fallback-0.3.0"),
+        help=("New artifact directory. Existing directories are never overwritten."),
+    )
+    export_parser.add_argument(
+        "--artifact-version",
+        default="0.3.0",
+        help="Semantic version assigned to the exported artifact.",
+    )
+    export_parser.add_argument(
+        "--k",
+        type=int,
+        default=10,
+        help="Default ranking cutoff recorded in artifact metadata.",
+    )
+    export_parser.add_argument(
+        "--max-features",
+        type=int,
+        default=50_000,
+        help="Maximum TF-IDF vocabulary size.",
+    )
+
     return parser
 
 
@@ -377,6 +443,16 @@ def main(
             args.bootstrap_random_seed,
             args.failure_score_quantile,
             args.maximum_failures_per_source,
+        )
+        return
+
+    if args.command == "export-model":
+        _run_model_export(
+            args.data_dir,
+            args.output,
+            args.artifact_version,
+            args.k,
+            args.max_features,
         )
         return
 

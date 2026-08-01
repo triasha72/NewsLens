@@ -1,5 +1,10 @@
 """Versioned model-artifact contracts for NewsLens."""
 
+from .export import (
+    ArtifactExportError,
+    ArtifactExportResult,
+    export_fallback_artifact,
+)
 from .manifest import (
     REQUIRED_ARTIFACT_FILES,
     ArtifactFileRecord,
@@ -30,6 +35,8 @@ __all__ = [
     "MODEL_FILE_NAME",
     "REQUIRED_ARTIFACT_FILES",
     "ArtifactAlreadyExistsError",
+    "ArtifactExportError",
+    "ArtifactExportResult",
     "ArtifactFileRecord",
     "ArtifactIntegrityError",
     "ArtifactManifest",
@@ -38,6 +45,7 @@ __all__ = [
     "ArtifactStorageError",
     "LoadedArtifact",
     "TfidfArtifactParameters",
+    "export_fallback_artifact",
     "load_artifact",
     "save_artifact",
 ]
