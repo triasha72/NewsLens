@@ -590,6 +590,5729 @@
     },
     "total_impressions": 31393
   },
+  "failure_analysis": {
+    "evaluated_impressions": 31393,
+    "failures": [
+      {
+        "candidate_count": 139,
+        "history_length": 11,
+        "impression_id": "71059",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N47020",
+            "subcategory": "newsopinion",
+            "title": "The News In Cartoons"
+          },
+          {
+            "category": "news",
+            "news_id": "N16616",
+            "subcategory": "newsopinion",
+            "title": "The Case for the Impeachment Defense"
+          },
+          {
+            "category": "news",
+            "news_id": "N34081",
+            "subcategory": "newsopinion",
+            "title": "Republicans Know Trump Is Innocent They're Trying to Figure Out Why"
+          },
+          {
+            "category": "news",
+            "news_id": "N18349",
+            "subcategory": "newsopinion",
+            "title": "Editorial: Regardless of what the Supreme Court does, Congress should make DACA stronger, and permanent"
+          },
+          {
+            "category": "news",
+            "news_id": "N26271",
+            "subcategory": "newsopinion",
+            "title": "A Post-Post-Cold-War NATO"
+          },
+          {
+            "category": "news",
+            "news_id": "N46501",
+            "subcategory": "newsopinion",
+            "title": "The System Was Blinking Red"
+          },
+          {
+            "category": "news",
+            "news_id": "N36330",
+            "subcategory": "newsopinion",
+            "title": "Bloomberg run should push Warren to the center   but won't"
+          },
+          {
+            "category": "news",
+            "news_id": "N24062",
+            "subcategory": "newsopinion",
+            "title": "Ex-AG Jeff Sessions: Trump impeachment hearings are desperate Democratic attack"
+          },
+          {
+            "category": "news",
+            "news_id": "N62341",
+            "subcategory": "newsopinion",
+            "title": "People died while Trump played games with Ukraine's military aid"
+          },
+          {
+            "category": "news",
+            "news_id": "N59908",
+            "subcategory": "newsopinion",
+            "title": "Shaking down the rich is bad for democracy"
+          }
+        ],
+        "ranked_items": [
+          "N47020",
+          "N16616",
+          "N34081",
+          "N18349",
+          "N26271",
+          "N46501",
+          "N36330",
+          "N24062",
+          "N62341",
+          "N59908"
+        ],
+        "ranked_scores": [
+          0.9067647112640829,
+          0.21105203127432903,
+          0.20240746178892785,
+          0.20096723476640355,
+          0.19478923856440505,
+          0.18485309204209954,
+          0.17642882195590764,
+          0.15375940738778118,
+          0.1515033205024604,
+          0.151435671291072
+        ],
+        "relevant_articles": [
+          {
+            "category": "news",
+            "news_id": "N32211",
+            "subcategory": "newsus",
+            "title": "Ben Shapiro blasts Boston University students 'triggered' by campus speech"
+          }
+        ],
+        "relevant_items": [
+          "N32211"
+        ],
+        "score_margin": 0.6957126799897538,
+        "score_margin_ratio": 0.7672471936186067,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.9067647112640829
+      },
+      {
+        "candidate_count": 67,
+        "history_length": 38,
+        "impression_id": "87283",
+        "margin_classification": "near_tie",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N23008",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Mandela Effect"
+          },
+          {
+            "category": "movies",
+            "news_id": "N62563",
+            "subcategory": "movievideo",
+            "title": "Trailer - Knives and Skin"
+          },
+          {
+            "category": "movies",
+            "news_id": "N64228",
+            "subcategory": "movienews",
+            "title": "Trailer - Jumanji: The Next Level"
+          },
+          {
+            "category": "movies",
+            "news_id": "N59761",
+            "subcategory": "movienews",
+            "title": "Trailer - Autonomy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N43587",
+            "subcategory": "movienews",
+            "title": "Trailer - Knives Out"
+          },
+          {
+            "category": "movies",
+            "news_id": "N61844",
+            "subcategory": "movienews",
+            "title": "'Sonic the Hedgehog' Gets a Digital Makeover in New Trailer (Video)"
+          },
+          {
+            "category": "movies",
+            "news_id": "N26488",
+            "subcategory": "movies-gallery",
+            "title": "50 Best Movie Sequels of All Time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N13288",
+            "subcategory": "movies-gallery",
+            "title": "The best and worst Disney movies of every decade, according to critics"
+          }
+        ],
+        "ranked_items": [
+          "N18862",
+          "N52294",
+          "N23008",
+          "N62563",
+          "N64228",
+          "N59761",
+          "N43587",
+          "N61844",
+          "N26488",
+          "N13288"
+        ],
+        "ranked_scores": [
+          0.7051653369536095,
+          0.7022699284613161,
+          0.6614229197264843,
+          0.6004839347089898,
+          0.5533695033826787,
+          0.526784314619759,
+          0.5152595110408341,
+          0.18603566399180174,
+          0.18135322521200942,
+          0.17495204533477055
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N6390",
+            "subcategory": "lifestylebuzz",
+            "title": "Family Brings Snow Inside So Obsessed Indoor Cat Can Play In It"
+          }
+        ],
+        "relevant_items": [
+          "N23446",
+          "N6390"
+        ],
+        "score_margin": 0.0028954084922934165,
+        "score_margin_ratio": 0.004105999459363522,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.7051653369536095
+      },
+      {
+        "candidate_count": 28,
+        "history_length": 38,
+        "impression_id": "33204",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "movies",
+            "news_id": "N60186",
+            "subcategory": "movienews",
+            "title": "Clip - Terminator: Dark Fate"
+          },
+          {
+            "category": "movies",
+            "news_id": "N60027",
+            "subcategory": "movies-awards",
+            "title": "Independent Spirit Awards Best Film winners ranked"
+          },
+          {
+            "category": "tv",
+            "news_id": "N49955",
+            "subcategory": "tv-gallery",
+            "title": "Stars who've played royals"
+          },
+          {
+            "category": "movies",
+            "news_id": "N1539",
+            "subcategory": "movienews",
+            "title": "Scarlett Johansson Regrets Being \"Hyper-Sexualized\" Early in Her Career"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N16148",
+            "subcategory": "entertainment-celebrity",
+            "title": "Miranda Lambert gets candid about her public divorce and secret wedding, plus more news"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N45523",
+            "subcategory": "lifestylebuzz",
+            "title": "Family told to take down Christmas display because it's too soon to decorate"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41387",
+            "subcategory": "tv-gallery",
+            "title": "Can you answer these real Jeopardy questions about TV shows?"
+          },
+          {
+            "category": "news",
+            "news_id": "N38779",
+            "subcategory": "newsus",
+            "title": "'One in a million' deer captured on camera in Michigan woods"
+          }
+        ],
+        "ranked_items": [
+          "N39949",
+          "N60186",
+          "N60027",
+          "N49955",
+          "N1539",
+          "N23446",
+          "N16148",
+          "N45523",
+          "N41387",
+          "N38779"
+        ],
+        "ranked_scores": [
+          0.6959742746641406,
+          0.13860439074649789,
+          0.11129357870029459,
+          0.07695514802059181,
+          0.06816509309011574,
+          0.06814545791571289,
+          0.06439684562830333,
+          0.06105194301596157,
+          0.03792970194627987,
+          0.03452926047871801
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N4021",
+            "subcategory": "lifestyledidyouknow",
+            "title": "9 Amazing Transgender Women Who Changed History"
+          }
+        ],
+        "relevant_items": [
+          "N4021"
+        ],
+        "score_margin": 0.5573698839176427,
+        "score_margin_ratio": 0.8008483994420845,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.6959742746641406
+      },
+      {
+        "candidate_count": 101,
+        "history_length": 68,
+        "impression_id": "28122",
+        "margin_classification": "near_tie",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N27101",
+            "subcategory": "movievideo",
+            "title": "Trailer - I See You"
+          },
+          {
+            "category": "movies",
+            "news_id": "N41309",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Report"
+          },
+          {
+            "category": "movies",
+            "news_id": "N31626",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Good Liar"
+          },
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N23008",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Mandela Effect"
+          },
+          {
+            "category": "movies",
+            "news_id": "N64228",
+            "subcategory": "movienews",
+            "title": "Trailer - Jumanji: The Next Level"
+          },
+          {
+            "category": "movies",
+            "news_id": "N59761",
+            "subcategory": "movienews",
+            "title": "Trailer - Autonomy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N4238",
+            "subcategory": "movievideo",
+            "title": "Trailer - Sonic the Hedgehog"
+          },
+          {
+            "category": "movies",
+            "news_id": "N43587",
+            "subcategory": "movienews",
+            "title": "Trailer - Knives Out"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N31041",
+            "subcategory": "recipes",
+            "title": "19 Cornbread Recipes to Replace The Store-Bought Rolls This Thanksgiving"
+          }
+        ],
+        "ranked_items": [
+          "N27101",
+          "N41309",
+          "N31626",
+          "N18862",
+          "N23008",
+          "N64228",
+          "N59761",
+          "N4238",
+          "N43587",
+          "N31041"
+        ],
+        "ranked_scores": [
+          0.6087678863787708,
+          0.5891504791343168,
+          0.5873274267002394,
+          0.5508233638838713,
+          0.5355692271541757,
+          0.47538215770331943,
+          0.47105643133400604,
+          0.4695164193037707,
+          0.4426430741817715,
+          0.1145728423365339
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41612",
+            "subcategory": "tv-celebrity",
+            "title": "'Lots of Tears!' Teresa Giudice Details Reuniting With Husband Joe in Italy"
+          }
+        ],
+        "relevant_items": [
+          "N23446",
+          "N41612"
+        ],
+        "score_margin": 0.019617407244453933,
+        "score_margin_ratio": 0.0322247734865701,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.6087678863787708
+      },
+      {
+        "candidate_count": 128,
+        "history_length": 3,
+        "impression_id": "81658",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N47020",
+            "subcategory": "newsopinion",
+            "title": "The News In Cartoons"
+          },
+          {
+            "category": "news",
+            "news_id": "N10541",
+            "subcategory": "newsopinion",
+            "title": "The Take Down Trump Project"
+          },
+          {
+            "category": "news",
+            "news_id": "N13980",
+            "subcategory": "newsopinion",
+            "title": "There's Never Going to Be a Clear Standard for Impeachable Offenses"
+          },
+          {
+            "category": "news",
+            "news_id": "N29369",
+            "subcategory": "newsopinion",
+            "title": "Why do Democrats need Deval Patrick?"
+          },
+          {
+            "category": "news",
+            "news_id": "N21710",
+            "subcategory": "newsfactcheck",
+            "title": "Trump Muddies Impeachment Timeline"
+          },
+          {
+            "category": "news",
+            "news_id": "N47380",
+            "subcategory": "newsopinion",
+            "title": "Hillary Clinton, get real"
+          },
+          {
+            "category": "news",
+            "news_id": "N18145",
+            "subcategory": "newsopinion",
+            "title": "John Yoo: Impeachment effort won't remove Trump from office   Is it worth the trouble?"
+          },
+          {
+            "category": "news",
+            "news_id": "N4034",
+            "subcategory": "newspolitics",
+            "title": "AP FACT CHECK: Trump assails a process he swore to uphold"
+          },
+          {
+            "category": "news",
+            "news_id": "N61969",
+            "subcategory": "newsfactcheck",
+            "title": "AP FACT CHECK: GOP presses empty Ukraine meddling theory"
+          },
+          {
+            "category": "news",
+            "news_id": "N24171",
+            "subcategory": "factcheck",
+            "title": "AP FACT CHECK: Trump's wildfire tweets not grounded in facts"
+          }
+        ],
+        "ranked_items": [
+          "N47020",
+          "N10541",
+          "N13980",
+          "N29369",
+          "N21710",
+          "N47380",
+          "N18145",
+          "N4034",
+          "N61969",
+          "N24171"
+        ],
+        "ranked_scores": [
+          0.5846065848169139,
+          0.12455921348319335,
+          0.106924796055579,
+          0.10389115210842355,
+          0.08787941553492688,
+          0.08149510705502264,
+          0.07912747590836286,
+          0.0767849693998261,
+          0.07619998929164068,
+          0.07389996861900307
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N1180",
+            "subcategory": "lifestylediy",
+            "title": "45 Easy Handmade Christmas Ornaments to Start Making Now"
+          }
+        ],
+        "relevant_items": [
+          "N1180"
+        ],
+        "score_margin": 0.46004737133372053,
+        "score_margin_ratio": 0.7869349803471636,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.5846065848169139
+      },
+      {
+        "candidate_count": 91,
+        "history_length": 3,
+        "impression_id": "135442",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "foodanddrink",
+            "news_id": "N29553",
+            "subcategory": "newstrends",
+            "title": "These Los Angeles Restaurants Serve an Amazing Thanksgiving Dinner"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N48487",
+            "subcategory": "entertainment-celebrity",
+            "title": "The latest on Brad Pitt and Angelina Jolie's post-split relationship, plus more news"
+          },
+          {
+            "category": "movies",
+            "news_id": "N36288",
+            "subcategory": "movies-celebrity",
+            "title": "Victim in Kevin Hart's car accident speaks out for 1st time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N26488",
+            "subcategory": "movies-gallery",
+            "title": "50 Best Movie Sequels of All Time"
+          },
+          {
+            "category": "sports",
+            "news_id": "N7494",
+            "subcategory": "football_nfl",
+            "title": "Insiders predict: NFL Week 11 winners"
+          },
+          {
+            "category": "movies",
+            "news_id": "N27936",
+            "subcategory": "movies-gallery",
+            "title": "50 Worst Movie Sequels of All Time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N11930",
+            "subcategory": "movies-gallery",
+            "title": "The most talked about movie moments of the 2010s"
+          },
+          {
+            "category": "movies",
+            "news_id": "N58656",
+            "subcategory": "movies-gallery",
+            "title": "'Charlie's Angels' stars: Where are they now?"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N57327",
+            "subcategory": "lifestylebuzz",
+            "title": "Please Don't Yell at Your Dog!"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N48552",
+            "subcategory": "newstrends",
+            "title": "LA Food Critic Falls in Love With an 'Impeccable' Meal at Angler"
+          }
+        ],
+        "ranked_items": [
+          "N29553",
+          "N48487",
+          "N36288",
+          "N26488",
+          "N7494",
+          "N27936",
+          "N11930",
+          "N58656",
+          "N57327",
+          "N48552"
+        ],
+        "ranked_scores": [
+          0.5793046903779021,
+          0.13128378705001137,
+          0.08278248254570374,
+          0.07427644061033707,
+          0.059573879083725294,
+          0.05890678814360578,
+          0.05381698895764518,
+          0.0527428944686865,
+          0.04947123514302393,
+          0.04791056953259007
+        ],
+        "relevant_articles": [
+          {
+            "category": "health",
+            "news_id": "N12627",
+            "subcategory": "fitness",
+            "title": "6 Reasons to Run On the Treadmill Instead of Outside"
+          }
+        ],
+        "relevant_items": [
+          "N12627"
+        ],
+        "score_margin": 0.44802090332789074,
+        "score_margin_ratio": 0.7733769651262964,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.5793046903779021
+      },
+      {
+        "candidate_count": 30,
+        "history_length": 198,
+        "impression_id": "139422",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N4238",
+            "subcategory": "movievideo",
+            "title": "Trailer - Sonic the Hedgehog"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N38733",
+            "subcategory": "lifestylebuzz",
+            "title": "Hillary Clinton Wants to Give Meghan Markle a Hug"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N39683",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Charles just turned 71   here are the best photos from every year of his royal career so far"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N6837",
+            "subcategory": "lifestylebuzz",
+            "title": "Powerful side-by-side portraits show people over 100 years old next to their younger selves"
+          },
+          {
+            "category": "finance",
+            "news_id": "N18151",
+            "subcategory": "finance-real-estate",
+            "title": "Abandoned mansions of the world's billionaires"
+          },
+          {
+            "category": "travel",
+            "news_id": "N44698",
+            "subcategory": "traveltripideas",
+            "title": "The most exclusive hotel in every state"
+          },
+          {
+            "category": "travel",
+            "news_id": "N22257",
+            "subcategory": "travelnews",
+            "title": "Southwest's Spring Travel Sale Includes $39 One-way Tickets"
+          },
+          {
+            "category": "autos",
+            "news_id": "N57081",
+            "subcategory": "autosclassics",
+            "title": "A Man and His Shelby G.T. 350 51 Years On"
+          }
+        ],
+        "ranked_items": [
+          "N4238",
+          "N3841",
+          "N38733",
+          "N23446",
+          "N39683",
+          "N6837",
+          "N18151",
+          "N44698",
+          "N22257",
+          "N57081"
+        ],
+        "ranked_scores": [
+          0.5126725678890004,
+          0.13299926604046047,
+          0.08750741639038027,
+          0.07648474019490499,
+          0.07624731463514392,
+          0.060655916680898196,
+          0.056028911717381835,
+          0.05050261551080138,
+          0.04850185203860022,
+          0.04824366588615883
+        ],
+        "relevant_articles": [
+          {
+            "category": "music",
+            "news_id": "N496",
+            "subcategory": "cma-awards",
+            "title": "Fashion hits and misses from the 2019 Country Music Association Awards"
+          },
+          {
+            "category": "news",
+            "news_id": "N49712",
+            "subcategory": "newsgoodnews",
+            "title": "Wisconsin bus driver saves children wandering in snow, as deadly Arctic air mass grips US"
+          }
+        ],
+        "relevant_items": [
+          "N496",
+          "N49712"
+        ],
+        "score_margin": 0.3796733018485399,
+        "score_margin_ratio": 0.7405765894826337,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.5126725678890004
+      },
+      {
+        "candidate_count": 153,
+        "history_length": 59,
+        "impression_id": "138357",
+        "margin_classification": "near_tie",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N64228",
+            "subcategory": "movienews",
+            "title": "Trailer - Jumanji: The Next Level"
+          },
+          {
+            "category": "movies",
+            "news_id": "N23008",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Mandela Effect"
+          },
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "movies",
+            "news_id": "N62563",
+            "subcategory": "movievideo",
+            "title": "Trailer - Knives and Skin"
+          },
+          {
+            "category": "movies",
+            "news_id": "N4238",
+            "subcategory": "movievideo",
+            "title": "Trailer - Sonic the Hedgehog"
+          },
+          {
+            "category": "movies",
+            "news_id": "N60186",
+            "subcategory": "movienews",
+            "title": "Clip - Terminator: Dark Fate"
+          },
+          {
+            "category": "movies",
+            "news_id": "N36288",
+            "subcategory": "movies-celebrity",
+            "title": "Victim in Kevin Hart's car accident speaks out for 1st time"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N39683",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Charles just turned 71   here are the best photos from every year of his royal career so far"
+          }
+        ],
+        "ranked_items": [
+          "N64228",
+          "N23008",
+          "N18862",
+          "N52294",
+          "N39949",
+          "N62563",
+          "N4238",
+          "N60186",
+          "N36288",
+          "N39683"
+        ],
+        "ranked_scores": [
+          0.4977292983155148,
+          0.4752249350460918,
+          0.4450586061982738,
+          0.44323119580183856,
+          0.4392577519054292,
+          0.4381341378733563,
+          0.3793635798037707,
+          0.1168563340086545,
+          0.08799523519371868,
+          0.0852996916211751
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N8074",
+            "subcategory": "lifestyledidyouknow",
+            "title": "A photographer takes incredible close-up photos of water droplets that look like miniature works of art"
+          }
+        ],
+        "relevant_items": [
+          "N8074"
+        ],
+        "score_margin": 0.02250436326942301,
+        "score_margin_ratio": 0.04521406183157276,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4977292983155148
+      },
+      {
+        "candidate_count": 59,
+        "history_length": 12,
+        "impression_id": "117945",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N29739",
+            "subcategory": "newsworld",
+            "title": "Today in History: November 14"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4021",
+            "subcategory": "lifestyledidyouknow",
+            "title": "9 Amazing Transgender Women Who Changed History"
+          },
+          {
+            "category": "news",
+            "news_id": "N52520",
+            "subcategory": "newsworld",
+            "title": "What the End of Bolivia's President Means for the Country"
+          },
+          {
+            "category": "news",
+            "news_id": "N40559",
+            "subcategory": "newsworld",
+            "title": "2 dead, 3 injured in a school shooting in Russia"
+          },
+          {
+            "category": "news",
+            "news_id": "N28767",
+            "subcategory": "newsworld",
+            "title": "Hong Kong: Student protesters fortify campus occupations as city braces for more violence"
+          },
+          {
+            "category": "news",
+            "news_id": "N18553",
+            "subcategory": "newsworld",
+            "title": "Bolivia unrest: Evo Morales denounces 'coup' as Jeanine Anez takes power"
+          },
+          {
+            "category": "news",
+            "news_id": "N9623",
+            "subcategory": "newsworld",
+            "title": "Israel says overnight strike on Gaza house killed Islamic Jihad commander"
+          },
+          {
+            "category": "news",
+            "news_id": "N48017",
+            "subcategory": "newsscienceandtechnology",
+            "title": "Experts crack mystery of ancient Egypt's sacred bird mummies"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N45509",
+            "subcategory": "foodnews",
+            "title": "This is Chick-fil-A's most-ordered menu item"
+          },
+          {
+            "category": "sports",
+            "news_id": "N32854",
+            "subcategory": "football_ncaa",
+            "title": "Opinion: Other schools can learn from Oregon's hiring of Mario Cristobal"
+          }
+        ],
+        "ranked_items": [
+          "N29739",
+          "N4021",
+          "N52520",
+          "N40559",
+          "N28767",
+          "N18553",
+          "N9623",
+          "N48017",
+          "N45509",
+          "N32854"
+        ],
+        "ranked_scores": [
+          0.4937392876846962,
+          0.09340391869240561,
+          0.07160250178892051,
+          0.06830914111479289,
+          0.0564453182768054,
+          0.0537466598594771,
+          0.050093470243113974,
+          0.03248004712251252,
+          0.01786187403527363,
+          0.017319233340260348
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N5652",
+            "subcategory": "voices",
+            "title": "I Never Imagined Being A Grandmother At 35. Here's How It Changed My Life."
+          }
+        ],
+        "relevant_items": [
+          "N5652"
+        ],
+        "score_margin": 0.4003353689922906,
+        "score_margin_ratio": 0.8108234021027435,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4937392876846962
+      },
+      {
+        "candidate_count": 40,
+        "history_length": 4,
+        "impression_id": "148119",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N47020",
+            "subcategory": "newsopinion",
+            "title": "The News In Cartoons"
+          },
+          {
+            "category": "tv",
+            "news_id": "N23547",
+            "subcategory": "tv-gallery",
+            "title": "Disney+: All the Original TV Shows and Movies Set for Streaming Platform (Photos)"
+          },
+          {
+            "category": "news",
+            "news_id": "N46263",
+            "subcategory": "newsopinion",
+            "title": "Republicans Want to Turn the Impeachment Hearings Into 'Judge Judy'"
+          },
+          {
+            "category": "tv",
+            "news_id": "N8907",
+            "subcategory": "tv-gallery",
+            "title": "10 TV Shows That Bombed in the 2010s That Everyone Loves Now"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41387",
+            "subcategory": "tv-gallery",
+            "title": "Can you answer these real Jeopardy questions about TV shows?"
+          },
+          {
+            "category": "news",
+            "news_id": "N31556",
+            "subcategory": "newsopinion",
+            "title": "If Trump Were Anyone Else \u2026"
+          },
+          {
+            "category": "tv",
+            "news_id": "N17031",
+            "subcategory": "tvvideos",
+            "title": "Lamar Odom is Engaged to Girlfriend Sabrina Parr -- See Her Stunning Ring!"
+          },
+          {
+            "category": "movies",
+            "news_id": "N1539",
+            "subcategory": "movienews",
+            "title": "Scarlett Johansson Regrets Being \"Hyper-Sexualized\" Early in Her Career"
+          },
+          {
+            "category": "finance",
+            "news_id": "N6477",
+            "subcategory": "finance-companies",
+            "title": "Walmart releases Black Friday ad with $129 Apple Watch, TV deals, electronics doorbusters"
+          },
+          {
+            "category": "tv",
+            "news_id": "N34185",
+            "subcategory": "tvnews",
+            "title": "Survivor Contestant Accused of 'Inappropriate Touching,' 2 Players Admit to Using Allegations to Win"
+          }
+        ],
+        "ranked_items": [
+          "N47020",
+          "N23547",
+          "N46263",
+          "N8907",
+          "N41387",
+          "N31556",
+          "N17031",
+          "N1539",
+          "N6477",
+          "N34185"
+        ],
+        "ranked_scores": [
+          0.4928130921533553,
+          0.07871425773342752,
+          0.07334325571903179,
+          0.06813751519652066,
+          0.06429271602869922,
+          0.04676607574185836,
+          0.04558424094144834,
+          0.030994241846992024,
+          0.028028962955474742,
+          0.02436366533705229
+        ],
+        "relevant_articles": [
+          {
+            "category": "news",
+            "news_id": "N38779",
+            "subcategory": "newsus",
+            "title": "'One in a million' deer captured on camera in Michigan woods"
+          }
+        ],
+        "relevant_items": [
+          "N38779"
+        ],
+        "score_margin": 0.4140988344199278,
+        "score_margin_ratio": 0.8402756359627457,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4928130921533553
+      },
+      {
+        "candidate_count": 97,
+        "history_length": 30,
+        "impression_id": "127231",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N9284",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Prince William's Rift Is \"One of the Main Reasons\" the Sussexes Are Skipping Royal Christmas"
+          },
+          {
+            "category": "travel",
+            "news_id": "N23391",
+            "subcategory": "internationaltravel",
+            "title": "Here's how much it will cost to travel to Africa like Meghan Markle and Prince Harry"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N39683",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Charles just turned 71   here are the best photos from every year of his royal career so far"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N32567",
+            "subcategory": "lifestyleroyals",
+            "title": "See Princess Sofia of Sweden's Unexpected Green Leopard Print Dress   Complete with Tiara!"
+          },
+          {
+            "category": "health",
+            "news_id": "N37204",
+            "subcategory": "health-news",
+            "title": "Model, 23, Didn't Know She Was Pregnant Until She Gave Birth to a Full-Term Baby in Her Bathroom"
+          },
+          {
+            "category": "health",
+            "news_id": "N366",
+            "subcategory": "nutrition",
+            "title": "These Diabetes-Friendly Thanksgiving Dishes Won't Spike Your Blood Sugar"
+          },
+          {
+            "category": "health",
+            "news_id": "N15678",
+            "subcategory": "weightloss",
+            "title": "Gospel Singer Tamela Mann Lost 40 Pounds by Overhauling Her Lifestyle"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4021",
+            "subcategory": "lifestyledidyouknow",
+            "title": "9 Amazing Transgender Women Who Changed History"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N37338",
+            "subcategory": "foodnews",
+            "title": "13 Popular Foods People Hated Eating 100 Years Ago"
+          }
+        ],
+        "ranked_items": [
+          "N23446",
+          "N9284",
+          "N23391",
+          "N39683",
+          "N32567",
+          "N37204",
+          "N366",
+          "N15678",
+          "N4021",
+          "N37338"
+        ],
+        "ranked_scores": [
+          0.47924257410721083,
+          0.37108911283787943,
+          0.3321478287571498,
+          0.23633468386669734,
+          0.12171185390751783,
+          0.08776533869261395,
+          0.06791903428540498,
+          0.06627932066218661,
+          0.05784995642202799,
+          0.05317794577766441
+        ],
+        "relevant_articles": [
+          {
+            "category": "foodanddrink",
+            "news_id": "N59841",
+            "subcategory": "recipes",
+            "title": "32 Things You Can Make in Your Air Fryer"
+          }
+        ],
+        "relevant_items": [
+          "N59841"
+        ],
+        "score_margin": 0.1081534612693314,
+        "score_margin_ratio": 0.22567582079036347,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.47924257410721083
+      },
+      {
+        "candidate_count": 36,
+        "history_length": 33,
+        "impression_id": "133991",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "sports",
+            "news_id": "N59685",
+            "subcategory": "football_nfl",
+            "title": "Ranking the 11 most disappointing NFL teams of 2019"
+          },
+          {
+            "category": "sports",
+            "news_id": "N48875",
+            "subcategory": "football_nfl",
+            "title": "Top storylines for Week 11 in the NFL"
+          },
+          {
+            "category": "sports",
+            "news_id": "N38333",
+            "subcategory": "baseball_mlb",
+            "title": "Astros' Justin Verlander wins second AL Cy Young Award, but this one is even sweeter"
+          },
+          {
+            "category": "sports",
+            "news_id": "N32866",
+            "subcategory": "baseball_mlb",
+            "title": "Astros can make history if Bregman wins MVP"
+          },
+          {
+            "category": "movies",
+            "news_id": "N60186",
+            "subcategory": "movienews",
+            "title": "Clip - Terminator: Dark Fate"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N45509",
+            "subcategory": "foodnews",
+            "title": "This is Chick-fil-A's most-ordered menu item"
+          },
+          {
+            "category": "sports",
+            "news_id": "N51570",
+            "subcategory": "basketball_nba",
+            "title": "Hernandez: Anthony Davis' impact on LeBron James apparent even when he doesn't play"
+          },
+          {
+            "category": "sports",
+            "news_id": "N23002",
+            "subcategory": "football_nfl",
+            "title": "Expect teams to target this weakness in Saquon Barkley's game"
+          }
+        ],
+        "ranked_items": [
+          "N52294",
+          "N39949",
+          "N59685",
+          "N48875",
+          "N38333",
+          "N32866",
+          "N60186",
+          "N45509",
+          "N51570",
+          "N23002"
+        ],
+        "ranked_scores": [
+          0.4790951808295962,
+          0.454134062431682,
+          0.08710591967193913,
+          0.08339315011797838,
+          0.07245690561057004,
+          0.07241537099873921,
+          0.07231884853085294,
+          0.06828793594130049,
+          0.06805652399378262,
+          0.060737835587376464
+        ],
+        "relevant_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N60550",
+            "subcategory": "humor",
+            "title": "Funny celeb pics for November 2019"
+          }
+        ],
+        "relevant_items": [
+          "N60550"
+        ],
+        "score_margin": 0.024961118397914206,
+        "score_margin_ratio": 0.05210054159737486,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4790951808295962
+      },
+      {
+        "candidate_count": 55,
+        "history_length": 10,
+        "impression_id": "35174",
+        "margin_classification": "near_tie",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N43587",
+            "subcategory": "movienews",
+            "title": "Trailer - Knives Out"
+          },
+          {
+            "category": "movies",
+            "news_id": "N59761",
+            "subcategory": "movienews",
+            "title": "Trailer - Autonomy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "movies",
+            "news_id": "N23008",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Mandela Effect"
+          },
+          {
+            "category": "movies",
+            "news_id": "N62563",
+            "subcategory": "movievideo",
+            "title": "Trailer - Knives and Skin"
+          },
+          {
+            "category": "movies",
+            "news_id": "N26488",
+            "subcategory": "movies-gallery",
+            "title": "50 Best Movie Sequels of All Time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N33828",
+            "subcategory": "movienews",
+            "title": "Dwayne Johnson Announces 'Black Adam' 2021 Release Date"
+          },
+          {
+            "category": "movies",
+            "news_id": "N27936",
+            "subcategory": "movies-gallery",
+            "title": "50 Worst Movie Sequels of All Time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N26624",
+            "subcategory": "movies-gallery",
+            "title": "The 11 highest-grossing Disney movies at the global box office of all time"
+          }
+        ],
+        "ranked_items": [
+          "N43587",
+          "N59761",
+          "N52294",
+          "N39949",
+          "N23008",
+          "N62563",
+          "N26488",
+          "N33828",
+          "N27936",
+          "N26624"
+        ],
+        "ranked_scores": [
+          0.47645199826904205,
+          0.46265331402998133,
+          0.41408641604023133,
+          0.410374246955597,
+          0.37566507995311754,
+          0.3410538682818836,
+          0.1973675431881091,
+          0.1801049182035447,
+          0.17024676979512965,
+          0.1689731238254771
+        ],
+        "relevant_articles": [
+          {
+            "category": "video",
+            "news_id": "N25064",
+            "subcategory": "animals",
+            "title": "Excited puppy totally loses it when owner arrives home"
+          }
+        ],
+        "relevant_items": [
+          "N25064"
+        ],
+        "score_margin": 0.013798684239060721,
+        "score_margin_ratio": 0.02896133144407321,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.47645199826904205
+      },
+      {
+        "candidate_count": 103,
+        "history_length": 3,
+        "impression_id": "155043",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N64228",
+            "subcategory": "movienews",
+            "title": "Trailer - Jumanji: The Next Level"
+          },
+          {
+            "category": "movies",
+            "news_id": "N59761",
+            "subcategory": "movienews",
+            "title": "Trailer - Autonomy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N62563",
+            "subcategory": "movievideo",
+            "title": "Trailer - Knives and Skin"
+          },
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "movies",
+            "news_id": "N23008",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Mandela Effect"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N35273",
+            "subcategory": "lifestylebeauty",
+            "title": "The 22 Wildest Celebrity Hair Transformations of the Last Decade"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N54752",
+            "subcategory": "celebrity",
+            "title": "How the biggest stars of the decade have changed"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N20793",
+            "subcategory": "celebrity",
+            "title": "The week in entertainment history: Nov. 10-16"
+          }
+        ],
+        "ranked_items": [
+          "N64228",
+          "N59761",
+          "N62563",
+          "N18862",
+          "N52294",
+          "N3841",
+          "N23008",
+          "N35273",
+          "N54752",
+          "N20793"
+        ],
+        "ranked_scores": [
+          0.4738499907618724,
+          0.4284382108599171,
+          0.36699346408338884,
+          0.3129101061027939,
+          0.31162529737630645,
+          0.29053874623522247,
+          0.28271089733817867,
+          0.11342776740145406,
+          0.10545988163571737,
+          0.09945300130388463
+        ],
+        "relevant_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N21701",
+            "subcategory": "celebrity",
+            "title": "John Legend Leads a Pack of Gorgeous Men in the Sexiest Man Alive Issue: From Sterling to Jason, Peek at 10 More Hot Guys"
+          },
+          {
+            "category": "health",
+            "news_id": "N31448",
+            "subcategory": "wellness",
+            "title": "Four words from dermatologists that'll change your life: Stop showering every day"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N5652",
+            "subcategory": "voices",
+            "title": "I Never Imagined Being A Grandmother At 35. Here's How It Changed My Life."
+          }
+        ],
+        "relevant_items": [
+          "N21701",
+          "N31448",
+          "N5652"
+        ],
+        "score_margin": 0.045411779901955274,
+        "score_margin_ratio": 0.09583577247504141,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4738499907618724
+      },
+      {
+        "candidate_count": 42,
+        "history_length": 10,
+        "impression_id": "130106",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N59761",
+            "subcategory": "movienews",
+            "title": "Trailer - Autonomy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "movies",
+            "news_id": "N62563",
+            "subcategory": "movievideo",
+            "title": "Trailer - Knives and Skin"
+          },
+          {
+            "category": "movies",
+            "news_id": "N26488",
+            "subcategory": "movies-gallery",
+            "title": "50 Best Movie Sequels of All Time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N27936",
+            "subcategory": "movies-gallery",
+            "title": "50 Worst Movie Sequels of All Time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N26624",
+            "subcategory": "movies-gallery",
+            "title": "The 11 highest-grossing Disney movies at the global box office of all time"
+          },
+          {
+            "category": "movies",
+            "news_id": "N60027",
+            "subcategory": "movies-awards",
+            "title": "Independent Spirit Awards Best Film winners ranked"
+          },
+          {
+            "category": "video",
+            "news_id": "N3517",
+            "subcategory": "animals",
+            "title": "Dreaming dog hilariously falls off couch"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N37338",
+            "subcategory": "foodnews",
+            "title": "13 Popular Foods People Hated Eating 100 Years Ago"
+          }
+        ],
+        "ranked_items": [
+          "N59761",
+          "N52294",
+          "N39949",
+          "N62563",
+          "N26488",
+          "N27936",
+          "N26624",
+          "N60027",
+          "N3517",
+          "N37338"
+        ],
+        "ranked_scores": [
+          0.46265331402998133,
+          0.41408641604023133,
+          0.410374246955597,
+          0.3410538682818836,
+          0.1973675431881091,
+          0.17024676979512965,
+          0.1689731238254771,
+          0.08929133229064203,
+          0.07963103107344942,
+          0.06412848009590187
+        ],
+        "relevant_articles": [
+          {
+            "category": "video",
+            "news_id": "N4485",
+            "subcategory": "viral",
+            "title": "Man sets Guinness World Record for highest standing jump"
+          }
+        ],
+        "relevant_items": [
+          "N4485"
+        ],
+        "score_margin": 0.04856689798975,
+        "score_margin_ratio": 0.10497471112160395,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.46265331402998133
+      },
+      {
+        "candidate_count": 52,
+        "history_length": 2,
+        "impression_id": "78195",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N29739",
+            "subcategory": "newsworld",
+            "title": "Today in History: November 14"
+          },
+          {
+            "category": "news",
+            "news_id": "N40559",
+            "subcategory": "newsworld",
+            "title": "2 dead, 3 injured in a school shooting in Russia"
+          },
+          {
+            "category": "news",
+            "news_id": "N28767",
+            "subcategory": "newsworld",
+            "title": "Hong Kong: Student protesters fortify campus occupations as city braces for more violence"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4021",
+            "subcategory": "lifestyledidyouknow",
+            "title": "9 Amazing Transgender Women Who Changed History"
+          },
+          {
+            "category": "news",
+            "news_id": "N3957",
+            "subcategory": "newsworld",
+            "title": "Turkey Gathered Information in the U.S. Against Its Critics"
+          },
+          {
+            "category": "news",
+            "news_id": "N18553",
+            "subcategory": "newsworld",
+            "title": "Bolivia unrest: Evo Morales denounces 'coup' as Jeanine Anez takes power"
+          },
+          {
+            "category": "news",
+            "news_id": "N9623",
+            "subcategory": "newsworld",
+            "title": "Israel says overnight strike on Gaza house killed Islamic Jihad commander"
+          },
+          {
+            "category": "health",
+            "news_id": "N43628",
+            "subcategory": "health-news",
+            "title": "How nature saves us trillions of dollars in health care"
+          },
+          {
+            "category": "sports",
+            "news_id": "N51570",
+            "subcategory": "basketball_nba",
+            "title": "Hernandez: Anthony Davis' impact on LeBron James apparent even when he doesn't play"
+          },
+          {
+            "category": "news",
+            "news_id": "N53875",
+            "subcategory": "newsus",
+            "title": "California crisis of fires, blackouts decades in the making"
+          }
+        ],
+        "ranked_items": [
+          "N29739",
+          "N40559",
+          "N28767",
+          "N4021",
+          "N3957",
+          "N18553",
+          "N9623",
+          "N43628",
+          "N51570",
+          "N53875"
+        ],
+        "ranked_scores": [
+          0.4559765634675769,
+          0.09462063003411891,
+          0.06377745519787349,
+          0.05950007518853414,
+          0.04233670833133968,
+          0.03731139868436454,
+          0.034015191604223616,
+          0.025799780658574314,
+          0.02089368865388706,
+          0.016286615391607594
+        ],
+        "relevant_articles": [
+          {
+            "category": "weather",
+            "news_id": "N55281",
+            "subcategory": "weathertopstories",
+            "title": "On a frigid night in Dallas, one man who used to be homeless ushered people to shelter"
+          }
+        ],
+        "relevant_items": [
+          "N55281"
+        ],
+        "score_margin": 0.361355933433458,
+        "score_margin_ratio": 0.7924879530768973,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4559765634675769
+      },
+      {
+        "candidate_count": 202,
+        "history_length": 4,
+        "impression_id": "5172",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N27101",
+            "subcategory": "movievideo",
+            "title": "Trailer - I See You"
+          },
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "movies",
+            "news_id": "N23008",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Mandela Effect"
+          },
+          {
+            "category": "movies",
+            "news_id": "N62563",
+            "subcategory": "movievideo",
+            "title": "Trailer - Knives and Skin"
+          },
+          {
+            "category": "movies",
+            "news_id": "N3737",
+            "subcategory": "movienews",
+            "title": "Trailer - Bloodshot"
+          },
+          {
+            "category": "movies",
+            "news_id": "N64228",
+            "subcategory": "movienews",
+            "title": "Trailer - Jumanji: The Next Level"
+          },
+          {
+            "category": "movies",
+            "news_id": "N43587",
+            "subcategory": "movienews",
+            "title": "Trailer - Knives Out"
+          },
+          {
+            "category": "movies",
+            "news_id": "N59761",
+            "subcategory": "movienews",
+            "title": "Trailer - Autonomy"
+          }
+        ],
+        "ranked_items": [
+          "N27101",
+          "N18862",
+          "N52294",
+          "N39949",
+          "N23008",
+          "N62563",
+          "N3737",
+          "N64228",
+          "N43587",
+          "N59761"
+        ],
+        "ranked_scores": [
+          0.4492291822300393,
+          0.40647007644025424,
+          0.40480111052614304,
+          0.4011721816124865,
+          0.3672413188655281,
+          0.33340621493927497,
+          0.3078090675595028,
+          0.2889859730649968,
+          0.2690838043457507,
+          0.26129077910186127
+        ],
+        "relevant_articles": [
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          }
+        ],
+        "relevant_items": [
+          "N4642"
+        ],
+        "score_margin": 0.04275910578978509,
+        "score_margin_ratio": 0.09518327722505167,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4492291822300393
+      },
+      {
+        "candidate_count": 131,
+        "history_length": 17,
+        "impression_id": "46469",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N54752",
+            "subcategory": "celebrity",
+            "title": "How the biggest stars of the decade have changed"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N20793",
+            "subcategory": "celebrity",
+            "title": "The week in entertainment history: Nov. 10-16"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N16148",
+            "subcategory": "entertainment-celebrity",
+            "title": "Miranda Lambert gets candid about her public divorce and secret wedding, plus more news"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N31679",
+            "subcategory": "celebrity",
+            "title": "Biggest celeb weddings of the last decade"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N21701",
+            "subcategory": "celebrity",
+            "title": "John Legend Leads a Pack of Gorgeous Men in the Sexiest Man Alive Issue: From Sterling to Jason, Peek at 10 More Hot Guys"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N33831",
+            "subcategory": "celebrity",
+            "title": "From Idris Elba to Richard Gere: All the Sexiest Man Alive Covers"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N60550",
+            "subcategory": "humor",
+            "title": "Funny celeb pics for November 2019"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N62894",
+            "subcategory": "celebrity",
+            "title": "38 men who were worthy competitors for John Legend's Sexiest Man Alive title"
+          },
+          {
+            "category": "music",
+            "news_id": "N35393",
+            "subcategory": "music-celebrity",
+            "title": "Camila Cabello and boyfriend Shawn Mendes get tattoos together: Photos"
+          }
+        ],
+        "ranked_items": [
+          "N3841",
+          "N54752",
+          "N20793",
+          "N16148",
+          "N31679",
+          "N21701",
+          "N33831",
+          "N60550",
+          "N62894",
+          "N35393"
+        ],
+        "ranked_scores": [
+          0.44766197923302165,
+          0.29720899448022753,
+          0.2413246130979437,
+          0.21869054752222641,
+          0.21686562197943354,
+          0.18428224173243854,
+          0.17951204909042362,
+          0.12577765981324981,
+          0.11563975105759124,
+          0.1120378234249462
+        ],
+        "relevant_articles": [
+          {
+            "category": "music",
+            "news_id": "N21030",
+            "subcategory": "cma-awards",
+            "title": "The most memorable moments from the 2019 CMA Awards"
+          }
+        ],
+        "relevant_items": [
+          "N21030"
+        ],
+        "score_margin": 0.15045298475279412,
+        "score_margin_ratio": 0.3360861358173971,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.44766197923302165
+      },
+      {
+        "candidate_count": 42,
+        "history_length": 59,
+        "impression_id": "142092",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N4238",
+            "subcategory": "movievideo",
+            "title": "Trailer - Sonic the Hedgehog"
+          },
+          {
+            "category": "tv",
+            "news_id": "N23547",
+            "subcategory": "tv-gallery",
+            "title": "Disney+: All the Original TV Shows and Movies Set for Streaming Platform (Photos)"
+          },
+          {
+            "category": "tv",
+            "news_id": "N49955",
+            "subcategory": "tv-gallery",
+            "title": "Stars who've played royals"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41387",
+            "subcategory": "tv-gallery",
+            "title": "Can you answer these real Jeopardy questions about TV shows?"
+          },
+          {
+            "category": "music",
+            "news_id": "N59267",
+            "subcategory": "music-celebrity",
+            "title": "Celine Dion Shares What She Misses Most About Late Husband Rene Angelil"
+          },
+          {
+            "category": "health",
+            "news_id": "N23089",
+            "subcategory": "health-news",
+            "title": "Between 1,000 to 2,000 people get the plague every year -- including about 7 in the US"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N6837",
+            "subcategory": "lifestylebuzz",
+            "title": "Powerful side-by-side portraits show people over 100 years old next to their younger selves"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N45523",
+            "subcategory": "lifestylebuzz",
+            "title": "Family told to take down Christmas display because it's too soon to decorate"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N37994",
+            "subcategory": "voices",
+            "title": "No, Not Everyone Is Beautiful, And We'd All Be Better Off If We Stopped Saying We Are"
+          }
+        ],
+        "ranked_items": [
+          "N18862",
+          "N4238",
+          "N23547",
+          "N49955",
+          "N41387",
+          "N59267",
+          "N23089",
+          "N6837",
+          "N45523",
+          "N37994"
+        ],
+        "ranked_scores": [
+          0.4450586061982738,
+          0.3793635798037707,
+          0.13088601423004415,
+          0.08105645327701809,
+          0.06435927276082942,
+          0.06085314899499774,
+          0.05238675027442953,
+          0.05210542076430312,
+          0.0514085052872119,
+          0.04923807240914451
+        ],
+        "relevant_articles": [
+          {
+            "category": "sports",
+            "news_id": "N42076",
+            "subcategory": "football_nfl",
+            "title": "Top 10 quarterbacks heading into Week 11"
+          }
+        ],
+        "relevant_items": [
+          "N42076"
+        ],
+        "score_margin": 0.06569502639450309,
+        "score_margin_ratio": 0.1476098326817568,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4450586061982738
+      },
+      {
+        "candidate_count": 46,
+        "history_length": 59,
+        "impression_id": "2251",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N4238",
+            "subcategory": "movievideo",
+            "title": "Trailer - Sonic the Hedgehog"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N39683",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Charles just turned 71   here are the best photos from every year of his royal career so far"
+          },
+          {
+            "category": "tv",
+            "news_id": "N49955",
+            "subcategory": "tv-gallery",
+            "title": "Stars who've played royals"
+          },
+          {
+            "category": "movies",
+            "news_id": "N1539",
+            "subcategory": "movienews",
+            "title": "Scarlett Johansson Regrets Being \"Hyper-Sexualized\" Early in Her Career"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41387",
+            "subcategory": "tv-gallery",
+            "title": "Can you answer these real Jeopardy questions about TV shows?"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "travel",
+            "news_id": "N6664",
+            "subcategory": "travelnews",
+            "title": "Qantas test flight from London to Sydney breaks record"
+          },
+          {
+            "category": "sports",
+            "news_id": "N46586",
+            "subcategory": "football_nfl",
+            "title": "Which NFL teams would be a fit for Colin Kaepernick? Ranking all from 32 to 1"
+          },
+          {
+            "category": "sports",
+            "news_id": "N20676",
+            "subcategory": "football_nfl",
+            "title": "Six pretenders entering the 2019 NFL home stretch"
+          }
+        ],
+        "ranked_items": [
+          "N18862",
+          "N4238",
+          "N39683",
+          "N49955",
+          "N1539",
+          "N41387",
+          "N23446",
+          "N6664",
+          "N46586",
+          "N20676"
+        ],
+        "ranked_scores": [
+          0.4450586061982738,
+          0.3793635798037707,
+          0.0852996916211751,
+          0.08105645327701809,
+          0.08039652015334907,
+          0.06435927276082942,
+          0.06307476782529112,
+          0.05897823262310125,
+          0.0568862288028741,
+          0.0555888294359769
+        ],
+        "relevant_articles": [
+          {
+            "category": "tv",
+            "news_id": "N34185",
+            "subcategory": "tvnews",
+            "title": "Survivor Contestant Accused of 'Inappropriate Touching,' 2 Players Admit to Using Allegations to Win"
+          }
+        ],
+        "relevant_items": [
+          "N34185"
+        ],
+        "score_margin": 0.06569502639450309,
+        "score_margin_ratio": 0.1476098326817568,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4450586061982738
+      },
+      {
+        "candidate_count": 33,
+        "history_length": 6,
+        "impression_id": "1302",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N58264",
+            "subcategory": "celebrity",
+            "title": "Celebrity beach cruising for 2019"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N38311",
+            "subcategory": "celebrity",
+            "title": "Celebrity PDA of 2019"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N54752",
+            "subcategory": "celebrity",
+            "title": "How the biggest stars of the decade have changed"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N20793",
+            "subcategory": "celebrity",
+            "title": "The week in entertainment history: Nov. 10-16"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N48487",
+            "subcategory": "entertainment-celebrity",
+            "title": "The latest on Brad Pitt and Angelina Jolie's post-split relationship, plus more news"
+          },
+          {
+            "category": "music",
+            "news_id": "N36612",
+            "subcategory": "music-celebrity",
+            "title": "Jessica Simpson 'Relieved' After Daughter Maxwell and Son Ace Recover From Illness"
+          },
+          {
+            "category": "music",
+            "news_id": "N41934",
+            "subcategory": "music-celebrity",
+            "title": "Aaron Carter admitted to Florida hospital"
+          },
+          {
+            "category": "sports",
+            "news_id": "N20413",
+            "subcategory": "football_nfl",
+            "title": "The 2019 NFL Season"
+          },
+          {
+            "category": "movies",
+            "news_id": "N1539",
+            "subcategory": "movienews",
+            "title": "Scarlett Johansson Regrets Being \"Hyper-Sexualized\" Early in Her Career"
+          }
+        ],
+        "ranked_items": [
+          "N58264",
+          "N38311",
+          "N3841",
+          "N54752",
+          "N20793",
+          "N48487",
+          "N36612",
+          "N41934",
+          "N20413",
+          "N1539"
+        ],
+        "ranked_scores": [
+          0.4425951621131006,
+          0.3478154402581551,
+          0.32065307232883344,
+          0.24399282891778062,
+          0.19669115076068183,
+          0.17280784461991489,
+          0.15619398683059382,
+          0.051676170992295184,
+          0.031793065407954305,
+          0.029677882854852858
+        ],
+        "relevant_articles": [
+          {
+            "category": "sports",
+            "news_id": "N32015",
+            "subcategory": "football_nfl_videos",
+            "title": "Who will be best team in the NFL after Week 11?"
+          }
+        ],
+        "relevant_items": [
+          "N32015"
+        ],
+        "score_margin": 0.09477972185494554,
+        "score_margin_ratio": 0.21414540864485446,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4425951621131006
+      },
+      {
+        "candidate_count": 35,
+        "history_length": 10,
+        "impression_id": "138039",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "news",
+            "news_id": "N38779",
+            "subcategory": "newsus",
+            "title": "'One in a million' deer captured on camera in Michigan woods"
+          },
+          {
+            "category": "video",
+            "news_id": "N47098",
+            "subcategory": "animals",
+            "title": "Abandoned 'unicorn' puppy has a tail on its head"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N10960",
+            "subcategory": "recipes",
+            "title": "65 Best Fall Soups That Will Warm You and Your Family Up All Season Long"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N45523",
+            "subcategory": "lifestylebuzz",
+            "title": "Family told to take down Christmas display because it's too soon to decorate"
+          },
+          {
+            "category": "health",
+            "news_id": "N35815",
+            "subcategory": "health-news",
+            "title": "LASIK eye surgery should be taken off market, ex-FDA adviser says"
+          },
+          {
+            "category": "music",
+            "news_id": "N29212",
+            "subcategory": "musicnews",
+            "title": "Kiss Cancel 'End of the Road' Tour of Australia and New Zealand Due to Illness"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N62894",
+            "subcategory": "celebrity",
+            "title": "38 men who were worthy competitors for John Legend's Sexiest Man Alive title"
+          },
+          {
+            "category": "movies",
+            "news_id": "N1539",
+            "subcategory": "movienews",
+            "title": "Scarlett Johansson Regrets Being \"Hyper-Sexualized\" Early in Her Career"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N6837",
+            "subcategory": "lifestylebuzz",
+            "title": "Powerful side-by-side portraits show people over 100 years old next to their younger selves"
+          }
+        ],
+        "ranked_items": [
+          "N39949",
+          "N38779",
+          "N47098",
+          "N10960",
+          "N45523",
+          "N35815",
+          "N29212",
+          "N62894",
+          "N1539",
+          "N6837"
+        ],
+        "ranked_scores": [
+          0.43996371484377345,
+          0.07262506147439027,
+          0.05209599618651485,
+          0.034098404675462435,
+          0.03380268376668523,
+          0.029935406997209302,
+          0.029285500167533497,
+          0.025039398899966522,
+          0.02039247199134641,
+          0.01989600669575548
+        ],
+        "relevant_articles": [
+          {
+            "category": "autos",
+            "news_id": "N7618",
+            "subcategory": "autosnews",
+            "title": "Ford v Ferrari: the real story"
+          }
+        ],
+        "relevant_items": [
+          "N7618"
+        ],
+        "score_margin": 0.3673386533693832,
+        "score_margin_ratio": 0.8349294293503757,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.43996371484377345
+      },
+      {
+        "candidate_count": 114,
+        "history_length": 19,
+        "impression_id": "124986",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "movies",
+            "news_id": "N27101",
+            "subcategory": "movievideo",
+            "title": "Trailer - I See You"
+          },
+          {
+            "category": "movies",
+            "news_id": "N20147",
+            "subcategory": "movievideo",
+            "title": "Trailer - Bombshell"
+          },
+          {
+            "category": "movies",
+            "news_id": "N18862",
+            "subcategory": "movievideo",
+            "title": "Trailer - Soul"
+          },
+          {
+            "category": "movies",
+            "news_id": "N52294",
+            "subcategory": "movievideo",
+            "title": "Trailer - Wendy"
+          },
+          {
+            "category": "movies",
+            "news_id": "N39949",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Photograph"
+          },
+          {
+            "category": "movies",
+            "news_id": "N23008",
+            "subcategory": "movievideo",
+            "title": "Trailer - The Mandela Effect"
+          },
+          {
+            "category": "movies",
+            "news_id": "N4238",
+            "subcategory": "movievideo",
+            "title": "Trailer - Sonic the Hedgehog"
+          },
+          {
+            "category": "movies",
+            "news_id": "N62563",
+            "subcategory": "movievideo",
+            "title": "Trailer - Knives and Skin"
+          },
+          {
+            "category": "movies",
+            "news_id": "N3737",
+            "subcategory": "movienews",
+            "title": "Trailer - Bloodshot"
+          },
+          {
+            "category": "movies",
+            "news_id": "N64228",
+            "subcategory": "movienews",
+            "title": "Trailer - Jumanji: The Next Level"
+          }
+        ],
+        "ranked_items": [
+          "N27101",
+          "N20147",
+          "N18862",
+          "N52294",
+          "N39949",
+          "N23008",
+          "N4238",
+          "N62563",
+          "N3737",
+          "N64228"
+        ],
+        "ranked_scores": [
+          0.4383302367607105,
+          0.39689852784236646,
+          0.3966085283189932,
+          0.3949800539161364,
+          0.39143916803242207,
+          0.3583315167717936,
+          0.3380652098136688,
+          0.3253173010852819,
+          0.31870056797805435,
+          0.29921143806363426
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N33831",
+            "subcategory": "celebrity",
+            "title": "From Idris Elba to Richard Gere: All the Sexiest Man Alive Covers"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N4404",
+            "subcategory": "entertainment-celebrity",
+            "title": "Watch Kelly Clarkson's Kids Interview Their Hero Jason Momoa In The Cutest Video Ever"
+          }
+        ],
+        "relevant_items": [
+          "N23446",
+          "N33831",
+          "N4404"
+        ],
+        "score_margin": 0.041431708918344023,
+        "score_margin_ratio": 0.09452167668041132,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4383302367607105
+      },
+      {
+        "candidate_count": 60,
+        "history_length": 6,
+        "impression_id": "92730",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N5048",
+            "subcategory": "lifestyleroyals",
+            "title": "Spain's King Felipe VI and Queen Letizia's royal visit to Cuba: Best photos"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4021",
+            "subcategory": "lifestyledidyouknow",
+            "title": "9 Amazing Transgender Women Who Changed History"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N55976",
+            "subcategory": "tipsandtricks",
+            "title": "We Tested Canned Pumpkin Against the Fresh Stuff\u2060 Here's the Winner"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "news",
+            "news_id": "N59138",
+            "subcategory": "newspolitics",
+            "title": "Trump impeachment hearings: 5 key takeaways from the first day"
+          },
+          {
+            "category": "sports",
+            "news_id": "N60256",
+            "subcategory": "basketball_nba",
+            "title": "Austin Rivers on his father Doc's ejection: 'made my night'"
+          },
+          {
+            "category": "tv",
+            "news_id": "N47748",
+            "subcategory": "tv-celebrity",
+            "title": "Chuck Woolery: Supporting Trump 'pretty much destroyed my career'"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N20770",
+            "subcategory": "lifestylecelebstyle",
+            "title": "You'll Be Captivated by Ciara's Best Hair and Makeup Looks"
+          }
+        ],
+        "ranked_items": [
+          "N42457",
+          "N5048",
+          "N4021",
+          "N55976",
+          "N36261",
+          "N59138",
+          "N60256",
+          "N47748",
+          "N14029",
+          "N20770"
+        ],
+        "ranked_scores": [
+          0.43774117396759643,
+          0.09366823026921754,
+          0.08851901734936712,
+          0.07630354998515884,
+          0.044407400482500727,
+          0.018810494655705175,
+          0.01825420760973581,
+          0.018166388455739865,
+          0.016664047951286096,
+          0.016613855813721188
+        ],
+        "relevant_articles": [
+          {
+            "category": "music",
+            "news_id": "N39399",
+            "subcategory": "cma-awards",
+            "title": "Gwen Stefani and Blake Shelton Are Couples Goals at the 2019 CMA Awards"
+          },
+          {
+            "category": "finance",
+            "news_id": "N8656",
+            "subcategory": "finance-real-estate",
+            "title": "How to know when to refinance your mortgage"
+          }
+        ],
+        "relevant_items": [
+          "N39399",
+          "N8656"
+        ],
+        "score_margin": 0.3440729436983789,
+        "score_margin_ratio": 0.7860191459253698,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.43774117396759643
+      },
+      {
+        "candidate_count": 87,
+        "history_length": 10,
+        "impression_id": "122631",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N61811",
+            "subcategory": "lifestyleroyals",
+            "title": "Archie's Photo Album: Prince Harry, Duchess Meghan's Royal Baby"
+          },
+          {
+            "category": "travel",
+            "news_id": "N23391",
+            "subcategory": "internationaltravel",
+            "title": "Here's how much it will cost to travel to Africa like Meghan Markle and Prince Harry"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N23767",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry Talked to Another Royal About His Desire for Privacy"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N18409",
+            "subcategory": "lifestylecelebstyle",
+            "title": "20 Style Lessons Chrissy Teigen Taught Us That We'll Remember Until the End of Time"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N32567",
+            "subcategory": "lifestyleroyals",
+            "title": "See Princess Sofia of Sweden's Unexpected Green Leopard Print Dress   Complete with Tiara!"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4021",
+            "subcategory": "lifestyledidyouknow",
+            "title": "9 Amazing Transgender Women Who Changed History"
+          },
+          {
+            "category": "music",
+            "news_id": "N36612",
+            "subcategory": "music-celebrity",
+            "title": "Jessica Simpson 'Relieved' After Daughter Maxwell and Son Ace Recover From Illness"
+          },
+          {
+            "category": "health",
+            "news_id": "N37204",
+            "subcategory": "health-news",
+            "title": "Model, 23, Didn't Know She Was Pregnant Until She Gave Birth to a Full-Term Baby in Her Bathroom"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N38311",
+            "subcategory": "celebrity",
+            "title": "Celebrity PDA of 2019"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N9047",
+            "subcategory": "lifestylebuzz",
+            "title": "Here's What 'Cultural Appropriation' Actually Means   and Why It's Wrong"
+          }
+        ],
+        "ranked_items": [
+          "N61811",
+          "N23391",
+          "N23767",
+          "N18409",
+          "N32567",
+          "N4021",
+          "N36612",
+          "N37204",
+          "N38311",
+          "N9047"
+        ],
+        "ranked_scores": [
+          0.4321840166197604,
+          0.36311703744875784,
+          0.25449646359132144,
+          0.19658442610802704,
+          0.08404983768161949,
+          0.0758133047342829,
+          0.0666073483693557,
+          0.06647599493633671,
+          0.05568533641503792,
+          0.054418872044590796
+        ],
+        "relevant_articles": [
+          {
+            "category": "health",
+            "news_id": "N12627",
+            "subcategory": "fitness",
+            "title": "6 Reasons to Run On the Treadmill Instead of Outside"
+          },
+          {
+            "category": "health",
+            "news_id": "N58848",
+            "subcategory": "nutrition",
+            "title": "What Chrissy Teigen Eats in a Day to Stay Fit and Glowing"
+          }
+        ],
+        "relevant_items": [
+          "N12627",
+          "N58848"
+        ],
+        "score_margin": 0.06906697917100257,
+        "score_margin_ratio": 0.1598091935726729,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_score": 0.4321840166197604
+      },
+      {
+        "candidate_count": 48,
+        "history_length": 0,
+        "impression_id": "127490",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N51048",
+            "subcategory": "elections-2020-us",
+            "title": "Rep. Tim Ryan endorses Biden in Democratic primary"
+          },
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "autos",
+            "news_id": "N38215",
+            "subcategory": "autosmotorcycles",
+            "title": "The Volkspod VW Beetle Minibikes Are Part Creepy, Part Adorable"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "tv",
+            "news_id": "N47748",
+            "subcategory": "tv-celebrity",
+            "title": "Chuck Woolery: Supporting Trump 'pretty much destroyed my career'"
+          }
+        ],
+        "ranked_items": [
+          "N51048",
+          "N4642",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N60272",
+          "N38215",
+          "N51287",
+          "N36261",
+          "N47748"
+        ],
+        "ranked_scores": [
+          1821.0,
+          1154.0,
+          1007.0,
+          795.0,
+          404.0,
+          296.0,
+          291.0,
+          243.0,
+          164.0,
+          159.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "tv",
+            "news_id": "N41612",
+            "subcategory": "tv-celebrity",
+            "title": "'Lots of Tears!' Teresa Giudice Details Reuniting With Husband Joe in Italy"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N60550",
+            "subcategory": "humor",
+            "title": "Funny celeb pics for November 2019"
+          }
+        ],
+        "relevant_items": [
+          "N41612",
+          "N60550"
+        ],
+        "score_margin": 667.0,
+        "score_margin_ratio": 0.3662822624931356,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1821.0
+      },
+      {
+        "candidate_count": 20,
+        "history_length": 0,
+        "impression_id": "130841",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N51048",
+            "subcategory": "elections-2020-us",
+            "title": "Rep. Tim Ryan endorses Biden in Democratic primary"
+          },
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "tv",
+            "news_id": "N48705",
+            "subcategory": "tv-celebrity",
+            "title": "Lori Loughlin's 'Stress Is Only Mounting' Ahead of Pretrial Hearing"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N35273",
+            "subcategory": "lifestylebeauty",
+            "title": "The 22 Wildest Celebrity Hair Transformations of the Last Decade"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41612",
+            "subcategory": "tv-celebrity",
+            "title": "'Lots of Tears!' Teresa Giudice Details Reuniting With Husband Joe in Italy"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N33831",
+            "subcategory": "celebrity",
+            "title": "From Idris Elba to Richard Gere: All the Sexiest Man Alive Covers"
+          }
+        ],
+        "ranked_items": [
+          "N51048",
+          "N4642",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N51287",
+          "N48705",
+          "N35273",
+          "N41612",
+          "N33831"
+        ],
+        "ranked_scores": [
+          1821.0,
+          1154.0,
+          1007.0,
+          795.0,
+          404.0,
+          243.0,
+          218.0,
+          88.0,
+          87.0,
+          83.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "health",
+            "news_id": "N42670",
+            "subcategory": "health-news",
+            "title": "Cannabis Use Disorder is Rising in U.S. States Where Weed is Legal"
+          }
+        ],
+        "relevant_items": [
+          "N42670"
+        ],
+        "score_margin": 667.0,
+        "score_margin_ratio": 0.3662822624931356,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1821.0
+      },
+      {
+        "candidate_count": 44,
+        "history_length": 0,
+        "impression_id": "140488",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N51048",
+            "subcategory": "elections-2020-us",
+            "title": "Rep. Tim Ryan endorses Biden in Democratic primary"
+          },
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "tv",
+            "news_id": "N48705",
+            "subcategory": "tv-celebrity",
+            "title": "Lori Loughlin's 'Stress Is Only Mounting' Ahead of Pretrial Hearing"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "tv",
+            "news_id": "N47748",
+            "subcategory": "tv-celebrity",
+            "title": "Chuck Woolery: Supporting Trump 'pretty much destroyed my career'"
+          },
+          {
+            "category": "news",
+            "news_id": "N63106",
+            "subcategory": "newsus",
+            "title": "Supreme Court Justices Couldn't Stop Interrupting Each Other During DACA Oral Arguments"
+          }
+        ],
+        "ranked_items": [
+          "N51048",
+          "N4642",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N51287",
+          "N48705",
+          "N36261",
+          "N47748",
+          "N63106"
+        ],
+        "ranked_scores": [
+          1821.0,
+          1154.0,
+          1007.0,
+          795.0,
+          404.0,
+          243.0,
+          218.0,
+          164.0,
+          159.0,
+          115.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N16148",
+            "subcategory": "entertainment-celebrity",
+            "title": "Miranda Lambert gets candid about her public divorce and secret wedding, plus more news"
+          },
+          {
+            "category": "sports",
+            "news_id": "N27476",
+            "subcategory": "basketball_nba",
+            "title": "Harden scores 47 points, Rockets beat Clippers 102-93"
+          },
+          {
+            "category": "news",
+            "news_id": "N54291",
+            "subcategory": "newsworld",
+            "title": "Bolivia's Interim Leader Says Nation Must 'Reconstruct Democracy'"
+          }
+        ],
+        "relevant_items": [
+          "N16148",
+          "N27476",
+          "N54291"
+        ],
+        "score_margin": 667.0,
+        "score_margin_ratio": 0.3662822624931356,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1821.0
+      },
+      {
+        "candidate_count": 25,
+        "history_length": 0,
+        "impression_id": "58306",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N51048",
+            "subcategory": "elections-2020-us",
+            "title": "Rep. Tim Ryan endorses Biden in Democratic primary"
+          },
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "tv",
+            "news_id": "N48705",
+            "subcategory": "tv-celebrity",
+            "title": "Lori Loughlin's 'Stress Is Only Mounting' Ahead of Pretrial Hearing"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "tv",
+            "news_id": "N47748",
+            "subcategory": "tv-celebrity",
+            "title": "Chuck Woolery: Supporting Trump 'pretty much destroyed my career'"
+          },
+          {
+            "category": "finance",
+            "news_id": "N8084",
+            "subcategory": "finance-retirement",
+            "title": "Is retirement dying? The old work model is disappearing for Boomers, Gen Xers"
+          }
+        ],
+        "ranked_items": [
+          "N51048",
+          "N4642",
+          "N26262",
+          "N14029",
+          "N42457",
+          "N51287",
+          "N48705",
+          "N36261",
+          "N47748",
+          "N8084"
+        ],
+        "ranked_scores": [
+          1821.0,
+          1154.0,
+          1099.0,
+          795.0,
+          404.0,
+          243.0,
+          218.0,
+          164.0,
+          159.0,
+          128.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N4404",
+            "subcategory": "entertainment-celebrity",
+            "title": "Watch Kelly Clarkson's Kids Interview Their Hero Jason Momoa In The Cutest Video Ever"
+          }
+        ],
+        "relevant_items": [
+          "N4404"
+        ],
+        "score_margin": 667.0,
+        "score_margin_ratio": 0.3662822624931356,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1821.0
+      },
+      {
+        "candidate_count": 33,
+        "history_length": 0,
+        "impression_id": "63688",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N51048",
+            "subcategory": "elections-2020-us",
+            "title": "Rep. Tim Ryan endorses Biden in Democratic primary"
+          },
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "tv",
+            "news_id": "N48705",
+            "subcategory": "tv-celebrity",
+            "title": "Lori Loughlin's 'Stress Is Only Mounting' Ahead of Pretrial Hearing"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "tv",
+            "news_id": "N47748",
+            "subcategory": "tv-celebrity",
+            "title": "Chuck Woolery: Supporting Trump 'pretty much destroyed my career'"
+          },
+          {
+            "category": "news",
+            "news_id": "N63106",
+            "subcategory": "newsus",
+            "title": "Supreme Court Justices Couldn't Stop Interrupting Each Other During DACA Oral Arguments"
+          }
+        ],
+        "ranked_items": [
+          "N51048",
+          "N4642",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N51287",
+          "N48705",
+          "N36261",
+          "N47748",
+          "N63106"
+        ],
+        "ranked_scores": [
+          1821.0,
+          1154.0,
+          1007.0,
+          795.0,
+          404.0,
+          243.0,
+          218.0,
+          164.0,
+          159.0,
+          115.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "news",
+            "news_id": "N3031",
+            "subcategory": "newsus",
+            "title": "FBI busts $6 million iPhone and iPad counterfeit ring"
+          },
+          {
+            "category": "travel",
+            "news_id": "N47149",
+            "subcategory": "traveltips",
+            "title": "How to Make Sure You Have a Seat Next to Your Family on Your Next Flight"
+          }
+        ],
+        "relevant_items": [
+          "N3031",
+          "N47149"
+        ],
+        "score_margin": 667.0,
+        "score_margin_ratio": 0.3662822624931356,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1821.0
+      },
+      {
+        "candidate_count": 45,
+        "history_length": 0,
+        "impression_id": "69957",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N51048",
+            "subcategory": "elections-2020-us",
+            "title": "Rep. Tim Ryan endorses Biden in Democratic primary"
+          },
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N8509",
+            "subcategory": "lifestylebuzz",
+            "title": "A teen received a response to a message in a bottle he wrote 9 years ago after it traveled over 3,000 miles"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "tv",
+            "news_id": "N48705",
+            "subcategory": "tv-celebrity",
+            "title": "Lori Loughlin's 'Stress Is Only Mounting' Ahead of Pretrial Hearing"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N36186",
+            "subcategory": "restaurantsandnews",
+            "title": "17 restaurants that will be open on Thanksgiving"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          }
+        ],
+        "ranked_items": [
+          "N51048",
+          "N4642",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N8509",
+          "N51287",
+          "N48705",
+          "N36186",
+          "N36261"
+        ],
+        "ranked_scores": [
+          1821.0,
+          1154.0,
+          1007.0,
+          795.0,
+          404.0,
+          377.0,
+          243.0,
+          218.0,
+          169.0,
+          164.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "tv",
+            "news_id": "N47748",
+            "subcategory": "tv-celebrity",
+            "title": "Chuck Woolery: Supporting Trump 'pretty much destroyed my career'"
+          }
+        ],
+        "relevant_items": [
+          "N47748"
+        ],
+        "score_margin": 667.0,
+        "score_margin_ratio": 0.3662822624931356,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1821.0
+      },
+      {
+        "candidate_count": 30,
+        "history_length": 0,
+        "impression_id": "81879",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "news",
+            "news_id": "N51048",
+            "subcategory": "elections-2020-us",
+            "title": "Rep. Tim Ryan endorses Biden in Democratic primary"
+          },
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "health",
+            "news_id": "N42634",
+            "subcategory": "nutrition",
+            "title": "The Latest Weight Loss Pills That Work And the Ones That Don't"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N8509",
+            "subcategory": "lifestylebuzz",
+            "title": "A teen received a response to a message in a bottle he wrote 9 years ago after it traveled over 3,000 miles"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "tv",
+            "news_id": "N48705",
+            "subcategory": "tv-celebrity",
+            "title": "Lori Loughlin's 'Stress Is Only Mounting' Ahead of Pretrial Hearing"
+          }
+        ],
+        "ranked_items": [
+          "N51048",
+          "N4642",
+          "N26262",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N42634",
+          "N8509",
+          "N51287",
+          "N48705"
+        ],
+        "ranked_scores": [
+          1821.0,
+          1154.0,
+          1099.0,
+          1007.0,
+          795.0,
+          404.0,
+          401.0,
+          377.0,
+          243.0,
+          218.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N33831",
+            "subcategory": "celebrity",
+            "title": "From Idris Elba to Richard Gere: All the Sexiest Man Alive Covers"
+          }
+        ],
+        "relevant_items": [
+          "N33831"
+        ],
+        "score_margin": 667.0,
+        "score_margin_ratio": 0.3662822624931356,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1821.0
+      },
+      {
+        "candidate_count": 136,
+        "history_length": 0,
+        "impression_id": "117095",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "finance",
+            "news_id": "N58363",
+            "subcategory": "finance-companies",
+            "title": "Supreme Court refuses to block lawsuit against gun manufacturer brought by Sandy Hook families"
+          },
+          {
+            "category": "finance",
+            "news_id": "N33885",
+            "subcategory": "finance-companies",
+            "title": "One of America's biggest solar panel makers quits manufacturing"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "finance",
+            "news_id": "N17059",
+            "subcategory": "finance-companies",
+            "title": "No. 1 milk company declares bankruptcy amid drop in demand"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N8509",
+            "subcategory": "lifestylebuzz",
+            "title": "A teen received a response to a message in a bottle he wrote 9 years ago after it traveled over 3,000 miles"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N44422",
+            "subcategory": "lifestylebuzz",
+            "title": "See inside a woman's 270-square-foot tiny home complete with 2 bedrooms and a walk-in closet"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4510",
+            "subcategory": "lifestylebuzz",
+            "title": "Husband, 106, and wife, 105, are named world's oldest living couple"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "finance",
+            "news_id": "N4913",
+            "subcategory": "finance-companies",
+            "title": "Don't be fooled: Costco says $75 coupon is a scam"
+          }
+        ],
+        "ranked_items": [
+          "N58363",
+          "N33885",
+          "N56214",
+          "N17059",
+          "N8509",
+          "N44422",
+          "N4510",
+          "N51287",
+          "N11817",
+          "N4913"
+        ],
+        "ranked_scores": [
+          1603.0,
+          1037.0,
+          1007.0,
+          480.0,
+          377.0,
+          311.0,
+          252.0,
+          243.0,
+          235.0,
+          216.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "health",
+            "news_id": "N15315",
+            "subcategory": "wellness",
+            "title": "If You're Over 40 And About To Start Weight Lifting For The First Time, Here Are 5 Things You Need To Know"
+          },
+          {
+            "category": "news",
+            "news_id": "N29739",
+            "subcategory": "newsworld",
+            "title": "Today in History: November 14"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4021",
+            "subcategory": "lifestyledidyouknow",
+            "title": "9 Amazing Transgender Women Who Changed History"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N5652",
+            "subcategory": "voices",
+            "title": "I Never Imagined Being A Grandmother At 35. Here's How It Changed My Life."
+          },
+          {
+            "category": "news",
+            "news_id": "N64174",
+            "subcategory": "newscrime",
+            "title": "Georgia executes man convicted of killing convenience store clerk"
+          }
+        ],
+        "relevant_items": [
+          "N15315",
+          "N29739",
+          "N4021",
+          "N5652",
+          "N64174"
+        ],
+        "score_margin": 566.0,
+        "score_margin_ratio": 0.35308796007485965,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1603.0
+      },
+      {
+        "candidate_count": 99,
+        "history_length": 0,
+        "impression_id": "139345",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "health",
+            "news_id": "N7121",
+            "subcategory": "wellness",
+            "title": "Selena Gomez Opens Up About Being Body Shamed for Gaining Weight Amidst Lupus Battle"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "autos",
+            "news_id": "N7618",
+            "subcategory": "autosnews",
+            "title": "Ford v Ferrari: the real story"
+          },
+          {
+            "category": "health",
+            "news_id": "N31448",
+            "subcategory": "wellness",
+            "title": "Four words from dermatologists that'll change your life: Stop showering every day"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "health",
+            "news_id": "N20576",
+            "subcategory": "ads-lung-health",
+            "title": "Surgeon Shocked After Doing Double Lung Transplant on Teen Vaper: 'Evil I Haven't Faced Before'"
+          }
+        ],
+        "ranked_items": [
+          "N4642",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N7121",
+          "N51287",
+          "N7618",
+          "N31448",
+          "N36261",
+          "N20576"
+        ],
+        "ranked_scores": [
+          1154.0,
+          1007.0,
+          795.0,
+          404.0,
+          343.0,
+          243.0,
+          190.0,
+          185.0,
+          164.0,
+          142.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "travel",
+            "news_id": "N22257",
+            "subcategory": "travelnews",
+            "title": "Southwest's Spring Travel Sale Includes $39 One-way Tickets"
+          }
+        ],
+        "relevant_items": [
+          "N22257"
+        ],
+        "score_margin": 147.0,
+        "score_margin_ratio": 0.12738301559792028,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1154.0
+      },
+      {
+        "candidate_count": 39,
+        "history_length": 0,
+        "impression_id": "90716",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "music",
+            "news_id": "N13930",
+            "subcategory": "musicnews",
+            "title": "Fans are divided after Drake was revealed as a surprise festival headliner, booed off stage"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N25295",
+            "subcategory": "shop-holidays",
+            "title": "77 Fabulous Christmas Presents That Are Less Than $50"
+          },
+          {
+            "category": "travel",
+            "news_id": "N12800",
+            "subcategory": "video",
+            "title": "This is the dirtiest spot on a plane"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N45509",
+            "subcategory": "foodnews",
+            "title": "This is Chick-fil-A's most-ordered menu item"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N16148",
+            "subcategory": "entertainment-celebrity",
+            "title": "Miranda Lambert gets candid about her public divorce and secret wedding, plus more news"
+          }
+        ],
+        "ranked_items": [
+          "N4642",
+          "N56214",
+          "N13930",
+          "N42457",
+          "N11817",
+          "N36261",
+          "N25295",
+          "N12800",
+          "N45509",
+          "N16148"
+        ],
+        "ranked_scores": [
+          1154.0,
+          1007.0,
+          722.0,
+          404.0,
+          235.0,
+          164.0,
+          97.0,
+          79.0,
+          74.0,
+          72.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "sports",
+            "news_id": "N61953",
+            "subcategory": "basketball_nba",
+            "title": "Boston Celtics rookie Carsen Edwards on Isaiah Thomas: 'A guy like him gives guys like me hope'"
+          }
+        ],
+        "relevant_items": [
+          "N61953"
+        ],
+        "score_margin": 147.0,
+        "score_margin_ratio": 0.12738301559792028,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1154.0
+      },
+      {
+        "candidate_count": 93,
+        "history_length": 0,
+        "impression_id": "91794",
+        "margin_classification": "intermediate_margin",
+        "ranked_articles": [
+          {
+            "category": "music",
+            "news_id": "N4642",
+            "subcategory": "music-celebrity",
+            "title": "Kodak Black Sentenced to Over 3 Years in Prison in Weapons Case"
+          },
+          {
+            "category": "weather",
+            "news_id": "N56214",
+            "subcategory": "weathertopstories",
+            "title": "Deadly Arctic blast breaks records set more than 100 years ago"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N14029",
+            "subcategory": "lifestylebuzz",
+            "title": "A master suite with an 'open-concept' bathroom that has no doors   or privacy   is asking for $1,200/month in rent"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "news",
+            "news_id": "N36261",
+            "subcategory": "elections-2020-us",
+            "title": "Deval Patrick Will Enter 2020 Presidential Race on Thursday"
+          },
+          {
+            "category": "sports",
+            "news_id": "N38695",
+            "subcategory": "football_nfl",
+            "title": "Panthers QB Cam Newton would reportedly welcome trade to Bears"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N59385",
+            "subcategory": "celebrity",
+            "title": "Celebrity Engagements of 2019"
+          },
+          {
+            "category": "news",
+            "news_id": "N63106",
+            "subcategory": "newsus",
+            "title": "Supreme Court Justices Couldn't Stop Interrupting Each Other During DACA Oral Arguments"
+          },
+          {
+            "category": "sports",
+            "news_id": "N49491",
+            "subcategory": "football_nfl",
+            "title": "Opinion: Colin Kaepernick's NFL workout is better late than never but shouldn't have come to this"
+          }
+        ],
+        "ranked_items": [
+          "N4642",
+          "N56214",
+          "N14029",
+          "N42457",
+          "N51287",
+          "N36261",
+          "N38695",
+          "N59385",
+          "N63106",
+          "N49491"
+        ],
+        "ranked_scores": [
+          1154.0,
+          1007.0,
+          795.0,
+          404.0,
+          243.0,
+          164.0,
+          126.0,
+          125.0,
+          115.0,
+          96.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "sports",
+            "news_id": "N38333",
+            "subcategory": "baseball_mlb",
+            "title": "Astros' Justin Verlander wins second AL Cy Young Award, but this one is even sweeter"
+          },
+          {
+            "category": "sports",
+            "news_id": "N57014",
+            "subcategory": "football_nfl",
+            "title": "Malik McDowell sentenced to 11 months in jail"
+          }
+        ],
+        "relevant_items": [
+          "N38333",
+          "N57014"
+        ],
+        "score_margin": 147.0,
+        "score_margin_ratio": 0.12738301559792028,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1154.0
+      },
+      {
+        "candidate_count": 116,
+        "history_length": 0,
+        "impression_id": "71798",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "tv",
+            "news_id": "N48077",
+            "subcategory": "tvnews",
+            "title": "Whoopi Goldberg Addresses 'The View' Tension: 'If We Were Fighting, You'd Actually Know It'"
+          },
+          {
+            "category": "tv",
+            "news_id": "N23547",
+            "subcategory": "tv-gallery",
+            "title": "Disney+: All the Original TV Shows and Movies Set for Streaming Platform (Photos)"
+          },
+          {
+            "category": "tv",
+            "news_id": "N21519",
+            "subcategory": "tv-celebrity",
+            "title": "RHOP's Monique Samuels Charged With Assault After Incident With Candiace Dillard"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N59385",
+            "subcategory": "celebrity",
+            "title": "Celebrity Engagements of 2019"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41387",
+            "subcategory": "tv-gallery",
+            "title": "Can you answer these real Jeopardy questions about TV shows?"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N4404",
+            "subcategory": "entertainment-celebrity",
+            "title": "Watch Kelly Clarkson's Kids Interview Their Hero Jason Momoa In The Cutest Video Ever"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N45509",
+            "subcategory": "foodnews",
+            "title": "This is Chick-fil-A's most-ordered menu item"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N45428",
+            "subcategory": "humor",
+            "title": "Comics - 'Pluggers' by Gary Brookins"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N11817",
+          "N48077",
+          "N23547",
+          "N21519",
+          "N59385",
+          "N41387",
+          "N4404",
+          "N45509",
+          "N45428"
+        ],
+        "ranked_scores": [
+          1099.0,
+          235.0,
+          176.0,
+          155.0,
+          135.0,
+          125.0,
+          105.0,
+          85.0,
+          74.0,
+          67.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "tv",
+            "news_id": "N34185",
+            "subcategory": "tvnews",
+            "title": "Survivor Contestant Accused of 'Inappropriate Touching,' 2 Players Admit to Using Allegations to Win"
+          },
+          {
+            "category": "news",
+            "news_id": "N64412",
+            "subcategory": "newsus",
+            "title": "Arizona activist accused of guiding migrants 'further north' after border crossing"
+          }
+        ],
+        "relevant_items": [
+          "N34185",
+          "N64412"
+        ],
+        "score_margin": 864.0,
+        "score_margin_ratio": 0.7861692447679709,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 137,
+        "history_length": 0,
+        "impression_id": "15414",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N8509",
+            "subcategory": "lifestylebuzz",
+            "title": "A teen received a response to a message in a bottle he wrote 9 years ago after it traveled over 3,000 miles"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "sports",
+            "news_id": "N48063",
+            "subcategory": "icehockey_nhl",
+            "title": "Cherry disappointed with MacLean's apology: 'He buried me'"
+          },
+          {
+            "category": "sports",
+            "news_id": "N38695",
+            "subcategory": "football_nfl",
+            "title": "Panthers QB Cam Newton would reportedly welcome trade to Bears"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N59385",
+            "subcategory": "celebrity",
+            "title": "Celebrity Engagements of 2019"
+          },
+          {
+            "category": "sports",
+            "news_id": "N49491",
+            "subcategory": "football_nfl",
+            "title": "Opinion: Colin Kaepernick's NFL workout is better late than never but shouldn't have come to this"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N4754",
+            "subcategory": "celebrity",
+            "title": "The most famous celebrity kids born this decade"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N45509",
+            "subcategory": "foodnews",
+            "title": "This is Chick-fil-A's most-ordered menu item"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N45428",
+            "subcategory": "humor",
+            "title": "Comics - 'Pluggers' by Gary Brookins"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N8509",
+          "N11817",
+          "N48063",
+          "N38695",
+          "N59385",
+          "N49491",
+          "N4754",
+          "N45509",
+          "N45428"
+        ],
+        "ranked_scores": [
+          1099.0,
+          377.0,
+          235.0,
+          148.0,
+          126.0,
+          125.0,
+          96.0,
+          95.0,
+          74.0,
+          67.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "sports",
+            "news_id": "N46613",
+            "subcategory": "football_nfl",
+            "title": "Baker Mayfield asked Browns fans to be quieter after the noise caused brutal false start penalty"
+          }
+        ],
+        "relevant_items": [
+          "N46613"
+        ],
+        "score_margin": 722.0,
+        "score_margin_ratio": 0.6569608735213831,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 152,
+        "history_length": 0,
+        "impression_id": "78013",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "health",
+            "news_id": "N7121",
+            "subcategory": "wellness",
+            "title": "Selena Gomez Opens Up About Being Body Shamed for Gaining Weight Amidst Lupus Battle"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "autos",
+            "news_id": "N38215",
+            "subcategory": "autosmotorcycles",
+            "title": "The Volkspod VW Beetle Minibikes Are Part Creepy, Part Adorable"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N10812",
+            "subcategory": "lifestyleroyals",
+            "title": "Harry and Meghan Revive Feud Rumors By Staying Away From the Royal Family's Christmas"
+          },
+          {
+            "category": "autos",
+            "news_id": "N7618",
+            "subcategory": "autosnews",
+            "title": "Ford v Ferrari: the real story"
+          },
+          {
+            "category": "health",
+            "news_id": "N31448",
+            "subcategory": "wellness",
+            "title": "Four words from dermatologists that'll change your life: Stop showering every day"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N42457",
+          "N7121",
+          "N60272",
+          "N38215",
+          "N3841",
+          "N11817",
+          "N10812",
+          "N7618",
+          "N31448"
+        ],
+        "ranked_scores": [
+          1099.0,
+          404.0,
+          343.0,
+          296.0,
+          291.0,
+          270.0,
+          235.0,
+          199.0,
+          190.0,
+          185.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "news",
+            "news_id": "N29739",
+            "subcategory": "newsworld",
+            "title": "Today in History: November 14"
+          }
+        ],
+        "relevant_items": [
+          "N29739"
+        ],
+        "score_margin": 695.0,
+        "score_margin_ratio": 0.632393084622384,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 220,
+        "history_length": 0,
+        "impression_id": "117302",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "news",
+            "news_id": "N16096",
+            "subcategory": "newsphotos",
+            "title": "Eerie photos of an abandoned airport that hasn't been touched in 25 years"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N43102",
+            "subcategory": "foodnews",
+            "title": "Wendy's Is Rolling Out Birthday Cake Frostys for Its 50th Anniversary"
+          },
+          {
+            "category": "autos",
+            "news_id": "N38215",
+            "subcategory": "autosmotorcycles",
+            "title": "The Volkspod VW Beetle Minibikes Are Part Creepy, Part Adorable"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N35047",
+            "subcategory": "foodnews",
+            "title": "Thanksgiving side dishes: 11 unique recipes to try this season"
+          },
+          {
+            "category": "autos",
+            "news_id": "N19318",
+            "subcategory": "autosnews",
+            "title": "C8 Corvette Dyno Test Follow-Up: What Really Happened"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N53470",
+            "subcategory": "beverages",
+            "title": "These Are America's Favorite Liquor Brands"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N16096",
+          "N42457",
+          "N60272",
+          "N43102",
+          "N38215",
+          "N11817",
+          "N35047",
+          "N19318",
+          "N53470"
+        ],
+        "ranked_scores": [
+          1099.0,
+          419.0,
+          404.0,
+          296.0,
+          294.0,
+          291.0,
+          235.0,
+          227.0,
+          221.0,
+          220.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "travel",
+            "news_id": "N11769",
+            "subcategory": "travelnews",
+            "title": "A man lost 400,000 frequent flyer miles for sneaking a fat cat onto his flight in Russia"
+          },
+          {
+            "category": "news",
+            "news_id": "N16439",
+            "subcategory": "newsworld",
+            "title": "American woman apparently strangled in the Dominican Republic"
+          },
+          {
+            "category": "news",
+            "news_id": "N37384",
+            "subcategory": "newscrime",
+            "title": "The Latest: Doctor accused of performing unneeded surgeries"
+          },
+          {
+            "category": "news",
+            "news_id": "N47570",
+            "subcategory": "newsus",
+            "title": "U.S. grand jury drops case against Colorado police for killing suspect"
+          },
+          {
+            "category": "news",
+            "news_id": "N48017",
+            "subcategory": "newsscienceandtechnology",
+            "title": "Experts crack mystery of ancient Egypt's sacred bird mummies"
+          },
+          {
+            "category": "music",
+            "news_id": "N55943",
+            "subcategory": "music-celebrity",
+            "title": "Wynonna Judd's Daughter, 23, Released from Prison 6 Years Early After Being Granted Parole"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N6390",
+            "subcategory": "lifestylebuzz",
+            "title": "Family Brings Snow Inside So Obsessed Indoor Cat Can Play In It"
+          }
+        ],
+        "relevant_items": [
+          "N11769",
+          "N16439",
+          "N37384",
+          "N47570",
+          "N48017",
+          "N55943",
+          "N6390"
+        ],
+        "score_margin": 680.0,
+        "score_margin_ratio": 0.618744313011829,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 107,
+        "history_length": 0,
+        "impression_id": "119551",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "news",
+            "news_id": "N16096",
+            "subcategory": "newsphotos",
+            "title": "Eerie photos of an abandoned airport that hasn't been touched in 25 years"
+          },
+          {
+            "category": "music",
+            "news_id": "N12029",
+            "subcategory": "music-celebrity",
+            "title": "John Legend Is PEOPLE's Sexiest Man Alive 2019: 'I'm Excited but a Little Scared at the Same Time'"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "autos",
+            "news_id": "N38215",
+            "subcategory": "autosmotorcycles",
+            "title": "The Volkspod VW Beetle Minibikes Are Part Creepy, Part Adorable"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N53470",
+            "subcategory": "beverages",
+            "title": "These Are America's Favorite Liquor Brands"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N61623",
+            "subcategory": "entertainment-celebrity",
+            "title": "Big celebrity money moments of the last decade"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N16096",
+          "N12029",
+          "N42457",
+          "N60272",
+          "N38215",
+          "N3841",
+          "N11817",
+          "N53470",
+          "N61623"
+        ],
+        "ranked_scores": [
+          1099.0,
+          419.0,
+          410.0,
+          404.0,
+          296.0,
+          291.0,
+          270.0,
+          235.0,
+          220.0,
+          160.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "health",
+            "news_id": "N28072",
+            "subcategory": "health-news",
+            "title": "He was a member of a boy band in the 90s. Now he's an ER doctor in Dallas"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N32567",
+            "subcategory": "lifestyleroyals",
+            "title": "See Princess Sofia of Sweden's Unexpected Green Leopard Print Dress   Complete with Tiara!"
+          }
+        ],
+        "relevant_items": [
+          "N28072",
+          "N32567"
+        ],
+        "score_margin": 680.0,
+        "score_margin_ratio": 0.618744313011829,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 137,
+        "history_length": 0,
+        "impression_id": "113928",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N41172",
+            "subcategory": "celebrity",
+            "title": "Welcome to the World! All of the Celebrity Babies Who've Made Their Debuts in 2019"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N7328",
+            "subcategory": "restaurantsandnews",
+            "title": "I went to Peter Luger after it received zero stars from New York Times"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N36186",
+            "subcategory": "restaurantsandnews",
+            "title": "17 restaurants that will be open on Thanksgiving"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N23081",
+            "subcategory": "newstrends",
+            "title": "We tried McDonald's new Snickerdoodle McFlurry, and here's our honest review"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N46279",
+            "subcategory": "restaurantsandnews",
+            "title": "We tried every single appetizer at Olive Garden and ranked them from worst to best"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N12608",
+            "subcategory": "restaurantsandnews",
+            "title": "55 Restaurants That Serve an Amazing Thanksgiving Dinner"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N18312",
+            "subcategory": "foodnews",
+            "title": "We made a 3-course feast using Chrissy Teigen's recipes, and had the best homemade pizza we've ever tasted"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N3841",
+          "N41172",
+          "N7328",
+          "N36186",
+          "N23081",
+          "N46279",
+          "N12608",
+          "N18312"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          270.0,
+          190.0,
+          185.0,
+          169.0,
+          141.0,
+          124.0,
+          110.0,
+          104.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "foodanddrink",
+            "news_id": "N21590",
+            "subcategory": "newstrends",
+            "title": "Explore 4 best low-priced diners in Tampa"
+          },
+          {
+            "category": "music",
+            "news_id": "N41934",
+            "subcategory": "music-celebrity",
+            "title": "Aaron Carter admitted to Florida hospital"
+          }
+        ],
+        "relevant_items": [
+          "N21590",
+          "N41934"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 182,
+        "history_length": 0,
+        "impression_id": "115539",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "news",
+            "news_id": "N16096",
+            "subcategory": "newsphotos",
+            "title": "Eerie photos of an abandoned airport that hasn't been touched in 25 years"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "health",
+            "news_id": "N42634",
+            "subcategory": "nutrition",
+            "title": "The Latest Weight Loss Pills That Work And the Ones That Don't"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "autos",
+            "news_id": "N38215",
+            "subcategory": "autosmotorcycles",
+            "title": "The Volkspod VW Beetle Minibikes Are Part Creepy, Part Adorable"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N35047",
+            "subcategory": "foodnews",
+            "title": "Thanksgiving side dishes: 11 unique recipes to try this season"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N16096",
+          "N42457",
+          "N42634",
+          "N60272",
+          "N38215",
+          "N3841",
+          "N11817",
+          "N35047"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          419.0,
+          404.0,
+          401.0,
+          296.0,
+          291.0,
+          270.0,
+          235.0,
+          227.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "foodanddrink",
+            "news_id": "N37437",
+            "subcategory": "quickandeasy",
+            "title": "How to Make Cornbread Without a Recipe"
+          },
+          {
+            "category": "finance",
+            "news_id": "N37673",
+            "subcategory": "finance-companies",
+            "title": "How this couple built a $100 million company without killing each other"
+          },
+          {
+            "category": "music",
+            "news_id": "N55943",
+            "subcategory": "music-celebrity",
+            "title": "Wynonna Judd's Daughter, 23, Released from Prison 6 Years Early After Being Granted Parole"
+          }
+        ],
+        "relevant_items": [
+          "N37437",
+          "N37673",
+          "N55943"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 135,
+        "history_length": 0,
+        "impression_id": "120293",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "health",
+            "news_id": "N42634",
+            "subcategory": "nutrition",
+            "title": "The Latest Weight Loss Pills That Work And the Ones That Don't"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N53470",
+            "subcategory": "beverages",
+            "title": "These Are America's Favorite Liquor Brands"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N41172",
+            "subcategory": "celebrity",
+            "title": "Welcome to the World! All of the Celebrity Babies Who've Made Their Debuts in 2019"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N61623",
+            "subcategory": "entertainment-celebrity",
+            "title": "Big celebrity money moments of the last decade"
+          },
+          {
+            "category": "health",
+            "news_id": "N3128",
+            "subcategory": "nutrition",
+            "title": "Should You Try the Controversial Cabbage Soup Diet? See What Experts Have to Say"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N42634",
+          "N60272",
+          "N3841",
+          "N11817",
+          "N53470",
+          "N41172",
+          "N61623",
+          "N3128"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          401.0,
+          296.0,
+          270.0,
+          235.0,
+          220.0,
+          190.0,
+          160.0,
+          153.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "sports",
+            "news_id": "N51424",
+            "subcategory": "football_nfl",
+            "title": "5-foot-6 Tarik Cohen complains about towels being placed too high in hilarious video"
+          }
+        ],
+        "relevant_items": [
+          "N51424"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 117,
+        "history_length": 0,
+        "impression_id": "123119",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4510",
+            "subcategory": "lifestylebuzz",
+            "title": "Husband, 106, and wife, 105, are named world's oldest living couple"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N10812",
+            "subcategory": "lifestyleroyals",
+            "title": "Harry and Meghan Revive Feud Rumors By Staying Away From the Royal Family's Christmas"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N61623",
+            "subcategory": "entertainment-celebrity",
+            "title": "Big celebrity money moments of the last decade"
+          },
+          {
+            "category": "tv",
+            "news_id": "N21712",
+            "subcategory": "tv-celebrity",
+            "title": "Jane Seymour, 68, claims many designers won't 'dress someone my age'"
+          },
+          {
+            "category": "news",
+            "news_id": "N9623",
+            "subcategory": "newsworld",
+            "title": "Israel says overnight strike on Gaza house killed Islamic Jihad commander"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N42457",
+          "N3841",
+          "N4510",
+          "N11817",
+          "N10812",
+          "N61623",
+          "N21712",
+          "N9623"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          404.0,
+          270.0,
+          252.0,
+          235.0,
+          199.0,
+          160.0,
+          99.0,
+          93.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "lifestyle",
+            "news_id": "N44249",
+            "subcategory": "lifestyleroyals",
+            "title": "Best royal photos of 2019"
+          }
+        ],
+        "relevant_items": [
+          "N44249"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 162,
+        "history_length": 0,
+        "impression_id": "123201",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N8509",
+            "subcategory": "lifestylebuzz",
+            "title": "A teen received a response to a message in a bottle he wrote 9 years ago after it traveled over 3,000 miles"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N43102",
+            "subcategory": "foodnews",
+            "title": "Wendy's Is Rolling Out Birthday Cake Frostys for Its 50th Anniversary"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4510",
+            "subcategory": "lifestylebuzz",
+            "title": "Husband, 106, and wife, 105, are named world's oldest living couple"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N35047",
+            "subcategory": "foodnews",
+            "title": "Thanksgiving side dishes: 11 unique recipes to try this season"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N8509",
+          "N60272",
+          "N43102",
+          "N3841",
+          "N4510",
+          "N51287",
+          "N11817",
+          "N35047"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          377.0,
+          296.0,
+          294.0,
+          270.0,
+          252.0,
+          243.0,
+          235.0,
+          227.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "travel",
+            "news_id": "N14436",
+            "subcategory": "travelnews",
+            "title": "They bought a 1 euro house in Italy -- here's what happened next"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N5652",
+            "subcategory": "voices",
+            "title": "I Never Imagined Being A Grandmother At 35. Here's How It Changed My Life."
+          }
+        ],
+        "relevant_items": [
+          "N14436",
+          "N5652"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 106,
+        "history_length": 0,
+        "impression_id": "124849",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "tv",
+            "news_id": "N41387",
+            "subcategory": "tv-gallery",
+            "title": "Can you answer these real Jeopardy questions about TV shows?"
+          },
+          {
+            "category": "travel",
+            "news_id": "N14436",
+            "subcategory": "travelnews",
+            "title": "They bought a 1 euro house in Italy -- here's what happened next"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N16148",
+            "subcategory": "entertainment-celebrity",
+            "title": "Miranda Lambert gets candid about her public divorce and secret wedding, plus more news"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N1180",
+            "subcategory": "lifestylediy",
+            "title": "45 Easy Handmade Christmas Ornaments to Start Making Now"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N45428",
+            "subcategory": "humor",
+            "title": "Comics - 'Pluggers' by Gary Brookins"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N62894",
+            "subcategory": "celebrity",
+            "title": "38 men who were worthy competitors for John Legend's Sexiest Man Alive title"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N31679",
+            "subcategory": "celebrity",
+            "title": "Biggest celeb weddings of the last decade"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N3841",
+          "N41387",
+          "N14436",
+          "N16148",
+          "N1180",
+          "N45428",
+          "N62894",
+          "N31679"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          270.0,
+          105.0,
+          81.0,
+          72.0,
+          71.0,
+          67.0,
+          56.0,
+          29.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "health",
+            "news_id": "N50588",
+            "subcategory": "health-news",
+            "title": "Vaping death toll hits 42, over 2,100 lung illnesses reported nationwide"
+          }
+        ],
+        "relevant_items": [
+          "N50588"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 131,
+        "history_length": 0,
+        "impression_id": "74566",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N8509",
+            "subcategory": "lifestylebuzz",
+            "title": "A teen received a response to a message in a bottle he wrote 9 years ago after it traveled over 3,000 miles"
+          },
+          {
+            "category": "autos",
+            "news_id": "N38215",
+            "subcategory": "autosmotorcycles",
+            "title": "The Volkspod VW Beetle Minibikes Are Part Creepy, Part Adorable"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N51287",
+            "subcategory": "lifestylebuzz",
+            "title": "19 hysterical winners from this year's Comedy Wildlife Photography Awards"
+          },
+          {
+            "category": "health",
+            "news_id": "N31448",
+            "subcategory": "wellness",
+            "title": "Four words from dermatologists that'll change your life: Stop showering every day"
+          },
+          {
+            "category": "autos",
+            "news_id": "N58114",
+            "subcategory": "autosnews",
+            "title": "2020 Ford Explorer launch hardly went according to plan, company admits"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N23942",
+            "subcategory": "lifestylebuzz",
+            "title": "Family Reunited With Dog Who Had Been Missing Since August While Waiting in Line to Adopt Cat"
+          },
+          {
+            "category": "health",
+            "news_id": "N29468",
+            "subcategory": "ads-lung-health",
+            "title": "\u200b'My Annoying Cough Turned Out To Be Lung Cancer'"
+          },
+          {
+            "category": "health",
+            "news_id": "N63656",
+            "subcategory": "wellness",
+            "title": "Model Belle Lucia   Who Was Shamed for Her Small Bump   Shares Her Post-Baby 'Pregnancy Transformation'"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N8509",
+          "N38215",
+          "N51287",
+          "N31448",
+          "N58114",
+          "N23942",
+          "N29468",
+          "N63656"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          377.0,
+          291.0,
+          243.0,
+          185.0,
+          172.0,
+          165.0,
+          137.0,
+          137.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "news",
+            "news_id": "N11606",
+            "subcategory": "newsus",
+            "title": "Missouri towns ready to welcome meteor hunters trying to cash in"
+          }
+        ],
+        "relevant_items": [
+          "N11606"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 257,
+        "history_length": 0,
+        "impression_id": "82988",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N42457",
+            "subcategory": "lifestyleroyals",
+            "title": "Meghan Markle and Prince Harry Won't Spend Christmas with Queen Elizabeth at Sandringham This Year"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "autos",
+            "news_id": "N19318",
+            "subcategory": "autosnews",
+            "title": "C8 Corvette Dyno Test Follow-Up: What Really Happened"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N41172",
+            "subcategory": "celebrity",
+            "title": "Welcome to the World! All of the Celebrity Babies Who've Made Their Debuts in 2019"
+          },
+          {
+            "category": "autos",
+            "news_id": "N7618",
+            "subcategory": "autosnews",
+            "title": "Ford v Ferrari: the real story"
+          },
+          {
+            "category": "autos",
+            "news_id": "N58114",
+            "subcategory": "autosnews",
+            "title": "2020 Ford Explorer launch hardly went according to plan, company admits"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N61623",
+            "subcategory": "entertainment-celebrity",
+            "title": "Big celebrity money moments of the last decade"
+          },
+          {
+            "category": "health",
+            "news_id": "N20576",
+            "subcategory": "ads-lung-health",
+            "title": "Surgeon Shocked After Doing Double Lung Transplant on Teen Vaper: 'Evil I Haven't Faced Before'"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N42457",
+          "N3841",
+          "N19318",
+          "N41172",
+          "N7618",
+          "N58114",
+          "N61623",
+          "N20576"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          404.0,
+          270.0,
+          221.0,
+          190.0,
+          190.0,
+          172.0,
+          160.0,
+          142.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "news",
+            "news_id": "N57311",
+            "subcategory": "newsus",
+            "title": "There have already been at least 30 shooting attacks at schools resulting in death or injury in 2019"
+          }
+        ],
+        "relevant_items": [
+          "N57311"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      },
+      {
+        "candidate_count": 119,
+        "history_length": 0,
+        "impression_id": "83412",
+        "margin_classification": "high_margin",
+        "ranked_articles": [
+          {
+            "category": "entertainment",
+            "news_id": "N26262",
+            "subcategory": "entertainment-celebrity",
+            "title": "Celebrity plastic surgery transformations"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N6056",
+            "subcategory": "celebrity",
+            "title": "See what your favorite stars look like without makeup"
+          },
+          {
+            "category": "travel",
+            "news_id": "N60272",
+            "subcategory": "travelnews",
+            "title": "Instagram-famous pilot reveals secrets people don't know about the job"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N43102",
+            "subcategory": "foodnews",
+            "title": "Wendy's Is Rolling Out Birthday Cake Frostys for Its 50th Anniversary"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N3841",
+            "subcategory": "celebrity",
+            "title": "Week in celebrity photos for Nov. 11-15, 2019"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N4510",
+            "subcategory": "lifestylebuzz",
+            "title": "Husband, 106, and wife, 105, are named world's oldest living couple"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N35738",
+            "subcategory": "foodnews",
+            "title": "Popeyes Has Blessed Us With A Boozy Pie To Pair With Its Returned Chicken Sandwich"
+          },
+          {
+            "category": "travel",
+            "news_id": "N11817",
+            "subcategory": "traveltripideas",
+            "title": "Here's the Best Small Town in Every State"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N35047",
+            "subcategory": "foodnews",
+            "title": "Thanksgiving side dishes: 11 unique recipes to try this season"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N53470",
+            "subcategory": "beverages",
+            "title": "These Are America's Favorite Liquor Brands"
+          }
+        ],
+        "ranked_items": [
+          "N26262",
+          "N6056",
+          "N60272",
+          "N43102",
+          "N3841",
+          "N4510",
+          "N35738",
+          "N11817",
+          "N35047",
+          "N53470"
+        ],
+        "ranked_scores": [
+          1099.0,
+          429.0,
+          296.0,
+          294.0,
+          270.0,
+          252.0,
+          246.0,
+          235.0,
+          227.0,
+          220.0
+        ],
+        "relevant_articles": [
+          {
+            "category": "travel",
+            "news_id": "N13960",
+            "subcategory": "travelnews",
+            "title": "Major fire burns Gainesville Mexican restaurant"
+          },
+          {
+            "category": "movies",
+            "news_id": "N1539",
+            "subcategory": "movienews",
+            "title": "Scarlett Johansson Regrets Being \"Hyper-Sexualized\" Early in Her Career"
+          },
+          {
+            "category": "entertainment",
+            "news_id": "N16148",
+            "subcategory": "entertainment-celebrity",
+            "title": "Miranda Lambert gets candid about her public divorce and secret wedding, plus more news"
+          },
+          {
+            "category": "health",
+            "news_id": "N23370",
+            "subcategory": "medical",
+            "title": "1 in 10 Women Has This Sexual Disorder and Doesn't Even Know It"
+          },
+          {
+            "category": "lifestyle",
+            "news_id": "N23446",
+            "subcategory": "lifestyleroyals",
+            "title": "Prince Harry and Meghan Markle just shared a never-before-seen photo of baby Archie with his 'Grandpa' Prince Charles to celebrate his birthday"
+          },
+          {
+            "category": "news",
+            "news_id": "N23877",
+            "subcategory": "newscrime",
+            "title": "Car of Marine linked to Virginia slaying is found in South Carolina, authorities say"
+          },
+          {
+            "category": "foodanddrink",
+            "news_id": "N38404",
+            "subcategory": "foodnews",
+            "title": "Stromboli vs. Calzone: What's the Real Difference Between These Italian Favorites?"
+          },
+          {
+            "category": "news",
+            "news_id": "N46111",
+            "subcategory": "newsus",
+            "title": "Popular Mexican restaurant goes up in flames, now considered 'total loss'"
+          },
+          {
+            "category": "news",
+            "news_id": "N48017",
+            "subcategory": "newsscienceandtechnology",
+            "title": "Experts crack mystery of ancient Egypt's sacred bird mummies"
+          },
+          {
+            "category": "sports",
+            "news_id": "N58569",
+            "subcategory": "basketball_ncaa",
+            "title": "Winners and losers from college basketball's signing day deadline"
+          },
+          {
+            "category": "health",
+            "news_id": "N60895",
+            "subcategory": "voices",
+            "title": "Why I Stayed in An Abusive Relationship"
+          },
+          {
+            "category": "travel",
+            "news_id": "N6787",
+            "subcategory": "video",
+            "title": "This Italian Beach Will Charge Entry Fee to Combat Overtourism"
+          }
+        ],
+        "relevant_items": [
+          "N13960",
+          "N1539",
+          "N16148",
+          "N23370",
+          "N23446",
+          "N23877",
+          "N38404",
+          "N46111",
+          "N48017",
+          "N58569",
+          "N60895",
+          "N6787"
+        ],
+        "score_margin": 670.0,
+        "score_margin_ratio": 0.6096451319381255,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_score": 1099.0
+      }
+    ],
+    "high_score_miss_fraction": 0.0392144278287658,
+    "high_score_misses": 1222,
+    "k": 10,
+    "maximum_failures_per_source": 25,
+    "method": "source_specific_top_score_quantile",
+    "non_positive_or_empty_score_impressions": 231,
+    "score_eligible_impressions": 31162,
+    "score_interpretation": "relative_within_recommendation_source",
+    "score_quantile": 0.9,
+    "skipped_no_click_impressions": 0,
+    "source_thresholds": [
+      {
+        "eligible_impressions": 30466,
+        "high_score_misses": 1178,
+        "retained_failures": 25,
+        "score_threshold": 0.1918148577499891,
+        "source": "content",
+        "top_k_misses": 9844
+      },
+      {
+        "eligible_impressions": 696,
+        "high_score_misses": 44,
+        "retained_failures": 25,
+        "score_threshold": 1007.0,
+        "source": "popularity",
+        "top_k_misses": 317
+      }
+    ],
+    "top_k_miss_fraction": 0.3237664447488294,
+    "top_k_misses": 10164,
+    "total_impressions": 31393
+  },
   "fallback_recovery_fraction": 1.0,
   "history_segments": {
     "k": 10,

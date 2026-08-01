@@ -137,6 +137,8 @@ def _run_fallback_evaluation(
     bootstrap_samples: int,
     bootstrap_confidence_level: float,
     bootstrap_random_seed: int,
+    failure_score_quantile: float,
+    maximum_failures_per_source: int,
 ) -> None:
     split_path = data_dir / "MINDsmall_train"
 
@@ -152,6 +154,8 @@ def _run_fallback_evaluation(
         bootstrap_samples=bootstrap_samples,
         bootstrap_confidence_level=bootstrap_confidence_level,
         bootstrap_random_seed=bootstrap_random_seed,
+        failure_score_quantile=failure_score_quantile,
+        maximum_failures_per_source=maximum_failures_per_source,
     )
 
     serialized = json.dumps(
@@ -311,6 +315,18 @@ def build_parser() -> argparse.ArgumentParser:
         default=42,
         help="Random seed used for deterministic bootstrap resampling.",
     )
+    fallback_parser.add_argument(
+        "--failure-score-quantile",
+        type=float,
+        default=0.90,
+        help=("Within-source top-score quantile used to identify high-score top-k failures."),
+    )
+    fallback_parser.add_argument(
+        "--maximum-failures-per-source",
+        type=int,
+        default=25,
+        help="Maximum number of failure examples retained per recommendation source.",
+    )
 
     return parser
 
@@ -359,6 +375,8 @@ def main(
             args.bootstrap_samples,
             args.bootstrap_confidence_level,
             args.bootstrap_random_seed,
+            args.failure_score_quantile,
+            args.maximum_failures_per_source,
         )
         return
 
