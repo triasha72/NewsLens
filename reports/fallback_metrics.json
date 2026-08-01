@@ -6448,6 +6448,59 @@
     "unique_recommended_items": 3687
   },
   "model_name": "tfidf_content_with_popularity_fallback",
+  "paired_comparison": {
+    "baseline_model_name": "tfidf_history_content",
+    "bootstrap_samples": 1000,
+    "candidate_model_name": "tfidf_content_with_popularity_fallback",
+    "confidence_level": 0.95,
+    "difference_direction": "candidate_minus_baseline",
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 31393,
+    "k": 10,
+    "method": "paired_nonparametric_percentile_bootstrap",
+    "metrics": {
+      "hit_rate_at_k": {
+        "baseline_estimate": 0.6610072309113497,
+        "candidate_estimate": 0.6762335552511707,
+        "excludes_zero": true,
+        "lower_bound": 0.013473545057815438,
+        "point_difference": 0.015226324339820962,
+        "standard_error": 0.0009080832879648578,
+        "upper_bound": 0.01701095785684707
+      },
+      "mrr_at_k": {
+        "baseline_estimate": 0.3133368120180467,
+        "candidate_estimate": 0.31794652432374215,
+        "excludes_zero": true,
+        "lower_bound": 0.0033679732338469924,
+        "point_difference": 0.004609712305695457,
+        "standard_error": 0.0006014094368380979,
+        "upper_bound": 0.005776997475425459
+      },
+      "ndcg_at_k": {
+        "baseline_estimate": 0.35944802884811794,
+        "candidate_estimate": 0.3663605124218536,
+        "excludes_zero": true,
+        "lower_bound": 0.005757115041646289,
+        "point_difference": 0.006912483573735639,
+        "standard_error": 0.0006002716036612603,
+        "upper_bound": 0.008077091296186566
+      },
+      "recall_at_k": {
+        "baseline_estimate": 0.5819427026473807,
+        "candidate_estimate": 0.5954741541538584,
+        "excludes_zero": true,
+        "lower_bound": 0.011917325998769317,
+        "point_difference": 0.01353145150647772,
+        "standard_error": 0.0008329952122249303,
+        "upper_bound": 0.015154453538070106
+      }
+    },
+    "random_seed": 42,
+    "resampling_unit": "aligned_evaluated_impression_pair",
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 31393
+  },
   "popularity_routed_fraction": 0.029528875864046126,
   "popularity_routed_impressions": 927,
   "recovered_fallback_impressions": 927,
