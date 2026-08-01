@@ -6,6 +6,12 @@ from .categories import (
     CategoryResult,
     evaluate_article_categories,
 )
+from .comparison import (
+    PairedBootstrapComparisonReport,
+    PairedComparisonError,
+    PairedMetricInterval,
+    paired_bootstrap_ranking_comparison,
+)
 from .content import (
     ContentEvaluationError,
     ContentEvaluationReport,
@@ -101,6 +107,9 @@ __all__ = [
     "HistorySegmentEvaluationReport",
     "HistorySegmentExample",
     "HistorySegmentResult",
+    "PairedBootstrapComparisonReport",
+    "PairedComparisonError",
+    "PairedMetricInterval",
     "PopularityEvaluationError",
     "PopularityEvaluationReport",
     "RankingEvaluationError",
@@ -124,6 +133,7 @@ __all__ = [
     "hit_rate_at_k",
     "mean_reciprocal_rank_at_k",
     "ndcg_at_k",
+    "paired_bootstrap_ranking_comparison",
     "recall_at_k",
     "reciprocal_rank_at_k",
 ]
