@@ -171,6 +171,7 @@ def test_openapi_schema_lists_service_endpoints() -> None:
     assert set(response.json()["paths"]) == {
         "/health",
         "/model-info",
+        "/recommend",
     }
 
 
@@ -179,3 +180,163 @@ def test_unknown_route_returns_not_found() -> None:
         response = client.get("/missing")
 
     assert response.status_code == 404
+
+
+def test_recommend_requires_loaded_artifact() -> None:
+    with TestClient(create_app()) as client:
+        response = client.post(
+            "/recommend",
+            json={
+                "history_news_ids": ["N1"],
+                "candidate_news_ids": [
+                    "N2",
+                    "N3",
+                ],
+                "top_k": 2,
+            },
+        )
+
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Recommendation model is not ready."}
+
+
+def test_recommend_returns_content_rankings(
+    tmp_path: Path,
+) -> None:
+    artifact_path = save_api_artifact(tmp_path)
+
+    with TestClient(create_app(artifact_path=artifact_path)) as client:
+        response = client.post(
+            "/recommend",
+            json={
+                "history_news_ids": ["N1"],
+                "candidate_news_ids": [
+                    "N2",
+                    "N3",
+                    "N4",
+                ],
+                "top_k": 2,
+            },
+        )
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert body["model_name"] == ("tfidf_content_with_popularity_fallback")
+    assert body["artifact_version"] == "0.3.0"
+    assert body["requested_top_k"] == 2
+    assert body["returned_count"] == 2
+    assert body["recommendations"][0]["news_id"] == "N2"
+    assert {item["source"] for item in body["recommendations"]} == {"content"}
+
+
+def test_recommend_uses_popularity_for_cold_start(
+    tmp_path: Path,
+) -> None:
+    artifact_path = save_api_artifact(tmp_path)
+
+    with TestClient(create_app(artifact_path=artifact_path)) as client:
+        response = client.post(
+            "/recommend",
+            json={
+                "history_news_ids": [],
+                "candidate_news_ids": [
+                    "N1",
+                    "N2",
+                    "N3",
+                    "N4",
+                ],
+                "top_k": 2,
+            },
+        )
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert body["returned_count"] == 2
+    assert {item["source"] for item in body["recommendations"]} == {"popularity"}
+
+
+def test_recommend_uses_artifact_default_cutoff(
+    tmp_path: Path,
+) -> None:
+    artifact_path = save_api_artifact(tmp_path)
+
+    with TestClient(create_app(artifact_path=artifact_path)) as client:
+        response = client.post(
+            "/recommend",
+            json={
+                "history_news_ids": ["N1"],
+                "candidate_news_ids": [
+                    "N2",
+                    "N3",
+                    "N4",
+                ],
+            },
+        )
+
+    assert response.status_code == 200
+    assert response.json()["requested_top_k"] == 2
+    assert response.json()["returned_count"] == 2
+
+
+def test_recommend_rejects_duplicate_candidates(
+    tmp_path: Path,
+) -> None:
+    artifact_path = save_api_artifact(tmp_path)
+
+    with TestClient(create_app(artifact_path=artifact_path)) as client:
+        response = client.post(
+            "/recommend",
+            json={
+                "history_news_ids": ["N1"],
+                "candidate_news_ids": [
+                    "N2",
+                    "N2",
+                ],
+                "top_k": 2,
+            },
+        )
+
+    assert response.status_code == 422
+
+
+def test_recommend_rejects_empty_candidates(
+    tmp_path: Path,
+) -> None:
+    artifact_path = save_api_artifact(tmp_path)
+
+    with TestClient(create_app(artifact_path=artifact_path)) as client:
+        response = client.post(
+            "/recommend",
+            json={
+                "history_news_ids": ["N1"],
+                "candidate_news_ids": [],
+                "top_k": 2,
+            },
+        )
+
+    assert response.status_code == 422
+
+
+def test_recommend_rejects_invalid_top_k(
+    tmp_path: Path,
+) -> None:
+    artifact_path = save_api_artifact(tmp_path)
+
+    with TestClient(create_app(artifact_path=artifact_path)) as client:
+        response = client.post(
+            "/recommend",
+            json={
+                "history_news_ids": ["N1"],
+                "candidate_news_ids": [
+                    "N2",
+                    "N3",
+                ],
+                "top_k": 0,
+            },
+        )
+
+    assert response.status_code == 422

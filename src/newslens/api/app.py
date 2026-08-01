@@ -5,8 +5,14 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import cast
 
-from fastapi import FastAPI, Request
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    Request,
+    status,
+)
 
 from newslens import __version__
 from newslens.artifacts import LoadedArtifact, load_artifact
@@ -14,7 +20,13 @@ from newslens.models import (
     ContentPopularityFallbackRecommender,
 )
 
-from .schemas import HealthResponse, ModelInfoResponse
+from .schemas import (
+    HealthResponse,
+    ModelInfoResponse,
+    RecommendationItem,
+    RecommendationRequest,
+    RecommendationResponse,
+)
 from .settings import ApiSettings
 
 SERVICE_NAME = "newslens"
@@ -43,6 +55,22 @@ def _loaded_artifact(
         "loaded_artifact",
         None,
     )
+
+
+def _require_loaded_artifact(
+    application: FastAPI,
+) -> LoadedArtifact:
+    """Return the loaded artifact or reject inference."""
+
+    loaded = _loaded_artifact(application)
+
+    if loaded is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Recommendation model is not ready.",
+        )
+
+    return loaded
 
 
 def create_app(
@@ -121,6 +149,54 @@ def create_app(
             model_ready=True,
             artifact_version=(loaded.metadata.artifact_version),
             ranking_cutoff=(loaded.metadata.ranking_cutoff),
+        )
+
+    @application.post(
+        "/recommend",
+        response_model=RecommendationResponse,
+        tags=["recommendation"],
+        summary="Rank candidate news articles",
+        responses={
+            status.HTTP_503_SERVICE_UNAVAILABLE: {
+                "description": ("The recommendation model is not ready.")
+            }
+        },
+    )
+    def recommend(
+        payload: RecommendationRequest,
+        request: Request,
+    ) -> RecommendationResponse:
+        loaded = _require_loaded_artifact(request.app)
+        model = cast(
+            ContentPopularityFallbackRecommender,
+            loaded.model,
+        )
+
+        requested_top_k = (
+            payload.top_k if payload.top_k is not None else loaded.metadata.ranking_cutoff
+        )
+
+        recommendations = model.recommend(
+            payload.history_news_ids,
+            candidate_news_ids=(payload.candidate_news_ids),
+            top_k=requested_top_k,
+        )
+
+        items = tuple(
+            RecommendationItem(
+                news_id=recommendation.news_id,
+                score=recommendation.score,
+                source=recommendation.source.value,
+            )
+            for recommendation in recommendations
+        )
+
+        return RecommendationResponse(
+            model_name=loaded.metadata.model_name,
+            artifact_version=(loaded.metadata.artifact_version),
+            requested_top_k=requested_top_k,
+            returned_count=len(items),
+            recommendations=items,
         )
 
     return application
