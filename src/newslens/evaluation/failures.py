@@ -7,7 +7,7 @@ than compared as if they represented calibrated probabilities.
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from itertools import pairwise
 from math import isfinite
@@ -18,6 +18,50 @@ import numpy as np
 
 class FailureAnalysisError(ValueError):
     """Raised when high-score failure analysis cannot be completed."""
+
+
+NEAR_TIE_MARGIN_RATIO = 0.05
+HIGH_MARGIN_RATIO = 0.25
+
+
+@dataclass(frozen=True)
+class FailureArticle:
+    """Human-readable article context captured with a retained failure."""
+
+    news_id: str
+    title: str
+    category: str
+    subcategory: str
+
+    def __post_init__(self) -> None:
+        news_id = str(self.news_id).strip()
+        title = str(self.title).strip()
+        category = str(self.category).strip()
+        subcategory = str(self.subcategory).strip()
+
+        if not news_id:
+            raise FailureAnalysisError("Failure-article news_id must not be empty.")
+
+        if not title:
+            raise FailureAnalysisError("Failure-article title must not be empty.")
+
+        if not category:
+            raise FailureAnalysisError("Failure-article category must not be empty.")
+
+        object.__setattr__(self, "news_id", news_id)
+        object.__setattr__(self, "title", title)
+        object.__setattr__(self, "category", category)
+        object.__setattr__(self, "subcategory", subcategory)
+
+    def to_dict(self) -> dict[str, str]:
+        """Return a JSON-compatible representation."""
+
+        return {
+            "news_id": self.news_id,
+            "title": self.title,
+            "category": self.category,
+            "subcategory": self.subcategory,
+        }
 
 
 @dataclass(frozen=True)
@@ -141,7 +185,11 @@ class HighScoreFailure:
     ranked_scores: tuple[float, ...]
     top_score: float
     score_margin: float | None
+    score_margin_ratio: float | None
+    margin_classification: str
     score_threshold: float
+    relevant_articles: tuple[FailureArticle, ...]
+    ranked_articles: tuple[FailureArticle, ...]
 
     def to_dict(self) -> dict[str, object]:
         """Return a JSON-compatible representation."""
@@ -156,7 +204,11 @@ class HighScoreFailure:
             "ranked_scores": list(self.ranked_scores),
             "top_score": self.top_score,
             "score_margin": self.score_margin,
+            "score_margin_ratio": self.score_margin_ratio,
+            "margin_classification": self.margin_classification,
             "score_threshold": self.score_threshold,
+            "relevant_articles": [article.to_dict() for article in self.relevant_articles],
+            "ranked_articles": [article.to_dict() for article in self.ranked_articles],
         }
 
 
@@ -251,12 +303,68 @@ def _score_margin(scores: tuple[float, ...]) -> float | None:
     return scores[0] - scores[1]
 
 
+def _score_margin_details(
+    scores: tuple[float, ...],
+) -> tuple[float | None, float | None, str]:
+    margin = _score_margin(scores)
+
+    if margin is None:
+        return None, None, "single_result"
+
+    margin_ratio = margin / scores[0]
+
+    if margin_ratio <= NEAR_TIE_MARGIN_RATIO:
+        classification = "near_tie"
+    elif margin_ratio >= HIGH_MARGIN_RATIO:
+        classification = "high_margin"
+    else:
+        classification = "intermediate_margin"
+
+    return margin, margin_ratio, classification
+
+
+def _articles_for_ids(
+    item_ids: tuple[str, ...],
+    article_metadata: Mapping[str, FailureArticle] | None,
+) -> tuple[FailureArticle, ...]:
+    if article_metadata is None:
+        return ()
+
+    missing_ids = [news_id for news_id in item_ids if news_id not in article_metadata]
+
+    if missing_ids:
+        preview = ", ".join(sorted(missing_ids)[:3])
+        raise FailureAnalysisError(
+            f"Article metadata is missing for retained failure items: {preview}."
+        )
+
+    articles = tuple(article_metadata[news_id] for news_id in item_ids)
+
+    if any(not isinstance(article, FailureArticle) for article in articles):
+        raise FailureAnalysisError("article_metadata values must be FailureArticle instances.")
+
+    mismatched_ids = [
+        news_id
+        for news_id, article in zip(item_ids, articles, strict=True)
+        if article.news_id != news_id
+    ]
+
+    if mismatched_ids:
+        preview = ", ".join(sorted(mismatched_ids)[:3])
+        raise FailureAnalysisError(
+            f"Article metadata keys must match their news_id values: {preview}."
+        )
+
+    return articles
+
+
 def analyze_high_score_failures(
     examples: Iterable[ScoredRankingExample],
     *,
     k: int,
     score_quantile: float = 0.90,
     maximum_failures_per_source: int = 25,
+    article_metadata: Mapping[str, FailureArticle] | None = None,
 ) -> HighScoreFailureReport:
     """Find high-score top-k misses without comparing unlike score scales.
 
@@ -274,6 +382,9 @@ def analyze_high_score_failures(
 
     if not example_list:
         raise FailureAnalysisError("At least one scored ranking example is required.")
+
+    if article_metadata is not None and not isinstance(article_metadata, Mapping):
+        raise FailureAnalysisError("article_metadata must be a mapping when provided.")
 
     if any(not isinstance(example, ScoredRankingExample) for example in example_list):
         raise FailureAnalysisError("examples must contain ScoredRankingExample instances.")
@@ -341,18 +452,33 @@ def analyze_high_score_failures(
         retained = source_failures[:validated_maximum]
 
         for example in retained:
+            margin, margin_ratio, margin_classification = _score_margin_details(
+                example.ranked_scores
+            )
+            relevant_items = tuple(sorted(example.relevant_items))
+            ranked_items = example.ranked_items[:validated_k]
             failures.append(
                 HighScoreFailure(
                     impression_id=example.impression_id,
                     source=example.source,
                     history_length=example.history_length,
                     candidate_count=example.candidate_count,
-                    relevant_items=tuple(sorted(example.relevant_items)),
-                    ranked_items=example.ranked_items[:validated_k],
+                    relevant_items=relevant_items,
+                    ranked_items=ranked_items,
                     ranked_scores=example.ranked_scores[:validated_k],
                     top_score=example.ranked_scores[0],
-                    score_margin=_score_margin(example.ranked_scores),
+                    score_margin=margin,
+                    score_margin_ratio=margin_ratio,
+                    margin_classification=margin_classification,
                     score_threshold=thresholds[source],
+                    relevant_articles=_articles_for_ids(
+                        relevant_items,
+                        article_metadata,
+                    ),
+                    ranked_articles=_articles_for_ids(
+                        ranked_items,
+                        article_metadata,
+                    ),
                 )
             )
 

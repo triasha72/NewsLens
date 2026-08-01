@@ -6,6 +6,7 @@ import pytest
 
 from newslens.evaluation import (
     FailureAnalysisError,
+    FailureArticle,
     ScoredRankingExample,
     analyze_high_score_failures,
 )
@@ -62,6 +63,17 @@ def make_mixed_source_examples() -> list[ScoredRankingExample]:
             history_length=0,
         ),
     ]
+
+
+def make_article_metadata() -> dict[str, FailureArticle]:
+    return {
+        "N1": FailureArticle("N1", "Mars mission", "science", "space"),
+        "N2": FailureArticle("N2", "Mars rover", "science", "space"),
+        "N3": FailureArticle("N3", "Football begins", "sports", "football"),
+        "N4": FailureArticle("N4", "Football result", "sports", "football"),
+        "N8": FailureArticle("N8", "Market update", "finance", "markets"),
+        "N9": FailureArticle("N9", "Pasta recipe", "food", "cooking"),
+    }
 
 
 def test_source_specific_thresholds_find_high_score_misses() -> None:
@@ -155,7 +167,96 @@ def test_failure_records_include_context_scores_and_margin() -> None:
     assert failure.ranked_scores == pytest.approx((0.90, 0.60))
     assert failure.top_score == pytest.approx(0.90)
     assert failure.score_margin == pytest.approx(0.30)
+    assert failure.score_margin_ratio == pytest.approx(1 / 3)
+    assert failure.margin_classification == "high_margin"
     assert failure.score_threshold == pytest.approx(0.80)
+    assert failure.relevant_articles == ()
+    assert failure.ranked_articles == ()
+
+
+def test_article_metadata_enriches_retained_failures() -> None:
+    report = analyze_high_score_failures(
+        make_mixed_source_examples(),
+        k=2,
+        score_quantile=0.50,
+        article_metadata=make_article_metadata(),
+    )
+    failure = report.failures[0]
+    payload = failure.to_dict()
+
+    assert failure.relevant_articles == (FailureArticle("N9", "Pasta recipe", "food", "cooking"),)
+    assert failure.ranked_articles == (
+        FailureArticle("N1", "Mars mission", "science", "space"),
+        FailureArticle("N2", "Mars rover", "science", "space"),
+    )
+    assert payload["relevant_articles"] == [
+        {
+            "news_id": "N9",
+            "title": "Pasta recipe",
+            "category": "food",
+            "subcategory": "cooking",
+        }
+    ]
+
+
+def test_missing_or_mismatched_article_metadata_is_rejected() -> None:
+    metadata = make_article_metadata()
+    del metadata["N9"]
+
+    with pytest.raises(FailureAnalysisError, match="metadata is missing"):
+        analyze_high_score_failures(
+            make_mixed_source_examples(),
+            k=2,
+            score_quantile=0.50,
+            article_metadata=metadata,
+        )
+
+    metadata = make_article_metadata()
+    metadata["N9"] = FailureArticle("OTHER", "Pasta recipe", "food", "cooking")
+
+    with pytest.raises(FailureAnalysisError, match="keys must match"):
+        analyze_high_score_failures(
+            make_mixed_source_examples(),
+            k=2,
+            score_quantile=0.50,
+            article_metadata=metadata,
+        )
+
+
+def test_margin_classifications_are_explicit_and_deterministic() -> None:
+    examples = [
+        make_example("NEAR", ["N1", "N2"], [0.90, 0.87], {"N9"}),
+        make_example("MIDDLE", ["N1", "N2"], [0.90, 0.80], {"N9"}),
+        make_example("HIGH", ["N1", "N2"], [0.90, 0.50], {"N9"}),
+        make_example("SINGLE", ["N1"], [0.90], {"N9"}),
+    ]
+    report = analyze_high_score_failures(
+        examples,
+        k=2,
+        score_quantile=0.50,
+    )
+    failures = {failure.impression_id: failure for failure in report.failures}
+
+    assert failures["NEAR"].margin_classification == "near_tie"
+    assert failures["NEAR"].score_margin_ratio == pytest.approx(1 / 30)
+    assert failures["MIDDLE"].margin_classification == "intermediate_margin"
+    assert failures["MIDDLE"].score_margin_ratio == pytest.approx(1 / 9)
+    assert failures["HIGH"].margin_classification == "high_margin"
+    assert failures["HIGH"].score_margin_ratio == pytest.approx(4 / 9)
+    assert failures["SINGLE"].margin_classification == "single_result"
+    assert failures["SINGLE"].score_margin_ratio is None
+
+
+def test_article_metadata_argument_and_values_are_validated() -> None:
+    with pytest.raises(FailureAnalysisError, match="must be a mapping"):
+        analyze_high_score_failures(
+            make_mixed_source_examples(),
+            k=2,
+            article_metadata=[],  # type: ignore[arg-type]
+        )
+
+    with pytest.raises(FailureAnalysisError, match="title must not be empty"):
+        FailureArticle("N1", " ", "science", "space")
 
 
 def test_per_source_limit_is_deterministic() -> None:
@@ -189,6 +290,8 @@ def test_report_is_json_serializable_and_describes_score_semantics() -> None:
     assert payload["top_k_miss_fraction"] == pytest.approx(4 / 6)
     assert payload["high_score_miss_fraction"] == pytest.approx(2 / 6)
     assert '"score_margin"' in serialized
+    assert '"margin_classification"' in serialized
+    assert '"relevant_articles"' in serialized
 
 
 def test_duplicate_impression_ids_are_rejected() -> None:

@@ -27,6 +27,7 @@ from .exposure import (
 )
 from .failures import (
     FailureAnalysisError,
+    FailureArticle,
     HighScoreFailure,
     HighScoreFailureReport,
     ScoredRankingExample,
@@ -90,6 +91,7 @@ __all__ = [
     "ExposureEvaluationError",
     "ExposureEvaluationReport",
     "FailureAnalysisError",
+    "FailureArticle",
     "FallbackEvaluationError",
     "FallbackEvaluationReport",
     "HighScoreFailure",

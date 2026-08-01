@@ -237,6 +237,21 @@ def test_report_includes_source_specific_high_score_failure_analysis() -> None:
     assert failure.relevant_items == ("N6",)
     assert failure.ranked_items == ("N4",)
     assert failure.ranked_scores == pytest.approx((1.0,))
+    assert failure.score_margin is None
+    assert failure.score_margin_ratio is None
+    assert failure.margin_classification == "single_result"
+    assert failure.relevant_articles[0].to_dict() == {
+        "news_id": "N6",
+        "title": "Cooking pasta recipe",
+        "category": "food",
+        "subcategory": "cooking",
+    }
+    assert failure.ranked_articles[0].to_dict() == {
+        "news_id": "N4",
+        "title": "Football team wins championship",
+        "category": "sports",
+        "subcategory": "football",
+    }
 
 
 def test_report_includes_deterministic_bootstrap_uncertainty() -> None:

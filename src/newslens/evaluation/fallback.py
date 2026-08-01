@@ -41,6 +41,7 @@ from .exposure import (
 )
 from .failures import (
     FailureAnalysisError,
+    FailureArticle,
     HighScoreFailureReport,
     ScoredRankingExample,
     analyze_high_score_failures,
@@ -184,6 +185,44 @@ def _prepare_item_categories(news: pd.DataFrame) -> dict[str, str]:
         raise FallbackEvaluationError("Article categories cannot be empty.")
 
     return dict(zip(news_ids, categories, strict=True))
+
+
+def _prepare_failure_article_metadata(
+    news: pd.DataFrame,
+) -> dict[str, FailureArticle]:
+    required_columns = {"news_id", "title", "category"}
+    missing_columns = required_columns.difference(news.columns)
+
+    if missing_columns:
+        formatted = ", ".join(sorted(missing_columns))
+        raise FallbackEvaluationError(f"Missing required article columns: {formatted}.")
+
+    news_ids = news["news_id"].fillna("").astype(str).str.strip()
+    titles = news["title"].fillna("").astype(str).str.strip()
+    categories = news["category"].fillna("").astype(str).str.strip()
+
+    if "subcategory" in news.columns:
+        subcategories = news["subcategory"].fillna("").astype(str).str.strip()
+    else:
+        subcategories = pd.Series("", index=news.index, dtype="object")
+
+    articles = (
+        FailureArticle(
+            news_id=news_id,
+            title=title,
+            category=category,
+            subcategory=subcategory,
+        )
+        for news_id, title, category, subcategory in zip(
+            news_ids,
+            titles,
+            categories,
+            subcategories,
+            strict=True,
+        )
+    )
+
+    return {article.news_id: article for article in articles}
 
 
 def _classify_fallback_reason(
@@ -437,6 +476,7 @@ def evaluate_fallback_baseline(
     try:
         catalog = _prepare_catalog(news)
         item_categories = _prepare_item_categories(news)
+        failure_article_metadata = _prepare_failure_article_metadata(news)
         split = chronological_train_validation_split(
             behaviors,
             validation_fraction=validation_fraction,
@@ -461,6 +501,7 @@ def evaluate_fallback_baseline(
         ChronologicalSplitError,
         ContentEvaluationError,
         ContentModelError,
+        FailureAnalysisError,
         PopularityModelError,
         FallbackModelError,
     ) as error:
@@ -510,6 +551,7 @@ def evaluate_fallback_baseline(
             k=k,
             score_quantile=failure_score_quantile,
             maximum_failures_per_source=maximum_failures_per_source,
+            article_metadata=failure_article_metadata,
         )
     except (
         BootstrapUncertaintyError,
