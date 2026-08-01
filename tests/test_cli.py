@@ -3,6 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
+from newslens.artifacts import load_artifact
 from newslens.cli import build_parser, main
 
 
@@ -260,3 +263,49 @@ def test_fallback_cli_uses_reproducible_bootstrap_defaults() -> None:
     assert args.bootstrap_random_seed == 42
     assert args.failure_score_quantile == 0.90
     assert args.maximum_failures_per_source == 25
+
+
+@pytest.mark.filterwarnings(
+    "ignore:Setting the shape on a NumPy array has been deprecated:DeprecationWarning"
+)
+def test_export_model_command_writes_loadable_artifact(
+    tmp_path: Path,
+    capsys: object,
+) -> None:
+    data_dir = tmp_path / "data"
+    _write_content_fixture(data_dir)
+    output = tmp_path / "artifacts" / "newslens-test-0.3.0"
+
+    main(
+        [
+            "export-model",
+            "--data-dir",
+            str(data_dir),
+            "--output",
+            str(output),
+            "--artifact-version",
+            "0.3.0",
+            "--k",
+            "2",
+            "--max-features",
+            "100",
+        ]
+    )
+
+    loaded = load_artifact(output)
+    captured = capsys.readouterr()  # type: ignore[attr-defined]
+
+    assert loaded.metadata.artifact_version == "0.3.0"
+    assert loaded.metadata.training_records == 5
+    assert loaded.metadata.ranking_cutoff == 2
+    assert loaded.metadata.tfidf.max_features == 100
+    assert "Model artifact written" in captured.out
+
+
+def test_export_model_cli_defaults_are_versioned() -> None:
+    args = build_parser().parse_args(["export-model"])
+
+    assert args.output == Path("artifacts/newslens-fallback-0.3.0")
+    assert args.artifact_version == "0.3.0"
+    assert args.k == 10
+    assert args.max_features == 50_000
