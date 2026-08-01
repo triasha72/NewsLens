@@ -1,149 +1,821 @@
-# NewsLens
+NewsLens
 
-NewsLens is a leakage-aware news search and recommendation system built with
-the Microsoft MIND news-recommendation dataset.
+NewsLens is a leakage-aware news search and recommendation system built withthe Microsoft MIND news-recommendation dataset. It demonstrates the progressionfrom validated interaction data to reproducible recommendation baselines,formal offline evaluation, model comparison, error analysis, and tested APIserving.
 
-The project demonstrates the progression from validated interaction data to
-reproducible recommendation baselines, formal offline ranking evaluation,
-model comparison, serving, and deployment. Each phase documents its
-assumptions, limitations, and non-claims.
+Current status: Offline model selection is complete. The selectedcandidate combines TF-IDF user-history recommendations with a training-onlypopularity fallback. A paired bootstrap comparison shows improvements overthe content-only baseline across NDCG@10, MRR@10, Recall@10, and Hit Rate@10.Phase 6 serving is in progress: a tested FastAPI foundation exposes/health and /model-info; versioned model-artifact loading and inferenceendpoints remain future work. The project currently has 348 automatedtests.
 
-> Current status: Phase 4 ranking evaluation is in progress. NewsLens includes
-> validated MIND ingestion, reproducible dataset auditing, leakage-safe
-> chronological splitting, deterministic search and recommendation baselines,
-> formally tested ranking metrics, a model-independent evaluator, and
-> reproducible MIND-small popularity, TF-IDF history-content, and rule-based
-> cold-start fallback evaluations. It also includes exhaustive history-length
-> subgroup evaluation and overlapping clicked-category evaluation with exact
-> accounting, plus overlapping training-exposure cohorts for unseen and
-> low-exposure diagnostics. Deterministic impression-level bootstrap intervals
-> now quantify uncertainty in the final fallback relevance metrics. The
-> project currently has 267 automated tests. High-confidence failure
-> inspection remains in progress.
+Why this project
 
-## Why this project
+NewsLens demonstrates:
 
-NewsLens is designed to demonstrate:
+production-style Python package organization;
 
-- production-style Python package organization;
-- validated ingestion of real interaction data;
-- explicit prevention and testing of temporal leakage;
-- deterministic recommendation and search baselines;
-- cold-start handling;
-- formally tested ranking metrics;
-- model-independent offline evaluation;
-- reproducible experiment commands and machine-readable reports;
-- model comparison and error analysis;
-- API serving, monitoring, testing, and packaging;
-- CI, containerization, experiment tracking, and deployment; and
-- clear communication of limitations and negative results.
+validated ingestion of real interaction data;
 
-## Implemented functionality
+explicit temporal-leakage prevention;
 
-### Phase 1: Foundation
+deterministic search and recommendation baselines;
 
-- installable Python package;
-- isolated environment instructions;
-- automated smoke tests;
-- Ruff linting and formatting;
-- GitHub Actions continuous integration; and
-- feature-branch and pull-request development workflow.
+an explicit cold-start policy;
 
-### Phase 2: MIND ingestion and audit
+model-independent ranking evaluation;
 
-- validated `news.tsv` loader;
-- validated `behaviors.tsv` loader;
-- timestamp and candidate-impression parsing;
-- duplicate-identifier detection;
-- malformed-schema and invalid-label rejection;
-- reproducible dataset-audit command;
-- train and development audit reports; and
-- synthetic unit and command-line tests.
+subgroup, exposure, uncertainty, and failure analysis;
 
-### Phase 3: Evaluation-safe baselines
+statistically paired model comparison;
 
-- strict chronological train/validation split;
-- temporal-overlap tests;
-- training-only popularity recommender;
-- TF-IDF article search;
-- TF-IDF user-history content recommender;
-- popularity fallback for cold-start users;
-- version-controlled baseline parameters; and
-- documented assumptions and limitations.
+typed API responses and automated API tests;
 
-### Phase 4: Ranking evaluation — in progress
+continuous integration with GitHub Actions; and
 
-- hand-validated NDCG@K;
-- hand-validated Mean Reciprocal Rank@K;
-- hand-validated Recall@K;
-- hand-validated Hit Rate@K;
-- catalog-coverage measurement;
-- explicit multiple-click and no-click semantics;
-- duplicate-ranking and invalid-input validation;
-- model-independent candidate-ranking evaluation;
-- reproducible popularity, content, and fallback evaluation commands;
-- machine-readable popularity, content, and fallback metrics;
-- same-split three-model comparison;
-- explicit content abstention and cold-start accounting;
-- explicit fallback routing and recovery accounting;
-- exhaustive history-length segmentation with per-segment ranking metrics;
-- overlapping clicked-category cohorts with category-specific relevance and
-  exposure metrics;
-- explicit minimum-support and multi-category membership accounting;
-- leakage-safe training-exposure bands for unseen, low-, medium-, and
-  high-exposure clicked articles;
-- exposure-specific relevance, recommendation coverage, and overlap
-  accounting;
-- deterministic nonparametric bootstrap confidence intervals for final
-  fallback relevance metrics;
-- configurable bootstrap sample count, confidence level, and random seed;
-- chronological MIND-small validation results; and
-- 267 automated tests.
+explicit documentation of limitations and non-claims.
 
-High-confidence failure inspection and final holdout evaluation are the next
-Phase 4 milestones.
+System overview
 
-## Quick start
+flowchart TD
+    A["Licensed MIND-small files"] --> B["Validated loaders and audit"]
+    B --> C["Leakage-safe chronological split"]
+    C --> D["TF-IDF history-content model"]
+    C --> E["Training-only popularity model"]
+    D --> F{"Usable content signal?"}
+    E --> F
+    F --> G["Candidate-set ranking"]
+    G --> H["Metrics, uncertainty, and diagnostics"]
+    G --> I["FastAPI serving foundation"]
 
-Python 3.12 is recommended. The package supports Python 3.11 and Python 3.12.
+The selected candidate preserves TF-IDF content rankings whenever a positivesimilarity signal exists. It routes only content abstentions to popularity.Content and popularity scores are not blended.
 
-### macOS or Linux
+Key results
 
-```bash
+All systems use the same chronological split, validation impressions,candidate sets, catalog, metric implementation, and ranking cutoff.
+
+Property
+
+Value
+
+Total MIND-small training records
+
+156,965
+
+Chronological training records
+
+125,572
+
+Chronological validation records
+
+31,393
+
+Requested validation fraction
+
+20%
+
+Actual validation fraction
+
+20%
+
+Cutoff timestamp
+
+2019-11-13 20:36:26
+
+Temporal overlap
+
+None
+
+Three-model comparison
+
+Metric @10
+
+Popularity
+
+TF-IDF content
+
+Content + fallback
+
+NDCG
+
+0.2853
+
+0.3594
+
+0.3664
+
+MRR
+
+0.2308
+
+0.3133
+
+0.3179
+
+Recall
+
+0.5047
+
+0.5819
+
+0.5955
+
+Hit Rate
+
+0.5705
+
+0.6610
+
+0.6762
+
+Catalog Coverage
+
+0.0402
+
+0.0719
+
+0.0719
+
+Unique recommended articles
+
+2,061
+
+3,687
+
+3,687
+
+Empty rankings
+
+0
+
+927
+
+0
+
+The content model handles 30,466 validation impressions, or 97.05%. Theremaining 927 impressions, or 2.95%, are routed to popularity. All fallbackroutes receive rankings, reducing empty rankings from 927 to zero.
+
+Paired bootstrap comparison
+
+The final fallback candidate and content-only baseline were compared onaligned evaluated impressions using a paired nonparametric percentilebootstrap.
+
+Metric
+
+Content baseline
+
+Fallback candidate
+
+Difference
+
+95% CI for difference
+
+NDCG@10
+
+0.3594
+
+0.3664
+
++0.0069
+
+[0.0058, 0.0081]
+
+MRR@10
+
+0.3133
+
+0.3179
+
++0.0046
+
+[0.0034, 0.0058]
+
+Recall@10
+
+0.5819
+
+0.5955
+
++0.0135
+
+[0.0119, 0.0152]
+
+Hit Rate@10
+
+0.6610
+
+0.6762
+
++0.0152
+
+[0.0135, 0.0170]
+
+Paired-comparison protocol:
+
+evaluated impressions: 31,393;
+
+bootstrap replicates: 1,000;
+
+confidence level: 95%;
+
+random seed: 42;
+
+resampling unit: aligned evaluated impression pair; and
+
+difference direction: candidate minus baseline.
+
+Every paired interval excludes zero under this evaluation protocol. This isevidence of an offline metric improvement, not evidence of online or causalproduct impact.
+
+Fallback routing
+
+Route
+
+Impressions
+
+Share
+
+Content
+
+30,466
+
+97.05%
+
+Popularity fallback
+
+927
+
+2.95%
+
+Empty-history fallback
+
+801
+
+2.55%
+
+Zero-signal fallback
+
+126
+
+0.40%
+
+Unknown-history fallback
+
+0
+
+0.00%
+
+Zero-profile fallback
+
+0
+
+0.00%
+
+Fallback recovery is 100% for the 927 routed impressions.
+
+Diagnostic evaluation
+
+History length
+
+History groups are mutually exclusive and exhaustive. Recombining themreproduces the overall fallback metrics.
+
+Segment
+
+History articles
+
+Impressions
+
+Share
+
+NDCG@10
+
+MRR@10
+
+Recall@10
+
+Hit Rate@10
+
+Cold start
+
+0
+
+801
+
+2.55%
+
+0.2954
+
+0.2334
+
+0.5339
+
+0.6017
+
+Short
+
+1–4
+
+3,379
+
+10.76%
+
+0.3471
+
+0.2809
+
+0.5911
+
+0.6324
+
+Medium
+
+5–9
+
+4,994
+
+15.91%
+
+0.3767
+
+0.3184
+
+0.6148
+
+0.6676
+
+Long
+
+10+
+
+22,219
+
+70.78%
+
+0.3695
+
+0.3265
+
+0.5940
+
+0.6875
+
+Cold-start impressions are weakest across all four relevance metrics. Thepattern among non-empty histories is metric-specific rather than uniformlymonotonic.
+
+Clicked-article category
+
+Category cohorts intentionally overlap when an impression contains clickedarticles from multiple categories. Therefore, category shares do not sum to100%.
+
+Category
+
+Relevant impressions
+
+NDCG@10
+
+Recall@10
+
+Hit Rate@10
+
+Weather
+
+1,640
+
+0.4764
+
+0.7359
+
+0.7366
+
+Lifestyle
+
+6,594
+
+0.3894
+
+0.6016
+
+0.6175
+
+News
+
+10,338
+
+0.3361
+
+0.5804
+
+0.6106
+
+Sports
+
+3,564
+
+0.3151
+
+0.5287
+
+0.5485
+
+Finance
+
+3,464
+
+0.2819
+
+0.5025
+
+0.5141
+
+Health
+
+2,268
+
+0.2124
+
+0.3978
+
+0.4114
+
+Travel
+
+1,920
+
+0.1772
+
+0.3493
+
+0.3563
+
+The full supported-category table and category-specific coverage values arepublished in docs/EVALUATION.md and reports/fallback_metrics.json.
+
+These category results are descriptive and conditioned on observed clicks.They are not causal or candidate-availability-adjusted comparisons.
+
+Training exposure
+
+Article exposure is calculated using only candidate appearances in thechronological training partition.
+
+Band
+
+Training exposures
+
+Catalog articles
+
+Relevant impressions
+
+NDCG@10
+
+Recall@10
+
+Hit Rate@10
+
+Unseen
+
+0
+
+34,450
+
+15,003
+
+0.3924
+
+0.6298
+
+0.6655
+
+Low
+
+1–9
+
+9,648
+
+13,038
+
+0.2807
+
+0.5162
+
+0.5512
+
+Medium
+
+10–99
+
+4,405
+
+3,012
+
+0.2916
+
+0.5136
+
+0.5196
+
+High
+
+100+
+
+2,779
+
+8,580
+
+0.2740
+
+0.4697
+
+0.5169
+
+Here, “unseen” means zero training candidate appearances. It does not meanmissing article text. Cohorts can overlap when a multi-click impression hasrelevant items from several exposure bands.
+
+Overall uncertainty
+
+The final candidate's overall metrics use a deterministic impression-levelnonparametric percentile bootstrap.
+
+Metric
+
+Estimate
+
+Lower 95%
+
+Upper 95%
+
+Standard error
+
+NDCG@10
+
+0.3664
+
+0.3627
+
+0.3703
+
+0.0019
+
+MRR@10
+
+0.3179
+
+0.3140
+
+0.3218
+
+0.0020
+
+Recall@10
+
+0.5955
+
+0.5907
+
+0.6003
+
+0.0026
+
+Hit Rate@10
+
+0.6762
+
+0.6712
+
+0.6815
+
+0.0027
+
+These intervals condition on the fixed dataset, split, candidate sets, fittedmodel, and metric definitions. They do not quantify temporal drift,model-selection uncertainty, or online impact.
+
+High-confidence failure analysis
+
+NewsLens inspects top-K misses whose top recommendation scores are highrelative to other impressions routed through the same recommendation source.Thresholds are source-specific because TF-IDF similarity and popularity clickcounts are not on a common scale.
+
+Property
+
+Result
+
+Evaluated impressions
+
+31,393
+
+Score-eligible impressions
+
+31,162
+
+Top-K misses
+
+10,164 (32.38%)
+
+High-score misses
+
+1,222 (3.92% of eligible impressions)
+
+Retained examples
+
+50
+
+Content threshold
+
+0.1918
+
+Popularity threshold
+
+1,007 clicks
+
+This diagnostic identifies confident failures for inspection. It does notclaim that scores from different recommendation sources are calibratedprobabilities.
+
+Implemented functionality
+
+Data ingestion and audit
+
+validated news.tsv and behaviors.tsv loaders;
+
+duplicate-identifier detection;
+
+malformed-schema and invalid-label rejection;
+
+timestamp, history, and candidate parsing;
+
+preservation of empty histories as valid cold-start records;
+
+reproducible train and development audit reports; and
+
+exclusion of raw licensed data from Git.
+
+Search and recommendation models
+
+training-only popularity ranking;
+
+TF-IDF article search;
+
+TF-IDF user-history content recommendation;
+
+content-to-popularity cold-start fallback;
+
+deterministic tie handling; and
+
+candidate-set and viewed-history restrictions.
+
+Evaluation
+
+leakage-safe chronological splitting;
+
+binary NDCG@K, MRR@K, Recall@K, and Hit Rate@K;
+
+catalog coverage;
+
+model-independent candidate-ranking evaluation;
+
+reproducible JSON reports;
+
+history, category, and training-exposure diagnostics;
+
+deterministic overall bootstrap intervals;
+
+high-confidence failure inspection; and
+
+paired bootstrap model comparison.
+
+API foundation
+
+FastAPI application factory;
+
+typed Pydantic response schemas;
+
+GET /health;
+
+GET /model-info;
+
+automatically generated OpenAPI schema;
+
+interactive Swagger documentation; and
+
+API integration tests.
+
+The API honestly reports model_ready: false until validated artifacts areimplemented and loaded.
+
+Quick start
+
+Python 3.12 is recommended. NewsLens supports Python 3.11 and Python 3.12.
+
+macOS or Linux
+
 bash scripts/setup.sh
 source .venv/bin/activate
 python -m newslens --help
-```
 
-### Windows PowerShell
+Windows PowerShell
 
-```powershell
 powershell -ExecutionPolicy Bypass -File scripts/setup.ps1
 .\.venv\Scripts\Activate.ps1
 python -m newslens --help
-```
 
-### Manual setup
+Manual setup
 
-```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 python -m ruff check .
 python -m pytest
-```
 
-Expected checks:
+Expected validation:
 
-```text
 All checks passed!
-267 passed
-```
+348 passed
 
-## Repository structure
+Run the HTTP API
 
-```text
+Start the local development server:
+
+python -m uvicorn newslens.api.app:app \
+  --host 127.0.0.1 \
+  --port 8000 \
+  --reload
+
+Available foundation endpoints:
+
+GET /health
+GET /model-info
+GET /docs
+GET /openapi.json
+
+Examples:
+
+curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:8000/model-info
+
+See docs/API.md for the API contract and current non-claims.
+
+Dataset policy
+
+NewsLens uses MIND-small from the Microsoft MIND news-recommendation dataset:
+
+https://msnews.github.io/
+
+Read and accept the applicable Microsoft Research License Terms before usingthe dataset. Dataset archives and extracted raw files must not be committed tothis repository.
+
+Expected local layout:
+
+data/
+├── MINDsmall_train/
+│   ├── news.tsv
+│   ├── behaviors.tsv
+│   ├── entity_embedding.vec
+│   └── relation_embedding.vec
+└── MINDsmall_dev/
+    ├── news.tsv
+    ├── behaviors.tsv
+    ├── entity_embedding.vec
+    └── relation_embedding.vec
+
+Only aggregate audit and evaluation reports are version controlled. Raw MINDrecords and embeddings are not redistributed.
+
+Reproduce the dataset audit
+
+python -m newslens audit-data \
+  --data-dir data \
+  --split train \
+  --output reports/mindsmall_train_audit.json
+
+python -m newslens audit-data \
+  --data-dir data \
+  --split dev \
+  --output reports/mindsmall_dev_audit.json
+
+Reproduce the evaluations
+
+Popularity
+
+python -m newslens evaluate-popularity \
+  --data-dir data \
+  --k 10 \
+  --validation-fraction 0.20 \
+  --output reports/popularity_metrics.json
+
+TF-IDF content
+
+python -m newslens evaluate-content \
+  --data-dir data \
+  --k 10 \
+  --validation-fraction 0.20 \
+  --max-features 50000 \
+  --output reports/content_metrics.json
+
+Content with fallback
+
+python -m newslens evaluate-fallback \
+  --data-dir data \
+  --k 10 \
+  --validation-fraction 0.20 \
+  --max-features 50000 \
+  --bootstrap-samples 1000 \
+  --bootstrap-confidence-level 0.95 \
+  --bootstrap-random-seed 42 \
+  --failure-score-quantile 0.90 \
+  --maximum-failures-per-source 25 \
+  --output reports/fallback_metrics.json
+
+TF-IDF article search example
+
+from newslens.data import load_news
+from newslens.models import TfidfArticleSearch
+
+news = load_news("data/MINDsmall_train/news.tsv")
+search = TfidfArticleSearch().fit(news)
+
+for result in search.search("space exploration mission", top_k=5):
+    print(result.news_id, result.score, result.title)
+
+Repository structure
+
 NewsLens/
 ├── .github/
 │   └── workflows/
@@ -153,6 +825,7 @@ NewsLens/
 ├── data/
 │   └── README.md
 ├── docs/
+│   ├── API.md
 │   ├── BASELINES.md
 │   ├── DECISIONS.md
 │   ├── EVALUATION.md
@@ -171,14 +844,20 @@ NewsLens/
 │   └── setup.sh
 ├── src/
 │   └── newslens/
+│       ├── api/
+│       │   ├── __init__.py
+│       │   ├── app.py
+│       │   └── schemas.py
 │       ├── data/
 │       │   ├── audit.py
 │       │   └── mind.py
 │       ├── evaluation/
 │       │   ├── categories.py
+│       │   ├── comparison.py
 │       │   ├── content.py
 │       │   ├── evaluator.py
 │       │   ├── exposure.py
+│       │   ├── failures.py
 │       │   ├── fallback.py
 │       │   ├── metrics.py
 │       │   ├── popularity.py
@@ -190,732 +869,136 @@ NewsLens/
 │       │   ├── fallback.py
 │       │   ├── popularity.py
 │       │   └── tfidf.py
-│       ├── cli.py
-│       └── __main__.py
+│       ├── __init__.py
+│       ├── __main__.py
+│       └── cli.py
 ├── tests/
 ├── LICENSE
+├── Makefile
 ├── pyproject.toml
 ├── README.md
 └── ROADMAP.md
-```
 
-Downloaded data, virtual environments, caches, and other local artifacts are
-excluded from Git.
+Virtual environments, caches, downloaded datasets, and other local artifactsare excluded from Git.
 
-## Dataset policy
+Testing and continuous integration
 
-NewsLens uses MIND-small from the Microsoft MIND news-recommendation dataset:
+Run the complete suite:
 
-https://msnews.github.io/
-
-Read and accept the applicable Microsoft Research License Terms before
-downloading or using the dataset. Dataset archives and extracted raw files must
-not be committed to this repository.
-
-The expected local data layout is:
-
-```text
-data/
-├── MINDsmall_train/
-│   ├── news.tsv
-│   ├── behaviors.tsv
-│   ├── entity_embedding.vec
-│   └── relation_embedding.vec
-└── MINDsmall_dev/
-    ├── news.tsv
-    ├── behaviors.tsv
-    ├── entity_embedding.vec
-    └── relation_embedding.vec
-```
-
-Only aggregate audit and evaluation reports are version controlled. Raw MIND
-records and embeddings are not redistributed.
-
-## Data validation
-
-The MIND loaders:
-
-- verify that input files exist;
-- validate the expected number of tab-separated fields;
-- reject empty required identifiers;
-- reject duplicate news and impression identifiers;
-- parse timestamps using the documented MIND format;
-- preserve empty histories as valid cold-start cases;
-- parse candidate impressions into article and label pairs;
-- reject labels other than `0` and `1`; and
-- report malformed rows with actionable error messages.
-
-## Reproducing the MIND-small audit
-
-After placing the licensed files in the expected local directories, run:
-
-```bash
-python -m newslens audit-data \
-  --split train \
-  --output reports/mindsmall_train_audit.json
-```
-
-```bash
-python -m newslens audit-data \
-  --split dev \
-  --output reports/mindsmall_dev_audit.json
-```
-
-Each command validates the selected split, prints its audit results, and writes
-a machine-readable JSON report.
-
-## MIND-small audit results
-
-| Metric | Train | Development |
-|---|---:|---:|
-| News articles | 51,282 | 42,416 |
-| Behavior records | 156,965 | 73,152 |
-| Unique users | 50,000 | 50,000 |
-| Candidate impressions | 5,843,444 | 2,740,998 |
-| Clicks | 236,344 | 111,383 |
-| Non-clicks | 5,607,100 | 2,629,615 |
-| Click-through rate | 4.0446% | 4.0636% |
-| Average candidates per impression | 37.2277 | 37.4699 |
-| Average history length | 32.5400 | 32.2960 |
-| Empty histories | 3,238 | 2,214 |
-| Missing titles | 0 | 0 |
-| Missing abstracts | 2,666 | 2,021 |
-| Referenced articles missing metadata | 0 | 0 |
-
-Click-through rate is defined as clicked candidate occurrences divided by all
-candidate occurrences.
-
-The complete reports are stored in:
-
-```text
-reports/
-├── mindsmall_train_audit.json
-└── mindsmall_dev_audit.json
-```
-
-These results establish dataset integrity and summarize the available records.
-They do not establish recommendation quality.
-
-## Leakage-safe evaluation protocol
-
-The `MINDsmall_train` behavior records are divided into internal training and
-validation partitions using a strict chronological boundary.
-
-| Property | Value |
-|---|---:|
-| Total behavior records | 156,965 |
-| Training records | 125,572 |
-| Validation records | 31,393 |
-| Requested validation fraction | 20% |
-| Actual validation fraction | 20% |
-| Cutoff timestamp | 2019-11-13 20:36:26 |
-| Last training timestamp | 2019-11-13 20:36:19 |
-| First validation timestamp | 2019-11-13 20:36:26 |
-| Temporal overlap | None |
-
-Records sharing the same timestamp remain in the same partition. Consequently,
-the maximum training timestamp is strictly earlier than the minimum validation
-timestamp.
-
-The official MIND-small development split is reserved as a later final holdout.
-It is not used for fitting or selecting the current models.
-
-## Ranking metrics
-
-NewsLens implements formally tested offline ranking metrics.
-
-### NDCG@K
-
-Normalized Discounted Cumulative Gain uses binary click relevance and discounts
-relevant articles appearing lower in the recommendation list.
-
-### Mean Reciprocal Rank@K
-
-MRR measures the reciprocal position of the first clicked article appearing
-within the first `K` recommendations.
-
-### Recall@K
-
-Recall measures the fraction of clicked candidate articles retrieved within the
-first `K` positions.
-
-### Hit Rate@K
-
-Hit Rate records whether at least one clicked article appears within the first
-`K` positions.
-
-### Catalog Coverage@K
-
-Catalog coverage measures the fraction of the available article catalog
-recommended at least once.
-
-The metric implementation also defines and tests:
-
-- impressions containing multiple clicked articles;
-- impressions without clicked articles;
-- rankings shorter than `K`;
-- duplicate recommended identifiers;
-- invalid cutoff values;
-- invalid or empty inputs; and
-- catalog consistency.
-
-## Model-independent evaluator
-
-The evaluator accepts candidate rankings from different recommendation
-strategies and calculates all supported metrics using consistent validation
-impressions.
-
-This separates metric computation from model implementation and allows
-popularity, content-based, fallback, and future hybrid models to be compared
-under the same protocol.
-
-The evaluator reports:
-
-- NDCG@K;
-- MRR@K;
-- Recall@K;
-- Hit Rate@K;
-- catalog coverage;
-- evaluated and skipped impressions;
-- empty rankings;
-- unique recommended articles; and
-- candidate-level coverage information.
-
-## Training-only popularity baseline
-
-The popularity recommender counts clicks observed only in the chronological
-training partition.
-
-For each supplied candidate set, articles are ranked by:
-
-1. descending training click count; and
-2. article identifier as a deterministic tie-breaker.
-
-Unseen articles receive a score of zero. Validation clicks never modify fitted
-scores.
-
-## Reproducing the popularity evaluation
-
-After placing the licensed MIND-small data in the expected local directories,
-run:
-
-```bash
-python -m newslens evaluate-popularity \
-  --data-dir data \
-  --k 10 \
-  --validation-fraction 0.20 \
-  --output reports/popularity_metrics.json
-```
-
-The command:
-
-1. validates and loads the MIND-small training data;
-2. creates the strict chronological split;
-3. fits popularity using only the training partition;
-4. ranks each validation candidate set;
-5. calculates the formal ranking metrics; and
-6. writes a machine-readable JSON report.
-
-## Formal popularity evaluation
-
-| Metric | Result |
-|---|---:|
-| NDCG@10 | 0.2853 |
-| MRR@10 | 0.2308 |
-| Recall@10 | 0.5047 |
-| Hit Rate@10 | 0.5705 |
-| Catalog Coverage@10 | 0.0402 |
-| Evaluated impressions | 31,393 |
-| Evaluation fraction | 100% |
-| Empty rankings | 0 |
-| Unique recommended articles | 2,061 |
-| Catalog size | 51,282 |
-| Candidate occurrences | 1,264,253 |
-| Unseen candidate occurrences | 383,855 |
-| Unseen candidate fraction | 30.36% |
-| Temporal leakage detected | No |
-
-The popularity model places at least one clicked article in its first ten
-positions for 57.05% of validation impressions and retrieves approximately
-50.47% of all clicked articles within those positions.
-
-However, the model recommends only 4.02% of the available catalog. Its rankings
-are concentrated among frequently clicked articles, which demonstrates the
-coverage limitation of global popularity ranking.
-
-Approximately 30.36% of validation candidate occurrences were unseen during
-training. These articles receive zero popularity scores, exposing an important
-cold-start limitation for the content-based and future hybrid systems to
-address.
-
-The formal Hit Rate@10 agrees with the earlier preliminary top-ten diagnostic,
-providing a useful reproducibility check.
-
-The machine-readable report is stored at:
-
-```text
-reports/popularity_metrics.json
-```
-
-## Reproducing the content evaluation
-
-The TF-IDF content recommender builds each user profile from the mean article
-vectors in that user's history and ranks only the candidates presented in that
-validation impression.
-
-The vocabulary and inverse-document frequencies are fitted using articles
-referenced by the chronological training partition. Validation interaction
-labels are not used during fitting.
-
-Run:
-
-```bash
-python -m newslens evaluate-content \
-  --data-dir data \
-  --k 10 \
-  --validation-fraction 0.20 \
-  --max-features 50000 \
-  --output reports/content_metrics.json
-```
-
-## Reproducing the fallback evaluation
-
-The fallback system preserves TF-IDF content rankings whenever positive
-similarity is available. It routes only content abstentions to the popularity
-model fitted on the chronological training partition.
-
-Run:
-
-```bash
-python -m newslens evaluate-fallback \
-  --data-dir data \
-  --k 10 \
-  --validation-fraction 0.20 \
-  --max-features 50000 \
-  --bootstrap-samples 1000 \
-  --bootstrap-confidence-level 0.95 \
-  --bootstrap-random-seed 42 \
-  --output reports/fallback_metrics.json
-```
-
-The fallback report includes exhaustive `history_segments`, overlapping
-`category_analysis`, overlapping `exposure_analysis`, and deterministic
-`uncertainty`. Segment membership depends only on the number of articles in
-each impression's user history; validation click labels do not affect
-assignment.
-
-## Bootstrap uncertainty evaluation
-
-NewsLens estimates uncertainty for the final fallback model's NDCG@10, MRR@10,
-Recall@10, and Hit Rate@10 using a nonparametric percentile bootstrap. One
-evaluated impression is the resampling unit. Each of 1,000 replicates samples
-31,393 impressions with replacement, using the original sample size. The
-configured confidence level is 95%, and random seed 42 makes the report
-deterministic.
-
-| Metric | Estimate | Lower 95% | Upper 95% | Bootstrap standard error |
-|---|---:|---:|---:|---:|
-| NDCG@10 | 0.3664 | 0.3627 | 0.3703 | 0.0019 |
-| MRR@10 | 0.3179 | 0.3140 | 0.3218 | 0.0020 |
-| Recall@10 | 0.5955 | 0.5907 | 0.6003 | 0.0026 |
-| Hit Rate@10 | 0.6762 | 0.6712 | 0.6815 | 0.0027 |
-
-The bootstrap point estimates exactly reproduce the common evaluator's
-metrics. Two complete runs with identical inputs and configuration produced
-byte-identical JSON reports. Catalog coverage is excluded from this bootstrap
-summary because it is a set-level statistic, not an average of independent
-impression-level values.
-
-These intervals estimate impression-sampling variability conditional on the
-fixed dataset, chronological split, fitted model, candidate sets, and metric
-definitions. They do not quantify model-selection uncertainty, temporal
-drift, online impact, or the significance of paired differences between
-models.
-
-## Three-model evaluation
-
-All three systems use the same 125,572 training records, 31,393 later
-validation records, candidate sets, catalog, metric implementation, and
-ranking cutoff.
-
-| Metric @10 | Popularity | TF-IDF content | Content + fallback |
-|---|---:|---:|---:|
-| NDCG | 0.2853 | 0.3594 | **0.3664** |
-| MRR | 0.2308 | 0.3133 | **0.3179** |
-| Recall | 0.5047 | 0.5819 | **0.5955** |
-| Hit Rate | 0.5705 | 0.6610 | **0.6762** |
-| Catalog Coverage | 0.0402 | **0.0719** | **0.0719** |
-| Unique recommended articles | 2,061 | **3,687** | **3,687** |
-| Empty rankings | 0 | 927 | **0** |
-
-Relative to content alone, fallback improves NDCG by 1.92%, MRR by 1.47%,
-Recall by 2.33%, and Hit Rate by 2.30%. Catalog coverage is unchanged.
-
-The content model produces a meaningful ranking for 30,466 validation
-impressions, or 97.05%. The remaining 927 impressions, or 2.95%, are routed to
-training-only popularity. Every routed impression receives a ranking, reducing
-empty rankings from 927 to zero.
-
-The fallback routes comprise 801 empty-history impressions and 126 impressions
-whose candidates have zero TF-IDF similarity to the user profile. There are no
-unknown-history or zero-profile cases in this validation partition.
-
-These are internal chronological-validation results, not final holdout or
-online-product results. The official MIND-small development split remains
-untouched.
-
-## History-length segment evaluation
-
-The fallback system's validation impressions are partitioned into four
-mutually exclusive, exhaustive history-length groups:
-
-| Segment | History articles | Impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Cold start | 0 | 801 | 2.55% | 0.2954 | 0.2334 | 0.5339 | 0.6017 |
-| Short history | 1–4 | 3,379 | 10.76% | 0.3471 | 0.2809 | 0.5911 | 0.6324 |
-| Medium history | 5–9 | 4,994 | 15.91% | **0.3767** | 0.3184 | **0.6148** | 0.6676 |
-| Long history | 10+ | 22,219 | 70.78% | 0.3695 | **0.3265** | 0.5940 | **0.6875** |
-
-All 31,393 validation impressions are assigned exactly once, and recombining
-the segment results reproduces the overall fallback metrics. Cold-start
-impressions are weakest across all four relevance metrics, while usable
-history generally improves ranking quality. The pattern is not uniformly
-monotonic: medium histories achieve the highest NDCG and Recall, whereas long
-histories achieve the highest MRR and Hit Rate.
-
-The 801 cold-start impressions exactly match the empty-history fallback
-routes. The additional 126 zero-signal fallback routes have nonempty histories
-and therefore belong to the short-, medium-, or long-history groups. History
-segments and fallback-reason groups answer different questions and should not
-be treated as interchangeable.
-
-Because 70.78% of impressions are in the long-history group, these subgroup
-results are descriptive associations under this split, not evidence that
-longer histories causally improve recommendations. The reported bootstrap
-intervals apply to the overall fallback metrics; subgroup-specific intervals
-have not yet been estimated.
-
-## Article-category evaluation
-
-NewsLens also evaluates the final fallback rankings within cohorts defined by
-the categories of clicked articles. An impression belongs to every category
-represented among its clicked candidates, so the cohorts intentionally
-overlap. The original global ranking positions are preserved when calculating
-category relevance metrics; items outside the focal category are not removed
-or re-ranked.
-
-All 31,393 clicked validation impressions are included. They produce 43,413
-impression-category memberships, and 8,074 impressions (25.72%) contain clicks
-from more than one category. Category shares therefore do not sum to 100%.
-Results below use a minimum-support threshold of 100 relevant impressions.
-
-| Category | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Category Coverage@10 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| News | 10,338 | 32.93% | 0.3361 | 0.2680 | 0.5804 | 0.6106 | 0.0641 |
-| Lifestyle | 6,594 | 21.00% | 0.3894 | 0.3297 | 0.6016 | 0.6175 | **0.1291** |
-| Sports | 3,564 | 11.35% | 0.3151 | 0.2546 | 0.5287 | 0.5485 | 0.0540 |
-| Finance | 3,464 | 11.03% | 0.2819 | 0.2169 | 0.5025 | 0.5141 | 0.1033 |
-| Music | 2,967 | 9.45% | 0.2234 | 0.1550 | 0.4520 | 0.4604 | 0.1014 |
-| Food and drink | 2,500 | 7.96% | 0.2577 | 0.2027 | 0.4530 | 0.4704 | 0.0894 |
-| TV | 2,312 | 7.36% | 0.2779 | 0.2069 | 0.5168 | 0.5238 | 0.0810 |
-| Health | 2,268 | 7.22% | 0.2124 | 0.1581 | 0.3978 | 0.4114 | 0.1119 |
-| Travel | 1,920 | 6.12% | 0.1772 | 0.1267 | 0.3493 | 0.3563 | 0.0728 |
-| Entertainment | 1,663 | 5.30% | 0.3230 | 0.2574 | 0.5441 | 0.5538 | 0.1227 |
-| Weather | 1,640 | 5.22% | **0.4764** | **0.3932** | **0.7359** | **0.7366** | 0.0420 |
-| Video | 1,558 | 4.96% | 0.1917 | 0.1346 | 0.3883 | 0.3928 | 0.0662 |
-| Autos | 1,469 | 4.68% | 0.2296 | 0.1764 | 0.4210 | 0.4391 | 0.0811 |
-| Movies | 1,156 | 3.68% | 0.2448 | 0.1705 | 0.4942 | 0.4957 | 0.1040 |
-
-Weather has the strongest recorded relevance metrics, whereas travel is the
-weakest supported category. Weather's category coverage is only 0.0420,
-showing that strong relevance and broad within-category exposure are distinct
-objectives. Lifestyle has the highest category coverage among supported
-categories at 0.1291.
-
-`kids`, `middleeast`, and `northamerica` have no clicked validation support and
-no recorded exposure in this split, so no relevance conclusion is made for
-them. Category cohorts are conditioned on observed clicks and are descriptive,
-not causal or candidate-availability-adjusted comparisons.
-
-## Training-exposure evaluation
-
-Articles are assigned to four bands using candidate exposures observed only in
-the chronological training partition:
-
-| Band | Training candidate exposures |
-|---|---:|
-| Unseen | 0 |
-| Low exposure | 1–9 |
-| Medium exposure | 10–99 |
-| High exposure | 100+ |
-
-An impression belongs to every band represented by its clicked articles, so
-the cohorts can overlap. Original global ranking positions are preserved. In
-this validation split, 6,627 impressions (21.11%) belong to multiple bands,
-producing 39,633 impression-band memberships across 31,393 impressions.
-
-| Band | Catalog articles | Relevant impressions | Share | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Band Coverage@10 |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Unseen | 34,450 | 15,003 | 47.79% | **0.3924** | **0.3291** | **0.6298** | **0.6655** | 0.0577 |
-| Low exposure | 9,648 | 13,038 | 41.53% | 0.2807 | 0.2159 | 0.5162 | 0.5512 | 0.0470 |
-| Medium exposure | 4,405 | 3,012 | 9.59% | 0.2916 | 0.2246 | 0.5136 | 0.5196 | 0.0854 |
-| High exposure | 2,779 | 8,580 | 27.33% | 0.2740 | 0.2265 | 0.4697 | 0.5169 | **0.3127** |
-
-All four bands exceed the 100-impression support threshold. Unseen clicked
-articles have the strongest recorded relevance metrics, while high-exposure
-articles have the broadest within-band recommendation coverage. This does not
-mean that zero exposure causes better performance. The TF-IDF vocabulary is
-fitted from training-referenced text, but catalog article text can still be
-transformed after fitting without using validation clicks. Recency, category
-mix, candidate difficulty, and lexical alignment may therefore contribute to
-the result.
-
-Here, “unseen” means zero candidate appearances in chronological training. It
-does not mean missing article metadata or an out-of-vocabulary document.
-
-The machine-readable reports are stored at:
-
-```text
-reports/popularity_metrics.json
-reports/content_metrics.json
-reports/fallback_metrics.json
-```
-
-See [docs/EVALUATION.md](docs/EVALUATION.md) for the complete protocol, metric
-semantics, interpretation, limitations, and next milestones.
-
-## TF-IDF article search
-
-The article-search baseline combines:
-
-- title;
-- abstract;
-- category; and
-- subcategory.
-
-The resulting text is represented using English TF-IDF unigrams and bigrams.
-Search queries are ranked using cosine similarity.
-
-Example:
-
-```python
-from newslens.data import load_news
-from newslens.models import TfidfArticleSearch
-
-news = load_news("data/MINDsmall_train/news.tsv")
-search = TfidfArticleSearch().fit(news)
-
-for result in search.search("space exploration mission", top_k=5):
-    print(result.news_id, result.score, result.title)
-```
-
-## Content-based history recommendations
-
-The content recommender creates a user profile by averaging the TF-IDF vectors
-of articles in that user's reading history. Candidate articles are ranked by
-cosine similarity to the resulting profile.
-
-For leakage-aware experiments, the TF-IDF vocabulary and inverse-document
-frequencies can be fitted only on articles referenced by the chronological
-training partition. Available candidate metadata can then be transformed
-without using validation interaction labels.
-
-Formal chronological evaluation is complete. The content model improves all
-recorded ranking metrics over popularity while abstaining on 2.95% of
-validation impressions. The content-only report intentionally retains those
-abstentions as zero-scoring empty rankings.
-
-## Cold-start fallback
-
-The system uses training-only popularity when:
-
-- a user has an empty history;
-- none of the history articles are recognized; or
-- the history produces no usable content-similarity signal.
-
-This is a rule-based fallback rather than a weighted hybrid model. Content and
-popularity scores are not blended.
-
-Formal chronological evaluation is complete. Content handles 30,466 validation
-impressions, while popularity handles the remaining 927 abstentions. The
-fallback recovers all 927 and eliminates empty rankings. Relative to content
-alone, it improves NDCG@10 by 1.92%, MRR@10 by 1.47%, Recall@10 by 2.33%, and
-Hit Rate@10 by 2.30%, while catalog coverage remains 7.19%.
-
-## Reproducible baseline configuration
-
-The baseline parameters are recorded in:
-
-```text
-configs/baselines.json
-```
-
-The configuration documents:
-
-- dataset and holdout policies;
-- chronological split behavior;
-- popularity scoring;
-- TF-IDF fields and parameters;
-- content-profile construction;
-- cold-start triggers; and
-- deterministic tie handling.
-
-See [docs/BASELINES.md](docs/BASELINES.md) for the baseline methodology,
-assumptions, diagnostics, and limitations.
-
-## Testing and code quality
-
-Run the complete test suite:
-
-```bash
 python -m pytest
-```
 
 Run lint checks:
 
-```bash
 python -m ruff check .
-```
 
-Apply automatic formatting:
+Apply formatting:
 
-```bash
 python -m ruff format .
-```
 
-The 267-test suite covers:
+The 348-test suite covers:
 
-- malformed TSV schemas;
-- duplicate identifiers;
-- invalid click labels;
-- timestamp parsing;
-- dataset auditing;
-- command-line report generation;
-- chronological splitting;
-- temporal-overlap prevention;
-- popularity fitting and ranking;
-- TF-IDF search;
-- content-profile recommendations;
-- cold-start behavior;
-- hand-calculated ranking metrics;
-- metric boundary and invalid-input conditions;
-- model-independent evaluation;
-- reproducible popularity evaluation;
-- leakage-aware content evaluation;
-- content abstention and cold-start accounting;
-- reproducible content-evaluation CLI behavior;
-- leakage-aware fallback evaluation;
-- content-versus-popularity routing and fallback-reason accounting;
-- exhaustive and non-overlapping history-segment definitions;
-- empty-history and no-click segment accounting;
-- model-independent per-segment ranking evaluation;
-- fallback integration and deterministic segment JSON output;
-- preservation of global ranking positions in category cohorts;
-- overlapping multi-category impression accounting;
-- category-specific catalog exposure and minimum-support reporting;
-- fallback integration and deterministic category JSON output;
-- contiguous training-exposure band definitions;
-- zero-exposure assignment for articles absent from training candidates;
-- preservation of global ranking positions across exposure cohorts;
-- overlapping multi-band clicked-impression accounting;
-- exposure-band support, recommendation coverage, and deterministic JSON;
-- fallback integration of chronological-training exposure counts;
-- deterministic impression-level bootstrap resampling;
-- bootstrap point-estimate agreement with the common evaluator;
-- confidence-interval accounting and invalid-configuration handling;
-- fallback-report and CLI integration of reproducible uncertainty settings;
-- reproducible fallback-evaluation CLI behavior;
-- CLI behavior;
-- model-not-fitted errors; and
-- deterministic outputs.
+malformed data and schema validation;
 
-GitHub Actions runs linting and tests automatically for pushes and pull
-requests.
+deterministic parsing and dataset auditing;
 
-## Development workflow
+chronological splitting and temporal-leakage prevention;
 
-NewsLens is developed using small feature branches and pull requests.
+popularity, TF-IDF search, content, and fallback models;
 
-A feature is considered complete only when:
+ranking metrics and model-independent evaluation;
 
-1. its implementation is tested;
-2. Ruff checks pass;
-3. the complete test suite passes;
-4. assumptions and limitations are documented;
-5. reproducible outputs are recorded when applicable; and
-6. GitHub Actions passes after the pull request is opened.
+subgroup and training-exposure diagnostics;
 
-## Development roadmap
+deterministic bootstrap uncertainty;
 
-1. **Foundation** — completed.
-2. **MIND ingestion and audit** — completed.
-3. **Evaluation-safe baselines** — completed.
-4. **Ranking evaluation** — in progress; metrics, evaluator, popularity
-   evaluation, TF-IDF content evaluation, and cold-start fallback evaluation
-   completed. History-length, article-category, and training-exposure
-   evaluations and overall fallback uncertainty estimation are complete;
-   high-confidence failure inspection remains.
-5. **Hybrid ranking** — planned.
-6. **Inference service** — planned.
-7. **MLOps and deployment** — planned.
-8. **Controlled experiments** — planned.
+high-confidence failure analysis;
 
-See [ROADMAP.md](ROADMAP.md) for detailed acceptance criteria and planned
-deliverables.
+paired bootstrap model comparison;
 
-## Current limitations and non-claims
+CLI report generation;
 
-- Popularity, TF-IDF content, and the rule-based cold-start fallback have
-  completed formal ranking evaluation; no learned hybrid model has been
-  evaluated.
-- The content-only model abstains on 2.95% of validation impressions; the
-  fallback fills those rankings using global training-only popularity.
-- Fallback removes empty rankings but does not improve catalog coverage over
-  content alone.
-- The official MIND-small development split has not yet been evaluated.
-- Popularity scores reflect historical exposure as well as user interest.
-- Popularity provides limited catalog coverage.
-- Unseen articles receive zero popularity scores.
-- TF-IDF captures lexical overlap but not deeper semantic similarity.
-- User-history articles currently receive equal weight.
-- Article publication timestamps are unavailable in the local metadata.
-- The fallback switches strategies instead of learning a joint ranker.
-- No neural recommendation model has been trained.
-- Overall fallback relevance metrics include deterministic 95% bootstrap
-  intervals. Paired model-difference intervals, subgroup-specific intervals,
-  and statistical-significance tests are not reported.
-- History-length segment sizes are highly imbalanced: 70.78% of validation
-  impressions belong to the long-history group.
-- History-length results are descriptive associations, not causal estimates.
-- Article-category cohorts overlap and are conditioned on clicked categories;
-  their shares cannot be summed and their metrics are descriptive rather than
-  causal comparisons.
-- Category coverage is not adjusted for category availability in each
-  impression's candidate set.
-- Three categories have no clicked validation support, so no relevance claim
-  is made for them.
-- Training-exposure cohorts overlap when an impression contains clicked items
-  from multiple bands; their shares cannot be summed.
-- “Unseen” means zero chronological-training candidate exposures, not absent
-  text metadata or an out-of-vocabulary document.
-- Exposure-band results are descriptive and may be confounded by recency,
-  category, candidate composition, and lexical difficulty.
-- Exposure thresholds are fixed diagnostic intervals rather than optimized or
-  statistically identified cut points.
-- Band coverage uses different catalog denominators and should not be read as a
-  direct relevance comparison.
-- No inference API has been implemented or deployed.
-- No online experiment has been conducted.
-- Passing tests and offline metrics do not establish online product impact.
-- Results should not be compared directly with systems using different data
-  splits, candidate policies, or metric definitions.
+API application-factory behavior;
 
-These statements should be updated only after the corresponding work has been
-implemented, tested, and documented.
+typed health and model-information responses;
 
-## License
+OpenAPI route publication; and
+
+invalid-input and error behavior.
+
+GitHub Actions installs the project, runs Ruff, and executes the complete testsuite for pull requests and pushes to main.
+
+Development roadmap
+
+Foundation — completed.
+
+MIND ingestion and audit — completed.
+
+Evaluation-safe baselines — completed.
+
+Ranking evaluation — completed, including subgroup analysis,uncertainty estimation, high-confidence failure inspection, and pairedbootstrap model comparison.
+
+Learned hybrid ranking — deferred; the evaluated rule-based fallbackremains the selected serving candidate.
+
+Inference service — in progress; FastAPI health and model-informationendpoints are implemented and tested.
+
+MLOps and deployment — planned.
+
+Controlled experiments — planned.
+
+The next milestone is a versioned, validated artifact bundle loaded onceduring application startup. See ROADMAP.md for detailedacceptance criteria.
+
+Current limitations and non-claims
+
+The official MIND-small development split has not been consumed for finalholdout evaluation.
+
+The selected fallback switches strategies rather than learning a jointranker.
+
+No learned hybrid or neural recommendation model has been trained.
+
+TF-IDF captures lexical overlap rather than deeper semantic similarity.
+
+User-history articles receive equal weight.
+
+Popularity scores reflect historical exposure as well as user interest.
+
+Popularity provides limited catalog coverage.
+
+Article publication timestamps are unavailable in the local metadata.
+
+Category, history, and exposure results are descriptive rather than causal.
+
+Category and exposure cohorts can overlap and their shares cannot be summed.
+
+Overall and paired 95% bootstrap intervals are reported, but subgroup-specificintervals are not.
+
+A tested API foundation exists, but it does not yet load a serialized modelartifact or expose search and recommendation inference.
+
+The API has not been containerized or publicly deployed.
+
+No online experiment has been conducted.
+
+Passing tests and improving offline metrics do not establish production oronline impact.
+
+Results should not be compared directly with systems using different datasplits, candidate policies, catalogs, or metric definitions.
+
+Development workflow
+
+NewsLens uses small feature branches and pull requests. A feature is completeonly when:
+
+its implementation is tested;
+
+Ruff checks pass;
+
+the complete test suite passes;
+
+assumptions and limitations are documented;
+
+reproducible outputs are recorded when applicable; and
+
+GitHub Actions passes.
+
+License
 
 Code in this repository is released under the MIT License.
 
-The Microsoft MIND dataset is governed by separate Microsoft Research License
-Terms and is not redistributed in this repository.
+The Microsoft MIND dataset is governed by separate Microsoft Research LicenseTerms and is not redistributed in this repository.
