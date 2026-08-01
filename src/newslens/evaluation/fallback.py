@@ -22,11 +22,19 @@ from .categories import (
     CategoryEvaluationReport,
     evaluate_article_categories,
 )
+from .comparison import (
+    PairedBootstrapComparisonReport,
+    PairedComparisonError,
+    paired_bootstrap_ranking_comparison,
+)
 from .content import (
     ContentEvaluationError,
     _parse_history,
     _prepare_catalog,
     _training_vocabulary_news_ids,
+)
+from .content import (
+    _build_ranking_examples as _build_content_ranking_examples,
 )
 from .evaluator import (
     RankingEvaluationError,
@@ -93,6 +101,7 @@ class FallbackEvaluationReport:
     category_analysis: CategoryEvaluationReport
     exposure_analysis: ExposureEvaluationReport
     failure_analysis: HighScoreFailureReport
+    paired_comparison: PairedBootstrapComparisonReport
 
     @property
     def content_routed_fraction(self) -> float:
@@ -153,6 +162,7 @@ class FallbackEvaluationReport:
             "category_analysis": self.category_analysis.to_dict(),
             "exposure_analysis": self.exposure_analysis.to_dict(),
             "failure_analysis": self.failure_analysis.to_dict(),
+            "paired_comparison": self.paired_comparison.to_dict(),
         }
 
 
@@ -514,6 +524,15 @@ def evaluate_fallback_baseline(
         catalog,
         k=k,
     )
+    content_build_result = _build_content_ranking_examples(
+        split.validation,
+        content_model,
+        catalog,
+        k=k,
+    )
+
+    if content_build_result.candidate_occurrences != build_result.candidate_occurrences:
+        raise FallbackEvaluationError("Content and fallback candidate accounting must match.")
 
     try:
         metrics = evaluate_rankings(
@@ -553,12 +572,23 @@ def evaluate_fallback_baseline(
             maximum_failures_per_source=maximum_failures_per_source,
             article_metadata=failure_article_metadata,
         )
+        paired_comparison = paired_bootstrap_ranking_comparison(
+            content_build_result.examples,
+            build_result.examples,
+            baseline_model_name="tfidf_history_content",
+            candidate_model_name="tfidf_content_with_popularity_fallback",
+            k=k,
+            bootstrap_samples=bootstrap_samples,
+            confidence_level=bootstrap_confidence_level,
+            random_seed=bootstrap_random_seed,
+        )
     except (
         BootstrapUncertaintyError,
         CategoryEvaluationError,
         ExposureEvaluationError,
         FailureAnalysisError,
         HistorySegmentEvaluationError,
+        PairedComparisonError,
         RankingEvaluationError,
     ) as error:
         raise FallbackEvaluationError(str(error)) from error
@@ -586,4 +616,5 @@ def evaluate_fallback_baseline(
         category_analysis=category_analysis,
         exposure_analysis=exposure_analysis,
         failure_analysis=failure_analysis,
+        paired_comparison=paired_comparison,
     )

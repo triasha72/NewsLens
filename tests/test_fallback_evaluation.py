@@ -201,6 +201,40 @@ def test_report_is_json_serializable() -> None:
     assert report.to_dict()["exposure_analysis"]["k"] == 2
     assert report.to_dict()["uncertainty"]["k"] == 2
     assert report.to_dict()["failure_analysis"]["k"] == 2
+    assert report.to_dict()["paired_comparison"]["k"] == 2
+
+
+def test_report_includes_paired_content_fallback_comparison() -> None:
+    report = evaluate_fallback_baseline(
+        make_news(),
+        make_behaviors(),
+        validation_fraction=0.40,
+        k=2,
+        bootstrap_samples=200,
+        bootstrap_confidence_level=0.90,
+        bootstrap_random_seed=2026,
+    )
+    comparison = report.paired_comparison
+
+    assert comparison.baseline_model_name == "tfidf_history_content"
+    assert comparison.candidate_model_name == ("tfidf_content_with_popularity_fallback")
+    assert comparison.total_impressions == report.validation_records
+    assert comparison.evaluated_impressions == report.metrics.evaluated_impressions
+    assert comparison.bootstrap_samples == 200
+    assert comparison.confidence_level == pytest.approx(0.90)
+    assert comparison.random_seed == 2026
+
+    assert comparison.ndcg_at_k.candidate_estimate == pytest.approx(report.metrics.ndcg_at_k)
+    assert comparison.mrr_at_k.candidate_estimate == pytest.approx(report.metrics.mrr_at_k)
+    assert comparison.recall_at_k.candidate_estimate == pytest.approx(report.metrics.recall_at_k)
+    assert comparison.hit_rate_at_k.candidate_estimate == pytest.approx(
+        report.metrics.hit_rate_at_k
+    )
+
+    assert comparison.ndcg_at_k.point_difference >= 0.0
+    assert comparison.mrr_at_k.point_difference >= 0.0
+    assert comparison.recall_at_k.point_difference >= 0.0
+    assert comparison.hit_rate_at_k.point_difference >= 0.0
 
 
 def test_report_includes_source_specific_high_score_failure_analysis() -> None:
