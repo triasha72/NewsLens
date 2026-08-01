@@ -5,7 +5,7 @@ from newslens.cli import main
 
 
 def test_package_version() -> None:
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.2.0"
 
 
 def test_cli_reports_available_commands(capsys: object) -> None:
