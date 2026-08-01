@@ -241,6 +241,8 @@ def test_fallback_evaluation_command_writes_report(
     assert report["metrics"]["k"] == 2
     assert report["metrics"]["mrr_at_k"] == 0.75
     assert report["uncertainty"]["bootstrap_samples"] == 200
+    assert report["paired_comparison"]["bootstrap_samples"] == 200
+    assert report["paired_comparison"]["difference_direction"] == ("candidate_minus_baseline")
     assert report["uncertainty"]["confidence_level"] == 0.90
     assert report["uncertainty"]["random_seed"] == 2026
     assert report["uncertainty"]["metrics"]["mrr_at_k"]["point_estimate"] == 0.75
