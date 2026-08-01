@@ -44,3 +44,29 @@ the numerical scores have comparable probabilistic meaning across routes.
 The original ranking metrics, bootstrap uncertainty, history-segment results,
 article-category results, and training-exposure results remain unchanged after
 adding article-context enrichment.
+## Paired comparison with the content-only baseline
+
+The production-candidate fallback model was compared against the
+content-only TF-IDF model using aligned validation impressions and a paired
+nonparametric percentile bootstrap.
+
+| Metric | Content-only baseline | Candidate model | Difference | 95% CI for difference |
+|---|---:|---:|---:|---:|
+| NDCG@10 | 0.3594 | 0.3664 | +0.0069 | [0.0058, 0.0081] |
+| MRR@10 | 0.3133 | 0.3179 | +0.0046 | [0.0034, 0.0058] |
+| Recall@10 | 0.5819 | 0.5955 | +0.0135 | [0.0119, 0.0152] |
+| Hit Rate@10 | 0.6610 | 0.6762 | +0.0152 | [0.0135, 0.0170] |
+
+Protocol:
+
+- Evaluation impressions: 31,393
+- Bootstrap samples: 1,000
+- Confidence level: 95%
+- Random seed: 42
+- Resampling unit: aligned evaluated impression pair
+- Difference direction: candidate minus baseline
+
+Every reported confidence interval excludes zero. This provides evidence
+that the fallback candidate improves the measured offline ranking metrics
+under this evaluation protocol. These results do not establish online or
+production impact.
