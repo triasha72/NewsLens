@@ -221,6 +221,10 @@ def test_fallback_evaluation_command_writes_report(
             "0.90",
             "--bootstrap-random-seed",
             "2026",
+            "--failure-score-quantile",
+            "0.50",
+            "--maximum-failures-per-source",
+            "5",
         ]
     )
 
@@ -240,6 +244,9 @@ def test_fallback_evaluation_command_writes_report(
     assert report["uncertainty"]["confidence_level"] == 0.90
     assert report["uncertainty"]["random_seed"] == 2026
     assert report["uncertainty"]["metrics"]["mrr_at_k"]["point_estimate"] == 0.75
+    assert report["failure_analysis"]["score_quantile"] == 0.50
+    assert report["failure_analysis"]["maximum_failures_per_source"] == 5
+    assert report["failure_analysis"]["total_impressions"] == 2
     assert "Fallback evaluation report written" in captured.out
 
 
@@ -249,3 +256,5 @@ def test_fallback_cli_uses_reproducible_bootstrap_defaults() -> None:
     assert args.bootstrap_samples == 1_000
     assert args.bootstrap_confidence_level == 0.95
     assert args.bootstrap_random_seed == 42
+    assert args.failure_score_quantile == 0.90
+    assert args.maximum_failures_per_source == 25
