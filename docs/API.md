@@ -154,3 +154,127 @@ python -m ruff check .
 python -m pytest
 git diff --check
 ```
+## Readiness and observability
+
+NewsLens separates HTTP-service liveness from model-serving readiness.
+
+### Liveness
+
+`GET /health` confirms that the HTTP service is running. It does not guarantee that a model artifact has been loaded.
+
+```bash
+curl -i http://127.0.0.1:8000/health
+```
+
+Example response:
+
+```json
+{
+  "status": "ok",
+  "service": "newslens",
+  "version": "0.2.0"
+}
+```
+
+### Model readiness
+
+`GET /ready` reports whether the service can process recommendation requests.
+
+```bash
+curl -i http://127.0.0.1:8000/ready
+```
+
+When a verified model artifact is loaded, the endpoint returns `200 OK`:
+
+```json
+{
+  "status": "ready",
+  "model_ready": true,
+  "artifact_version": "0.3.0"
+}
+```
+
+When no artifact is loaded, it returns `503 Service Unavailable`.
+
+This separation allows deployment platforms to distinguish between:
+
+- a running HTTP process; and
+- an application that is ready to serve model-backed traffic.
+
+### Request identification
+
+Every HTTP response includes an `X-Request-ID` header.
+
+Clients may provide their own request identifier:
+
+```bash
+curl -i \
+  -H "X-Request-ID: example-request-001" \
+  http://127.0.0.1:8000/health
+```
+
+If no identifier is supplied, NewsLens generates one automatically.
+
+The request identifier is included in request logs and recommendation responses so that one request can be traced through the service.
+
+### HTTP processing time
+
+Every response includes:
+
+```text
+X-Process-Time-Ms
+```
+
+This header reports the total server-side HTTP processing time in milliseconds.
+
+### Recommendation inference time
+
+Successful `POST /recommend` responses include:
+
+- `request_id`;
+- `inference_ms`;
+- model name;
+- artifact version;
+- requested ranking cutoff;
+- returned recommendation count; and
+- recommendation routing source.
+
+Example request:
+
+```bash
+curl -i \
+  -X POST \
+  http://127.0.0.1:8000/recommend \
+  -H "Content-Type: application/json" \
+  -H "X-Request-ID: recommendation-example-001" \
+  -d '{
+    "history_news_ids": ["N32211"],
+    "candidate_news_ids": [
+      "N47020",
+      "N16616",
+      "N34081"
+    ],
+    "top_k": 3
+  }'
+```
+
+### Service logs
+
+NewsLens emits logs for:
+
+- completed HTTP requests;
+- failed HTTP requests; and
+- completed recommendation inference.
+
+Recommendation logs include:
+
+- request ID;
+- artifact version;
+- history size;
+- candidate-set size;
+- requested ranking cutoff;
+- returned recommendation count;
+- routing source; and
+- inference latency.
+
+These measurements provide local service observability. They do not yet represent a complete production monitoring, metrics-storage, or alerting system.
