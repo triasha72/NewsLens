@@ -170,6 +170,7 @@ def test_openapi_schema_lists_service_endpoints() -> None:
     assert response.json()["info"]["version"] == __version__
     assert set(response.json()["paths"]) == {
         "/health",
+        "/ready",
         "/model-info",
         "/recommend",
     }

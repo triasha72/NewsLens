@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from time import perf_counter
 from typing import cast
 
 from fastapi import (
@@ -20,9 +21,15 @@ from newslens.models import (
     ContentPopularityFallbackRecommender,
 )
 
+from .observability import (
+    LOGGER,
+    get_request_id,
+    install_request_observability,
+)
 from .schemas import (
     HealthResponse,
     ModelInfoResponse,
+    ReadinessResponse,
     RecommendationItem,
     RecommendationRequest,
     RecommendationResponse,
@@ -48,7 +55,7 @@ def _resolve_artifact_path(
 def _loaded_artifact(
     application: FastAPI,
 ) -> LoadedArtifact | None:
-    """Return the artifact currently held by the application."""
+    """Return the artifact held by the application."""
 
     return getattr(
         application.state,
@@ -60,7 +67,7 @@ def _loaded_artifact(
 def _require_loaded_artifact(
     application: FastAPI,
 ) -> LoadedArtifact:
-    """Return the loaded artifact or reject inference."""
+    """Return the loaded artifact or reject model traffic."""
 
     loaded = _loaded_artifact(application)
 
@@ -112,6 +119,8 @@ def create_app(
         lifespan=lifespan,
     )
 
+    install_request_observability(application)
+
     @application.get(
         "/health",
         response_model=HealthResponse,
@@ -123,6 +132,28 @@ def create_app(
             status="ok",
             service=SERVICE_NAME,
             version=__version__,
+        )
+
+    @application.get(
+        "/ready",
+        response_model=ReadinessResponse,
+        tags=["service"],
+        summary="Check model-serving readiness",
+        responses={
+            status.HTTP_503_SERVICE_UNAVAILABLE: {
+                "description": ("The recommendation model is not ready.")
+            }
+        },
+    )
+    def readiness(
+        request: Request,
+    ) -> ReadinessResponse:
+        loaded = _require_loaded_artifact(request.app)
+
+        return ReadinessResponse(
+            status="ready",
+            model_ready=True,
+            artifact_version=(loaded.metadata.artifact_version),
         )
 
     @application.get(
@@ -176,11 +207,15 @@ def create_app(
             payload.top_k if payload.top_k is not None else loaded.metadata.ranking_cutoff
         )
 
+        inference_started_at = perf_counter()
+
         recommendations = model.recommend(
             payload.history_news_ids,
             candidate_news_ids=(payload.candidate_news_ids),
             top_k=requested_top_k,
         )
+
+        inference_ms = (perf_counter() - inference_started_at) * 1_000
 
         items = tuple(
             RecommendationItem(
@@ -191,11 +226,35 @@ def create_app(
             for recommendation in recommendations
         )
 
+        request_id = get_request_id(request)
+        routing_sources = ",".join(sorted({item.source for item in items}))
+
+        if not routing_sources:
+            routing_sources = "none"
+
+        LOGGER.info(
+            "recommendation_completed request_id=%s "
+            "artifact_version=%s history_count=%d "
+            "candidate_count=%d top_k=%d "
+            "returned_count=%d source=%s "
+            "inference_ms=%.3f",
+            request_id,
+            loaded.metadata.artifact_version,
+            len(payload.history_news_ids),
+            len(payload.candidate_news_ids),
+            requested_top_k,
+            len(items),
+            routing_sources,
+            inference_ms,
+        )
+
         return RecommendationResponse(
+            request_id=request_id,
             model_name=loaded.metadata.model_name,
             artifact_version=(loaded.metadata.artifact_version),
             requested_top_k=requested_top_k,
             returned_count=len(items),
+            inference_ms=inference_ms,
             recommendations=items,
         )
 
