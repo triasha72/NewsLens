@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: newslens-api:0.2.0
+    image: newslens-api:0.3.0
     ports:
       - "8000:8000"
     environment:

@@ -14,4 +14,4 @@ from the Docker image.
 ## Build the image
 
 ```bash
-docker build --tag newslens-api:0.2.0 .
+docker build --tag newslens-api:0.3.0 .
