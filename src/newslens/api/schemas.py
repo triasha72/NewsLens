@@ -22,6 +22,16 @@ class HealthResponse(BaseModel):
     version: str
 
 
+class ReadinessResponse(BaseModel):
+    """Readiness information for model-backed traffic."""
+
+    model_config = ConfigDict(frozen=True)
+
+    status: Literal["ready"]
+    model_ready: Literal[True]
+    artifact_version: str
+
+
 class ModelInfoResponse(BaseModel):
     """Metadata about the model exposed by the service."""
 
@@ -102,8 +112,10 @@ class RecommendationResponse(BaseModel):
 
     model_config = ConfigDict(frozen=True)
 
+    request_id: str
     model_name: str
     artifact_version: str
     requested_top_k: int
     returned_count: int
+    inference_ms: float = Field(ge=0.0)
     recommendations: tuple[RecommendationItem, ...]
