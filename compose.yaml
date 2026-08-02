@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: newslens-api:0.2.0
+    ports:
+      - "8000:8000"
+    environment:
+      NEWSLENS_ARTIFACT_PATH: /models/newslens-fallback-0.3.0
+    volumes:
+      - ./artifacts/newslens-fallback-0.3.0:/models/newslens-fallback-0.3.0:ro
+    init: true
