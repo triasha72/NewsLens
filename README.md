@@ -391,6 +391,25 @@ python -m newslens export-training-features \
   --output reports/article_training_features.csv
 ```
 
+#### Verified MIND-small training warehouse
+
+A local end-to-end materialization of the licensed MIND-small training split
+produced the following SQL-queryable warehouse:
+
+| Entity | Rows |
+|---|---:|
+| Articles | 51,282 |
+| Behavior events | 156,965 |
+| Users | 50,000 |
+| Ordered history events | 5,107,639 |
+| Candidate interactions | 5,843,444 |
+| Clicked candidate interactions | 236,344 |
+
+The persisted event window runs from `2019-11-09T00:00:19` through
+`2019-11-14T23:59:13` under warehouse schema version `1.0.0`. These counts are
+reported by SQL from the generated database; the database itself remains a
+local, ignored derivative of licensed data.
+
 The generated database is derived from licensed data and is intentionally ignored
 by Git. Feature timestamps use an exclusive cutoff. Direct SQL examples are in
 [`docs/DATA_WAREHOUSE.md`](docs/DATA_WAREHOUSE.md).

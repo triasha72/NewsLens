@@ -2,11 +2,11 @@
 
 NewsLens began as an investigation into a deceptively simple problem: evaluating a news recommender without letting future behavior influence past recommendations. Each later component was added because an earlier result raised another question.
 
-The current release is `v0.3.0`. The main branch now also includes a normalized
-DuckDB analytical layer under active development alongside the leakage-aware
-evaluation, TF-IDF history model with training-only popularity fallback,
-uncertainty analysis, versioned artifacts, FastAPI inference, observability,
-Docker deployment, CI, and multi-platform container publishing.
+The current release is `v0.3.0`. The main branch now also includes a verified
+normalized DuckDB analytical layer alongside the leakage-aware evaluation,
+TF-IDF history model with training-only popularity fallback, uncertainty
+analysis, versioned artifacts, FastAPI inference, observability, Docker
+deployment, CI, and multi-platform container publishing.
 
 This roadmap records questions worth testing next. It is intentionally not a list of technologies to add for their own sake.
 
@@ -45,6 +45,13 @@ articles, impressions, ordered histories, and candidate interactions. The build
 records source SHA-256 digests, replaces databases atomically, exposes a persisted
 SQL engagement view, and produces pre-cutoff article features without using
 validation-time events.
+
+The verified MIND-small training build contains 51,282 articles, 156,965
+behavior events from 50,000 users, 5,107,639 ordered history events, and
+5,843,444 candidate interactions, including 236,344 clicks. The database spans
+`2019-11-09T00:00:19` through `2019-11-14T23:59:13` and uses schema version
+`1.0.0`. The generated database remains excluded from Git as a derivative of
+licensed data.
 
 Detailed evidence is recorded in:
 

@@ -61,6 +61,26 @@ The JSON summary is computed with SQL and includes the number of articles,
 impressions, users, history events, candidate interactions, clicks, and the
 observed time range.
 
+### Verified MIND-small training build
+
+The complete MIND-small training split was materialized locally and summarized
+through the command above:
+
+| Warehouse measure | Verified result |
+|---|---:|
+| Schema version | `1.0.0` |
+| Articles | 51,282 |
+| Behavior events | 156,965 |
+| Users | 50,000 |
+| Ordered history events | 5,107,639 |
+| Candidate interactions | 5,843,444 |
+| Clicks | 236,344 |
+
+The earliest stored behavior timestamp is `2019-11-09T00:00:19`, and the latest
+is `2019-11-14T23:59:13`. The generated database is not distributed because it
+is derived from licensed MIND data; the commands, schema, tests, and verified
+aggregate results are reproducible by users with authorized dataset access.
+
 ## Query it directly with SQL
 
 The DuckDB Python client can execute ad hoc queries without a separate server:
