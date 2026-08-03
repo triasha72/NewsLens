@@ -2,7 +2,11 @@
 
 NewsLens began as an investigation into a deceptively simple problem: evaluating a news recommender without letting future behavior influence past recommendations. Each later component was added because an earlier result raised another question.
 
-The current release is `v0.3.0`. It includes a leakage-aware offline evaluation, a TF-IDF history model with a training-only popularity fallback, uncertainty and diagnostic analysis, versioned model artifacts, a FastAPI inference service, observability, Docker deployment, CI, and multi-platform container publishing.
+The current release is `v0.3.0`. The main branch now also includes a normalized
+DuckDB analytical layer under active development alongside the leakage-aware
+evaluation, TF-IDF history model with training-only popularity fallback,
+uncertainty analysis, versioned artifacts, FastAPI inference, observability,
+Docker deployment, CI, and multi-platform container publishing.
 
 This roadmap records questions worth testing next. It is intentionally not a list of technologies to add for their own sake.
 
@@ -34,12 +38,21 @@ Paired bootstrap intervals favor the fallback system over content-only ranking f
 
 The selected model can be exported as a versioned, checksummed artifact, loaded by a typed API, mounted read-only into a non-root container, validated in CI, and published for both `linux/amd64` and `linux/arm64`.
 
+### Reproducible analytical data
+
+Validated MIND records can be materialized into normalized DuckDB tables for
+articles, impressions, ordered histories, and candidate interactions. The build
+records source SHA-256 digests, replaces databases atomically, exposes a persisted
+SQL engagement view, and produces pre-cutoff article features without using
+validation-time events.
+
 Detailed evidence is recorded in:
 
 - [`docs/EVALUATION.md`](docs/EVALUATION.md)
 - [`docs/DECISIONS.md`](docs/DECISIONS.md)
 - [`docs/API.md`](docs/API.md)
 - [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
+- [`docs/DATA_WAREHOUSE.md`](docs/DATA_WAREHOUSE.md)
 - [`docs/RESEARCH_QUESTIONS.md`](docs/RESEARCH_QUESTIONS.md)
 - [`reports/fallback_metrics.json`](reports/fallback_metrics.json)
 
@@ -64,6 +77,13 @@ No. Cold-start histories are weaker than longer histories, and performance varie
 ### Can the fitted behavior be reproduced outside the evaluation script?
 
 Yes. The artifact contract records configuration and metadata, verifies file integrity, and reproduces model-backed API rankings after load.
+
+### Can the raw interaction structure be queried without repeating TSV parsing?
+
+Yes. The DuckDB warehouse provides a versioned relational schema, SQL-derived
+summaries, and cutoff-aware feature export. It remains a local analytical layer;
+a shared PostgreSQL service or online feature store would require a distinct use
+case and operational design.
 
 ## Next investigations
 
@@ -154,6 +174,9 @@ Content and popularity scores must remain separate unless a defensible calibrati
 - publish the hardware and workload used for every benchmark; and
 - define thresholds before optimizing.
 
+The same investigation should benchmark warehouse build time, database size, and
+representative analytical queries before considering a shared PostgreSQL backend.
+
 ### 7. Online-experiment design
 
 **Question:** What evidence would be needed before claiming user or product impact?
@@ -189,9 +212,10 @@ Negative results should be retained when they change the understanding of the pr
 ## Constraints
 
 - Raw licensed MIND data is never committed or copied into published images.
+- DuckDB database files and exported warehouse features derived from licensed
+  records are never committed or copied into published images.
 - Generated model artifacts remain outside Git.
 - The official development split stays untouched until a written holdout protocol is frozen.
 - New models do not get a different split, catalog, candidate policy, or metric implementation merely because it improves their score.
 - Checksums detect corruption; they do not make untrusted pickle-compatible artifacts safe.
 - A passing test suite and a healthy container do not establish production impact.
-

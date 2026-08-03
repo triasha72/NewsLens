@@ -9,7 +9,14 @@ from pathlib import Path
 
 from . import __version__
 from .artifacts import export_fallback_artifact
-from .data import audit_dataset, load_behaviors, load_news
+from .data import (
+    article_training_features,
+    audit_dataset,
+    build_mind_warehouse_from_paths,
+    load_behaviors,
+    load_news,
+    summarize_warehouse,
+)
 from .evaluation import (
     evaluate_content_baseline,
     evaluate_fallback_baseline,
@@ -208,6 +215,56 @@ def _run_model_export(
     print(f"Model artifact written to {result.path}")
 
 
+def _run_warehouse_build(
+    data_dir: Path,
+    split: str,
+    output: Path,
+    overwrite: bool,
+) -> None:
+    split_directory = {
+        "train": "MINDsmall_train",
+        "dev": "MINDsmall_dev",
+    }[split]
+    split_path = data_dir / split_directory
+
+    result = build_mind_warehouse_from_paths(
+        split_path / "news.tsv",
+        split_path / "behaviors.tsv",
+        output,
+        split=split,
+        overwrite=overwrite,
+    )
+    print(json.dumps(result.to_dict(), indent=2, sort_keys=True))
+    print(f"DuckDB warehouse written to {output}")
+
+
+def _run_warehouse_summary(database: Path) -> None:
+    summary = summarize_warehouse(database)
+    print(json.dumps(summary.to_dict(), indent=2, sort_keys=True))
+
+
+def _run_training_feature_export(
+    database: Path,
+    cutoff_timestamp: str,
+    output: Path,
+) -> None:
+    features = article_training_features(database, cutoff_timestamp)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    features.to_csv(output, index=False)
+    print(
+        json.dumps(
+            {
+                "cutoff_timestamp": cutoff_timestamp,
+                "feature_rows": len(features),
+                "output": str(output),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    print(f"Leakage-safe SQL feature snapshot written to {output}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Create the NewsLens command-line parser."""
 
@@ -394,6 +451,62 @@ def build_parser() -> argparse.ArgumentParser:
         help="Maximum TF-IDF vocabulary size.",
     )
 
+    warehouse_parser = subparsers.add_parser(
+        "build-warehouse",
+        help=("Validate a MIND-small split and materialize it in normalized DuckDB tables."),
+    )
+    warehouse_parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path("data"),
+        help=("Directory containing the extracted MIND-small folders."),
+    )
+    warehouse_parser.add_argument(
+        "--split",
+        choices=("train", "dev"),
+        default="train",
+    )
+    warehouse_parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("warehouses/mindsmall_train.duckdb"),
+    )
+    warehouse_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Atomically replace an existing warehouse after a successful rebuild.",
+    )
+
+    warehouse_summary_parser = subparsers.add_parser(
+        "warehouse-summary",
+        help="Report row counts and temporal coverage from a NewsLens DuckDB warehouse.",
+    )
+    warehouse_summary_parser.add_argument(
+        "--database",
+        type=Path,
+        default=Path("warehouses/mindsmall_train.duckdb"),
+    )
+
+    feature_parser = subparsers.add_parser(
+        "export-training-features",
+        help="Export article engagement features computed before a timestamp cutoff.",
+    )
+    feature_parser.add_argument(
+        "--database",
+        type=Path,
+        default=Path("warehouses/mindsmall_train.duckdb"),
+    )
+    feature_parser.add_argument(
+        "--cutoff-timestamp",
+        required=True,
+        help="Exclusive ISO-8601 cutoff applied to behavior timestamps.",
+    )
+    feature_parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("reports/article_training_features.csv"),
+    )
+
     return parser
 
 
@@ -453,6 +566,27 @@ def main(
             args.artifact_version,
             args.k,
             args.max_features,
+        )
+        return
+
+    if args.command == "build-warehouse":
+        _run_warehouse_build(
+            args.data_dir,
+            args.split,
+            args.output,
+            args.overwrite,
+        )
+        return
+
+    if args.command == "warehouse-summary":
+        _run_warehouse_summary(args.database)
+        return
+
+    if args.command == "export-training-features":
+        _run_training_feature_export(
+            args.database,
+            args.cutoff_timestamp,
+            args.output,
         )
         return
 
