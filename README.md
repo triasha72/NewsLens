@@ -17,6 +17,7 @@ It grew into a leakage-aware news search and recommendation system built on the 
 NewsLens currently includes:
 
 - validated MIND-small ingestion and dataset auditing;
+- a normalized DuckDB warehouse with SQL audit and feature queries;
 - leakage-safe chronological training and validation;
 - TF-IDF article search and user-history recommendation;
 - a training-only popularity baseline;
@@ -54,12 +55,14 @@ The current implementation is one evidence-backed answer to those questions, not
 ```mermaid
 flowchart TD
     A["Licensed MIND-small data"] --> B["Validated ingestion and audit"]
-    B --> C["Leakage-safe chronological split"]
-    C --> D["Popularity and TF-IDF models"]
-    D --> E["Offline evaluation and diagnostics"]
-    E --> F["Versioned model artifact"]
-    F --> G["FastAPI recommendation service"]
-    G --> H["Docker and GitHub Container Registry"]
+    B --> C["Normalized DuckDB warehouse and SQL features"]
+    B --> D["Leakage-safe chronological split"]
+    C --> D
+    D --> E["Popularity and TF-IDF models"]
+    E --> F["Offline evaluation and diagnostics"]
+    F --> G["Versioned model artifact"]
+    G --> H["FastAPI recommendation service"]
+    H --> I["Docker and GitHub Container Registry"]
 ```
 
 The selected model uses TF-IDF content recommendations when the user history produces a positive similarity signal. Cold-start and zero-signal requests are routed to a popularity model trained only on the appropriate training partition.
@@ -228,6 +231,20 @@ Full results are available in:
 - reproducible train and development audit reports; and
 - exclusion of licensed raw data from Git and Docker images.
 
+### DuckDB analytical warehouse
+
+- normalized `articles`, `behavior_events`, `user_history`, and
+  `candidate_interactions` tables;
+- relational primary-key and reference validation;
+- source-file SHA-256 provenance and schema metadata;
+- atomic, failure-safe warehouse replacement;
+- a persisted SQL article-engagement view;
+- SQL-derived warehouse summaries; and
+- cutoff-aware article feature extraction that excludes validation-time events.
+
+See [`docs/DATA_WAREHOUSE.md`](docs/DATA_WAREHOUSE.md) for the schema, query
+examples, and scope of the data layer.
+
 ### Search and recommendation
 
 - training-only popularity ranking;
@@ -356,6 +373,27 @@ data/
 Dataset archives, raw records, and embeddings must not be committed to this repository.
 
 ## Command-line workflows
+
+### Build and query the DuckDB warehouse
+
+```bash
+python -m newslens build-warehouse \
+  --data-dir data \
+  --split train \
+  --output warehouses/mindsmall_train.duckdb
+
+python -m newslens warehouse-summary \
+  --database warehouses/mindsmall_train.duckdb
+
+python -m newslens export-training-features \
+  --database warehouses/mindsmall_train.duckdb \
+  --cutoff-timestamp 2019-11-13T20:36:26 \
+  --output reports/article_training_features.csv
+```
+
+The generated database is derived from licensed data and is intentionally ignored
+by Git. Feature timestamps use an exclusive cutoff. Direct SQL examples are in
+[`docs/DATA_WAREHOUSE.md`](docs/DATA_WAREHOUSE.md).
 
 ### Audit the dataset
 
@@ -582,6 +620,7 @@ NewsLens/
 ├── docs/
 │   ├── API.md
 │   ├── BASELINES.md
+│   ├── DATA_WAREHOUSE.md
 │   ├── DECISIONS.md
 │   ├── DEPLOYMENT.md
 │   ├── EVALUATION.md
@@ -609,7 +648,10 @@ NewsLens/
 │       │   └── storage.py
 │       ├── data/
 │       │   ├── audit.py
-│       │   └── mind.py
+│       │   ├── mind.py
+│       │   ├── warehouse.py
+│       │   └── sql/
+│       │       └── warehouse_schema.sql
 │       ├── evaluation/
 │       │   ├── categories.py
 │       │   ├── comparison.py
@@ -672,6 +714,7 @@ git diff --check
 The automated suite covers:
 
 - data parsing and schema validation;
+- DuckDB schema materialization, SQL summaries, and leakage-safe feature export;
 - deterministic dataset auditing;
 - chronological splitting and temporal-leakage prevention;
 - search, popularity, content, and fallback recommendation;
@@ -708,6 +751,8 @@ Tagged releases also publish multi-platform images to GitHub Container Registry.
 - Category and exposure cohorts can overlap.
 - Subgroup-specific confidence intervals are not currently reported.
 - The published container does not include the licensed dataset or generated model artifact.
+- The DuckDB layer is a local analytical batch database, not a hosted PostgreSQL
+  service, streaming ingestion system, or online feature store.
 - Request logs and latency headers provide service-level observability, but there is no external metrics store or alerting system.
 - A versioned container is published, but NewsLens is not operated as a public, always-on hosted service.
 - No online experiment has been conducted.
