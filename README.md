@@ -6,9 +6,9 @@
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-NewsLens is a leakage-aware news search and recommendation system built using the Microsoft MIND news-recommendation dataset.
+NewsLens began with a simple question: how much of a news recommender's apparent quality survives once recommendations are evaluated in the order they could actually have been made?
 
-It demonstrates an end-to-end machine-learning engineering workflow: validated data ingestion, temporal splitting, reproducible model evaluation, uncertainty analysis, versioned model artifacts, FastAPI inference, observability, containerization, CI/CD, and multi-platform container publishing.
+It grew into a leakage-aware news search and recommendation system built on the Microsoft MIND news-recommendation dataset. The project follows several connected questions—temporal leakage, sparse histories, cold-start routing, incompatible score scales, and reproducible serving—from raw records to a tested API and published container.
 
 ## Project status
 
@@ -34,26 +34,20 @@ NewsLens currently includes:
 
 The repository contains more than 400 automated tests.
 
-## Why this project
+## Questions that shaped NewsLens
 
-NewsLens is designed as a portfolio-grade example of full-lifecycle ML engineering.
+The system was not designed from a predetermined architecture checklist. Its components were added as earlier experiments exposed new questions:
 
-It demonstrates:
+- What changes when news interactions are split chronologically instead of randomly?
+- How far can lexical article similarity go before a more complex representation is justified?
+- What should happen when a user has no usable history or the content model has no positive signal?
+- Can a fallback recover abstentions without leaking validation information?
+- Are observed metric differences stable under paired resampling?
+- Where does the model behave differently across history length, category, and training exposure?
+- What information must be preserved to reproduce exactly the same rankings outside the training process?
+- How should liveness, readiness, integrity checks, and observability behave when that model is served?
 
-- rigorous preprocessing and input validation;
-- prevention of temporal data leakage;
-- model-independent ranking metrics;
-- reproducible experiment configuration;
-- explicit cold-start behavior;
-- statistical comparison of candidate models;
-- failure and subgroup analysis;
-- production-style Python package design;
-- unit and integration testing;
-- model serialization and integrity verification;
-- typed REST API development;
-- service readiness and observability;
-- containerization and CI/CD; and
-- careful documentation of limitations and non-claims.
+The current implementation is one evidence-backed answer to those questions, not a claim that news recommendation is solved. Open questions and proposed follow-up experiments are tracked in [`docs/RESEARCH_QUESTIONS.md`](docs/RESEARCH_QUESTIONS.md) and [`ROADMAP.md`](ROADMAP.md).
 
 ## System architecture
 
@@ -591,8 +585,7 @@ NewsLens/
 │   ├── DECISIONS.md
 │   ├── DEPLOYMENT.md
 │   ├── EVALUATION.md
-│   ├── INTERVIEW_NOTES.md
-│   └── LEARNING_LOG.md
+│   └── RESEARCH_QUESTIONS.md
 ├── reports/
 │   ├── content_metrics.json
 │   ├── fallback_metrics.json
