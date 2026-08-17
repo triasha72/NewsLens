@@ -1,5 +1,6 @@
 """Recommendation and search models for NewsLens."""
 
+from .base import Recommendation, RecommendationModel
 from .content import (
     ColdStartUserError,
     ContentBasedRecommender,
@@ -42,6 +43,8 @@ __all__ = [
     "PopularityModelNotFittedError",
     "PopularityRecommender",
     "PopularityStatistics",
+    "Recommendation",
+    "RecommendationModel",
     "RecommendationSource",
     "TfidfArticleSearch",
 ]

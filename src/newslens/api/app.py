@@ -37,6 +37,7 @@ from .schemas import (
 from .settings import ApiSettings
 
 SERVICE_NAME = "newslens"
+# TODO(newslens-v0.4): serve RecommendationModel-compatible artifacts generically.
 MODEL_NAME = "tfidf_content_with_popularity_fallback"
 RANKING_CUTOFF = 10
 
