@@ -21,3 +21,6 @@ data/*
 .DS_Store
 .idea/
 .vscode/
+
+# Phase 04 local retrieval artifacts
+artifacts/retrieval/
