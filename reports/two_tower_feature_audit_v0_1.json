@@ -1,0 +1,56 @@
+{
+  "encoder": {
+    "fit_article_count": 47367,
+    "indexed_article_count": 51282,
+    "max_features": 50000,
+    "nonzero_article_count": 51282,
+    "nonzero_article_fraction": 1.0,
+    "svd_components": 256,
+    "svd_explained_variance_ratio_sum": 0.15357468327008522,
+    "tfidf_vocabulary_size": 50000,
+    "zero_article_count": 0
+  },
+  "experiment": "phase03_two_tower_feature_coverage_audit",
+  "history_coverage": {
+    "history_occurrences": 1039295,
+    "impressions_with_history": 30592,
+    "impressions_with_usable_history": 30592,
+    "supported_history_fraction": 1.0,
+    "supported_history_occurrences": 1039295,
+    "usable_history_fraction_among_nonempty": 1.0
+  },
+  "non_fit_article_coverage": {
+    "candidate_occurrences": 375506,
+    "clicked_occurrences": 17949,
+    "supported_candidate_fraction": 1.0,
+    "supported_candidate_occurrences": 375506,
+    "supported_clicked_fraction": 1.0,
+    "supported_clicked_occurrences": 17949,
+    "unique_not_fit_validation_candidates": 3404
+  },
+  "protocol": {
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "dataset": "MINDsmall_train",
+    "k": 10,
+    "official_dev_used": false,
+    "seed": 42,
+    "training_impressions": 125572,
+    "validation_fraction": 0.2,
+    "validation_impressions": 31393
+  },
+  "validation_candidate_coverage": {
+    "candidate_occurrences": 1264253,
+    "impressions_with_all_candidate_support": 31393,
+    "impressions_with_any_candidate_support": 31393,
+    "impressions_with_at_least_k_supported": 31393,
+    "supported_candidate_fraction": 1.0,
+    "supported_candidate_occurrences": 1264253,
+    "unique_validation_candidates": 6293,
+    "zero_supported_candidate_impressions": 0
+  },
+  "validation_click_coverage": {
+    "clicked_occurrences": 48488,
+    "supported_clicked_fraction": 1.0,
+    "supported_clicked_occurrences": 48488
+  }
+}
