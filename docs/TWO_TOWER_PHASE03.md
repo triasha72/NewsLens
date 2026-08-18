@@ -547,3 +547,76 @@ the Phase 03 model is frozen.
 
 No additional two-tower architecture or hyperparameter tuning will be
 performed.
+
+## Phase 03F: Direct v0.2 versus v0.1 comparison
+
+The final Phase 03 experiment directly compares the original two-tower
+checkpoint against the same-impression hard-negative checkpoint using the
+same 31,393 chronological validation impressions.
+
+Configuration parity was verified before comparison:
+
+- network configuration: identical;
+- article-feature configuration: identical;
+- maximum history length: identical.
+
+The two versions therefore differ in the intended training-objective
+intervention rather than network capacity or feature representation.
+
+### Final paired result
+
+| Model | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 |
+|---|---:|---:|---:|---:|
+| v0.1 two-tower + popularity | 0.364966 | 0.311884 | 0.603411 | 0.684261 |
+| v0.2 hard-negative two-tower + popularity | 0.372602 | 0.319438 | 0.614151 | 0.696588 |
+
+Paired bootstrap, v0.2 minus v0.1:
+
+- NDCG@10: +0.007636,
+  95% CI [+0.006211, +0.009164];
+- MRR@10: +0.007554,
+  95% CI [+0.005480, +0.009474];
+- Recall@10: +0.010740,
+  95% CI [+0.008091, +0.013348];
+- Hit Rate@10: +0.012328,
+  95% CI [+0.009301, +0.015450].
+
+All four paired intervals are entirely above zero.
+
+The two versions produce different top-k rankings on 28,026 of the 31,393
+validation impressions.
+
+### Diversity / coverage observation
+
+The hard-negative model improves ranking metrics while slightly reducing
+catalog exposure:
+
+- v0.1 catalog coverage@10: 0.076206;
+- v0.2 catalog coverage@10: 0.074900;
+- v0.1 unique recommended articles: 3,908;
+- v0.2 unique recommended articles: 3,841.
+
+This tradeoff is recorded rather than optimized during Phase 03. Exposure and
+diversity behavior are handled in a later dedicated phase.
+
+### Phase 03 model selection
+
+**Selected model: v0.2 same-impression hard-negative two-tower with
+popularity fallback for empty-history users.**
+
+The selection is based on:
+
+1. complete train-fitted content representation coverage on chronological
+   validation candidates;
+2. statistically supported improvements over v0.1 on NDCG, MRR, Recall, and
+   Hit Rate;
+3. statistically supported improvements over Content + popularity fallback
+   on NDCG, Recall, and Hit Rate;
+4. deterministic training/evaluation protocol and artifact SHA verification;
+5. no architecture or hyperparameter changes after the bounded objective
+   ablation.
+
+No additional Phase 03 tuning will be performed.
+
+Phase 04 moves the frozen v0.2 retrieval representation into an explicit
+vector-index candidate-retrieval system.

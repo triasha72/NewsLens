@@ -1,0 +1,121 @@
+{
+  "accounting": {
+    "changed_rankings": 28026,
+    "v0_1": {
+      "popularity_fallback_impressions": 801,
+      "raw_ranked_impressions": 30592,
+      "truncated_history_impressions": 15205
+    },
+    "v0_2": {
+      "popularity_fallback_impressions": 801,
+      "raw_ranked_impressions": 30592,
+      "truncated_history_impressions": 15205
+    }
+  },
+  "checkpoints": {
+    "v0_1_sha256": "11fd97c2b8a826de0c8d29c38b2a736935516c7d493ac3e87e460d384db3363c",
+    "v0_2_sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8"
+  },
+  "comparison": {
+    "baseline_model_name": "two_tower_v0_1",
+    "bootstrap_samples": 1000,
+    "candidate_model_name": "hard_negative_two_tower_v0_2",
+    "confidence_level": 0.95,
+    "difference_direction": "candidate_minus_baseline",
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 31393,
+    "k": 10,
+    "method": "paired_nonparametric_percentile_bootstrap",
+    "metrics": {
+      "hit_rate_at_k": {
+        "baseline_estimate": 0.6842608224763482,
+        "candidate_estimate": 0.6965884114292995,
+        "excludes_zero": true,
+        "lower_bound": 0.009300640270123915,
+        "point_difference": 0.012327588952951274,
+        "standard_error": 0.0015652772185004251,
+        "upper_bound": 0.015450100340840314
+      },
+      "mrr_at_k": {
+        "baseline_estimate": 0.3118835889509288,
+        "candidate_estimate": 0.31943766909921784,
+        "excludes_zero": true,
+        "lower_bound": 0.005480048694001661,
+        "point_difference": 0.007554080148289011,
+        "standard_error": 0.0010465532592944663,
+        "upper_bound": 0.009473932364863458
+      },
+      "ndcg_at_k": {
+        "baseline_estimate": 0.36496566651725626,
+        "candidate_estimate": 0.3726020882896977,
+        "excludes_zero": true,
+        "lower_bound": 0.006211174629632578,
+        "point_difference": 0.0076364217724414485,
+        "standard_error": 0.0007978579704128033,
+        "upper_bound": 0.009163775261684898
+      },
+      "recall_at_k": {
+        "baseline_estimate": 0.6034112930223494,
+        "candidate_estimate": 0.6141512395480533,
+        "excludes_zero": true,
+        "lower_bound": 0.008090898927011144,
+        "point_difference": 0.01073994652570387,
+        "standard_error": 0.001346794143956484,
+        "upper_bound": 0.013347615318489613
+      }
+    },
+    "random_seed": 42,
+    "resampling_unit": "aligned_evaluated_impression_pair",
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 31393
+  },
+  "configuration_parity": {
+    "feature_config_equal": true,
+    "max_history_length_equal": true,
+    "network_config_equal": true
+  },
+  "experiment": "phase03_direct_v02_vs_v01",
+  "metrics": {
+    "v0_1": {
+      "catalog_coverage_at_k": 0.07620607620607621,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "hit_rate_at_k": 0.6842608224763482,
+      "k": 10,
+      "mrr_at_k": 0.3118835889509288,
+      "ndcg_at_k": 0.36496566651725626,
+      "recall_at_k": 0.6034112930223494,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393,
+      "unique_recommended_items": 3908
+    },
+    "v0_2": {
+      "catalog_coverage_at_k": 0.0748995748995749,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "hit_rate_at_k": 0.6965884114292995,
+      "k": 10,
+      "mrr_at_k": 0.31943766909921784,
+      "ndcg_at_k": 0.3726020882896977,
+      "recall_at_k": 0.6141512395480533,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393,
+      "unique_recommended_items": 3841
+    }
+  },
+  "protocol": {
+    "bootstrap_samples": 1000,
+    "confidence_level": 0.95,
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "dataset": "MINDsmall_train",
+    "k": 10,
+    "official_dev_used": false,
+    "previously_exposed_dev_used": false,
+    "seed": 42,
+    "validation_impressions": 31393
+  }
+}
