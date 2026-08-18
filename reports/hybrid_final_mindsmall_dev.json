@@ -1,0 +1,154 @@
+{
+  "baseline_metrics": {
+    "catalog_coverage_at_k": 0.05415555351175695,
+    "catalog_size": 65238,
+    "empty_ranking_impressions": 0,
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 73152,
+    "hit_rate_at_k": 0.7004319772528433,
+    "k": 10,
+    "mrr_at_k": 0.32324406714785653,
+    "ndcg_at_k": 0.3793856558264621,
+    "recall_at_k": 0.6242210682303422,
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 73152,
+    "unique_recommended_items": 3533
+  },
+  "data": {
+    "combined_catalog_size": 65238,
+    "dev_only_articles": 13956,
+    "dev_zip_sha256": "d6ce515dcaa6b6d47ddf0a326eebc8a31b84735ae410285c9882ca2a06eec669",
+    "evaluation_source": "MINDsmall_dev",
+    "holdout_behaviors": 73152,
+    "holdout_news": 42416,
+    "training_behaviors": 156965,
+    "training_news": 51282,
+    "training_source": "MINDsmall_train"
+  },
+  "evaluation_status": {
+    "architecture_frozen_before_holdout": true,
+    "hyperparameter_tuning_on_dev": false,
+    "official_dev_evaluation_number": 1,
+    "post_holdout_tuning_permitted": false,
+    "pre_holdout_commit": "4d0b493"
+  },
+  "experiment": "phase02_final_mindsmall_dev_holdout",
+  "frozen_configuration": {
+    "batch_size": 2048,
+    "bootstrap_samples": 1000,
+    "collaborative_weight": 0.2,
+    "confidence_level": 0.95,
+    "embedding_dim": 64,
+    "epochs": 10,
+    "k": 10,
+    "learning_rate": 0.01,
+    "max_features": 50000,
+    "max_negatives_per_positive": 3,
+    "minimum_supported_candidates": 10,
+    "seed": 42,
+    "weight_decay": 1e-06
+  },
+  "gate_accounting": {
+    "candidate_occurrences": 2740998,
+    "changed_rankings": 4207,
+    "content_topk_occurrences": 605693,
+    "gate_closed_impressions": 68583,
+    "gate_open_fraction": 0.06245898950131234,
+    "gate_open_impressions": 4569,
+    "hybrid_topk_occurrences": 27507,
+    "popularity_topk_occurrences": 20458,
+    "supported_candidate_fraction": 0.06318428543180257,
+    "supported_candidate_occurrences": 173188
+  },
+  "holdout_conclusion": {
+    "ndcg_95pct_interval_entirely_positive": false,
+    "ndcg_direction_matches_internal_validation": true,
+    "no_post_holdout_tuning": true
+  },
+  "hybrid_metrics": {
+    "catalog_coverage_at_k": 0.05412489653269567,
+    "catalog_size": 65238,
+    "empty_ranking_impressions": 0,
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 73152,
+    "hit_rate_at_k": 0.7005823490813649,
+    "k": 10,
+    "mrr_at_k": 0.3232539780183727,
+    "ndcg_at_k": 0.37942609855237197,
+    "recall_at_k": 0.6243502024791862,
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 73152,
+    "unique_recommended_items": 3531
+  },
+  "information_boundary": {
+    "bpr_fit_source": "MINDsmall_train warehouse only",
+    "dev_article_text_usage": "transformed using frozen train-fitted TF-IDF vectorizer",
+    "dev_behavior_usage": "evaluation only",
+    "popularity_fit_source": "MINDsmall_train behaviors only",
+    "tfidf_fit_source": "train-referenced article text only"
+  },
+  "paired_comparison": {
+    "baseline_model_name": "content_popularity_fallback",
+    "bootstrap_samples": 1000,
+    "candidate_model_name": "frozen_support_gated_hybrid",
+    "confidence_level": 0.95,
+    "difference_direction": "candidate_minus_baseline",
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 73152,
+    "k": 10,
+    "method": "paired_nonparametric_percentile_bootstrap",
+    "metrics": {
+      "hit_rate_at_k": {
+        "baseline_estimate": 0.7004319772528433,
+        "candidate_estimate": 0.7005823490813649,
+        "excludes_zero": false,
+        "lower_bound": -0.00020539424759405042,
+        "point_difference": 0.00015037182852151165,
+        "standard_error": 0.0001816173470701313,
+        "upper_bound": 0.0005057961504811899
+      },
+      "mrr_at_k": {
+        "baseline_estimate": 0.32324406714785653,
+        "candidate_estimate": 0.3232539780183727,
+        "excludes_zero": false,
+        "lower_bound": -0.0001215223531086392,
+        "point_difference": 9.910870516161019e-06,
+        "standard_error": 6.193424047633433e-05,
+        "upper_bound": 0.00012233822334708165
+      },
+      "ndcg_at_k": {
+        "baseline_estimate": 0.3793856558264621,
+        "candidate_estimate": 0.37942609855237197,
+        "excludes_zero": false,
+        "lower_bound": -9.711529503597203e-05,
+        "point_difference": 4.044272590986164e-05,
+        "standard_error": 6.322518371911516e-05,
+        "upper_bound": 0.000160595058135961
+      },
+      "recall_at_k": {
+        "baseline_estimate": 0.6242210682303422,
+        "candidate_estimate": 0.6243502024791862,
+        "excludes_zero": false,
+        "lower_bound": -0.00019496396500784618,
+        "point_difference": 0.00012913424884397617,
+        "standard_error": 0.00015886069695447724,
+        "upper_bound": 0.00043057972245656793
+      }
+    },
+    "random_seed": 42,
+    "resampling_unit": "aligned_evaluated_impression_pair",
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 73152
+  },
+  "training_accounting": {
+    "bpr_exclusive_cutoff": "2019-11-14T23:59:13.000001",
+    "bpr_known_items": 12212,
+    "bpr_known_users": 50000,
+    "bpr_training_triples": 683919,
+    "tfidf_indexed_articles": 65238,
+    "tfidf_vocabulary_articles": 51282,
+    "tfidf_vocabulary_size": 50000,
+    "warehouse_behavior_count": 156965,
+    "warehouse_max_timestamp": "2019-11-14T23:59:13"
+  }
+}
