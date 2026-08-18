@@ -1,0 +1,94 @@
+{
+  "checkpoint": {
+    "path": "artifacts/two_tower_hard_negative_v0_2.pt",
+    "sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8"
+  },
+  "experiment": "phase03_two_tower_same_impression_hard_negatives",
+  "features": {
+    "fit_article_count": 47367,
+    "indexed_article_count": 51282,
+    "nonzero_article_count": 51282,
+    "svd_components": 256,
+    "tfidf_vocabulary_size": 50000
+  },
+  "network_config": {
+    "dropout": 0.1,
+    "embedding_dim": 64,
+    "hidden_dim": 128,
+    "input_dim": 256,
+    "temperature": 0.07
+  },
+  "protocol": {
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "dataset": "MINDsmall_train",
+    "hard_negative_sampling": "all",
+    "limited_training_run": false,
+    "max_training_examples": 0,
+    "objective": "in_batch_plus_all_same_impression_unclicked",
+    "official_dev_used": false,
+    "previously_exposed_dev_used": false,
+    "seed": 42,
+    "training_impressions": 125572,
+    "validation_impressions": 31393
+  },
+  "training_config": {
+    "batch_size": 128,
+    "device": "cpu",
+    "epochs": 3,
+    "gradient_clip_norm": 5.0,
+    "learning_rate": 0.001,
+    "objective": "in_batch_plus_all_same_impression_unclicked",
+    "seed": 42,
+    "weight_decay": 1e-05
+  },
+  "training_data": {
+    "attached_hard_negative_occurrences": 8420452,
+    "eligible_impressions": 123135,
+    "empty_history_impressions": 2437,
+    "examples_with_hard_negatives": 184282,
+    "examples_without_hard_negatives": 0,
+    "history_without_features_impressions": 0,
+    "input_impressions": 125572,
+    "positive_click_occurrences": 187856,
+    "positive_without_features": 0,
+    "skipped_positive_occurrences": 3574,
+    "truncated_history_impressions": 59343,
+    "unique_hard_negative_articles": 16661,
+    "unique_positive_articles": 6294,
+    "usable_example_count": 184282
+  },
+  "training_result": {
+    "device": "cpu",
+    "epochs": [
+      {
+        "average_loss": 4.732981915701176,
+        "batches": 1440,
+        "epoch": 1,
+        "examples_seen": 184282,
+        "hard_negative_occurrences_seen": 8420452,
+        "skipped_batches": 0,
+        "top1_accuracy": 0.03559219023019069
+      },
+      {
+        "average_loss": 4.688527636390824,
+        "batches": 1440,
+        "epoch": 2,
+        "examples_seen": 184282,
+        "hard_negative_occurrences_seen": 8420452,
+        "skipped_batches": 0,
+        "top1_accuracy": 0.04014499517044529
+      },
+      {
+        "average_loss": 4.673004410857637,
+        "batches": 1440,
+        "epoch": 3,
+        "examples_seen": 184282,
+        "hard_negative_occurrences_seen": 8420452,
+        "skipped_batches": 0,
+        "top1_accuracy": 0.042456669669311164
+      }
+    ],
+    "feature_dim": 256,
+    "training_examples": 184282
+  }
+}

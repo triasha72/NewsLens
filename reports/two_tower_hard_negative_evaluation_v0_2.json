@@ -1,0 +1,262 @@
+{
+  "accounting": {
+    "candidate_occurrences": 1264253,
+    "changed_vs_content_fallback": 29454,
+    "empty_history_impressions": 801,
+    "popularity_fallback_impressions": 801,
+    "raw_empty_impressions": 801,
+    "raw_ranked_fraction": 0.9744847577485427,
+    "raw_ranked_impressions": 30592,
+    "truncated_history_impressions": 15205,
+    "unusable_history_impressions": 0
+  },
+  "checkpoint": {
+    "network_config": {
+      "dropout": 0.1,
+      "embedding_dim": 64,
+      "hidden_dim": 128,
+      "input_dim": 256,
+      "temperature": 0.07
+    },
+    "sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8",
+    "training_config": {
+      "batch_size": 128,
+      "device": "cpu",
+      "epochs": 3,
+      "gradient_clip_norm": 5.0,
+      "learning_rate": 0.001,
+      "objective": "in_batch_plus_all_same_impression_unclicked",
+      "seed": 42,
+      "weight_decay": 1e-05
+    }
+  },
+  "comparisons": {
+    "raw_two_tower_vs_content_fallback": {
+      "baseline_model_name": "content_popularity_fallback",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "raw_two_tower",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.6762335552511707,
+          "candidate_estimate": 0.6812346701493963,
+          "excludes_zero": true,
+          "lower_bound": 0.00015767846335170406,
+          "point_difference": 0.005001114898225634,
+          "standard_error": 0.002594563380612612,
+          "upper_bound": 0.009780842863058642
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.31794652432374215,
+          "candidate_estimate": 0.31348173614682073,
+          "excludes_zero": true,
+          "lower_bound": -0.008338788055066328,
+          "point_difference": -0.004464788176921419,
+          "standard_error": 0.0019346417098466953,
+          "upper_bound": -0.0005889516240350936
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.3663605124218536,
+          "candidate_estimate": 0.365064844889504,
+          "excludes_zero": false,
+          "lower_bound": -0.004610505475973494,
+          "point_difference": -0.0012956675323495537,
+          "standard_error": 0.0016450798331643975,
+          "upper_bound": 0.0019159834315216932
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.5954741541538584,
+          "candidate_estimate": 0.6005283967244331,
+          "excludes_zero": true,
+          "lower_bound": 0.00036626696691042235,
+          "point_difference": 0.005054242570574741,
+          "standard_error": 0.002320613896322829,
+          "upper_bound": 0.009476290403754487
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393
+    },
+    "two_tower_fallback_vs_content_fallback": {
+      "baseline_model_name": "content_popularity_fallback",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "two_tower_popularity_fallback",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.6762335552511707,
+          "candidate_estimate": 0.6965884114292995,
+          "excludes_zero": true,
+          "lower_bound": 0.015544070334150928,
+          "point_difference": 0.020354856178128822,
+          "standard_error": 0.002495055387508953,
+          "upper_bound": 0.024943458732838528
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.31794652432374215,
+          "candidate_estimate": 0.31943766909921784,
+          "excludes_zero": false,
+          "lower_bound": -0.002282112924274368,
+          "point_difference": 0.0014911447754756835,
+          "standard_error": 0.0018994225234912445,
+          "upper_bound": 0.005179149418609638
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.3663605124218536,
+          "candidate_estimate": 0.3726020882896977,
+          "excludes_zero": true,
+          "lower_bound": 0.0031613139027265556,
+          "point_difference": 0.006241575867844129,
+          "standard_error": 0.0015936786233235643,
+          "upper_bound": 0.009405307614608727
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.5954741541538584,
+          "candidate_estimate": 0.6141512395480533,
+          "excludes_zero": true,
+          "lower_bound": 0.014384171078764647,
+          "point_difference": 0.01867708539419488,
+          "standard_error": 0.0022264747814690314,
+          "upper_bound": 0.02302390588703277
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393
+    },
+    "two_tower_fallback_vs_raw_two_tower": {
+      "baseline_model_name": "raw_two_tower",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "two_tower_popularity_fallback",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.6812346701493963,
+          "candidate_estimate": 0.6965884114292995,
+          "excludes_zero": true,
+          "lower_bound": 0.013984009174019686,
+          "point_difference": 0.015353741279903188,
+          "standard_error": 0.0007277123195079519,
+          "upper_bound": 0.016755327620807187
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.31348173614682073,
+          "candidate_estimate": 0.31943766909921784,
+          "excludes_zero": true,
+          "lower_bound": 0.005259201512924471,
+          "point_difference": 0.005955932952397103,
+          "standard_error": 0.0003472305109963628,
+          "upper_bound": 0.0066273655561673505
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.365064844889504,
+          "candidate_estimate": 0.3726020882896977,
+          "excludes_zero": true,
+          "lower_bound": 0.00673131320376173,
+          "point_difference": 0.007537243400193683,
+          "standard_error": 0.0003947198782265298,
+          "upper_bound": 0.008313744513728146
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.6005283967244331,
+          "candidate_estimate": 0.6141512395480533,
+          "excludes_zero": true,
+          "lower_bound": 0.012328305673239254,
+          "point_difference": 0.01362284282362014,
+          "standard_error": 0.0006709286776955504,
+          "upper_bound": 0.014986465742287102
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393
+    }
+  },
+  "experiment": "phase03_two_tower_chronological_evaluation",
+  "feature_reconstruction": {
+    "fit_article_count": 47367,
+    "indexed_article_count": 51282,
+    "nonzero_article_count": 51282,
+    "svd_components": 256,
+    "tfidf_vocabulary_size": 50000
+  },
+  "metrics": {
+    "content_popularity_fallback": {
+      "catalog_coverage_at_k": 0.07189657189657189,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "hit_rate_at_k": 0.6762335552511707,
+      "k": 10,
+      "mrr_at_k": 0.31794652432374215,
+      "ndcg_at_k": 0.3663605124218536,
+      "recall_at_k": 0.5954741541538584,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393,
+      "unique_recommended_items": 3687
+    },
+    "raw_two_tower": {
+      "catalog_coverage_at_k": 0.07474357474357475,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 801,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "hit_rate_at_k": 0.6812346701493963,
+      "k": 10,
+      "mrr_at_k": 0.31348173614682073,
+      "ndcg_at_k": 0.365064844889504,
+      "recall_at_k": 0.6005283967244331,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393,
+      "unique_recommended_items": 3833
+    },
+    "two_tower_popularity_fallback": {
+      "catalog_coverage_at_k": 0.0748995748995749,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "hit_rate_at_k": 0.6965884114292995,
+      "k": 10,
+      "mrr_at_k": 0.31943766909921784,
+      "ndcg_at_k": 0.3726020882896977,
+      "recall_at_k": 0.6141512395480533,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393,
+      "unique_recommended_items": 3841
+    }
+  },
+  "protocol": {
+    "bootstrap_samples": 1000,
+    "confidence_level": 0.95,
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "dataset": "MINDsmall_train",
+    "k": 10,
+    "max_history_length": 20,
+    "official_dev_used": false,
+    "previously_exposed_dev_used": false,
+    "seed": 42,
+    "training_impressions": 125572,
+    "validation_impressions": 31393
+  }
+}
