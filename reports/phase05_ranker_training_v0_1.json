@@ -1,0 +1,71 @@
+{
+  "artifact": {
+    "path": "artifacts/ranker/second_stage_ranker_v0_1.joblib",
+    "sha256": "bd4176eb03a7749cc19c3866a242db75d3674baf212f17df685faa846356312a"
+  },
+  "diagnostics": {
+    "score_maximum": 0.8181676086372969,
+    "score_mean": 0.17317481768462226,
+    "score_minimum": 0.025104870519353308,
+    "training_log_loss": 0.41852977288763926,
+    "training_roc_auc": 0.7089043109733477
+  },
+  "experiment": "phase05_second_stage_ranker_training",
+  "feature_names": [
+    "two_tower_score",
+    "mean_history_similarity",
+    "max_history_similarity",
+    "log1p_popularity_clicks",
+    "log1p_popularity_exposures",
+    "popularity_ctr",
+    "category_match_any",
+    "subcategory_match_any",
+    "category_history_fraction",
+    "subcategory_history_fraction",
+    "usable_history_length"
+  ],
+  "frozen_inputs": {
+    "phase03_checkpoint_sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8",
+    "phase04_catalog_sha256": "5aae2f910298fc078d7085fd8e4f63e703610def3cfa37ab07c2562d2320f607",
+    "phase05_audit_report": "reports/phase05_ranker_data_audit_v0_1.json"
+  },
+  "model_config": {
+    "l2_regularization": 0.001,
+    "learning_rate": 0.05,
+    "max_iter": 200,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 50,
+    "seed": 42
+  },
+  "protocol": {
+    "dataset": "MINDsmall_train",
+    "limited_training_run": false,
+    "official_dev_used": false,
+    "phase03_cutoff": "2019-11-13T20:36:26",
+    "phase03_development_pool_impressions": 31393,
+    "phase03_training_impressions": 125572,
+    "ranker_cutoff": "2019-11-14T14:57:43",
+    "ranker_training_impressions": 25114,
+    "ranker_validation_fraction": 0.2,
+    "ranker_validation_impressions": 6279
+  },
+  "runtime_seconds": 2.447212375001982,
+  "training_matrix": {
+    "available_negative_rows": 969158,
+    "candidate_occurrences": 1033453,
+    "eligible_impressions": 24463,
+    "empty_history_impressions": 651,
+    "feature_count": 11,
+    "impressions_without_click": 0,
+    "input_impressions": 25114,
+    "limited_training_run": false,
+    "max_negatives_per_positive": 5,
+    "positive_fraction": 0.1731625255283404,
+    "positive_rows": 38240,
+    "selected_negative_rows": 182593,
+    "training_rows": 220833,
+    "truncated_history_impressions": 12295,
+    "unique_positive_articles": 1811,
+    "unsupported_history_impressions": 0
+  }
+}

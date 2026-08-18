@@ -1,0 +1,449 @@
+{
+  "accounting": {
+    "candidate_occurrences": 230800,
+    "changed_ranking_fraction": 0.9657588788023571,
+    "changed_rankings": 6064,
+    "popularity_fallback_impressions": 150,
+    "ranker_scored_impressions": 6129,
+    "truncated_history_impressions": 2910
+  },
+  "comparison": {
+    "baseline_model_name": "phase03_two_tower_popularity",
+    "bootstrap_samples": 1000,
+    "candidate_model_name": "phase05_second_stage_ranker",
+    "confidence_level": 0.95,
+    "difference_direction": "candidate_minus_baseline",
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 6279,
+    "k": 10,
+    "method": "paired_nonparametric_percentile_bootstrap",
+    "metrics": {
+      "hit_rate_at_k": {
+        "baseline_estimate": 0.7048893135849658,
+        "candidate_estimate": 0.5351170568561873,
+        "excludes_zero": true,
+        "lower_bound": -0.18363194776238254,
+        "point_difference": -0.1697722567287785,
+        "standard_error": 0.007398072456805687,
+        "upper_bound": -0.15479773849339068
+      },
+      "mrr_at_k": {
+        "baseline_estimate": 0.32451235789745103,
+        "candidate_estimate": 0.22731958632579752,
+        "excludes_zero": true,
+        "lower_bound": -0.10798840364834163,
+        "point_difference": -0.09719277157165351,
+        "standard_error": 0.00544814781425334,
+        "upper_bound": -0.0864300360612472
+      },
+      "ndcg_at_k": {
+        "baseline_estimate": 0.38260168891214524,
+        "candidate_estimate": 0.27503485879110284,
+        "excludes_zero": true,
+        "lower_bound": -0.1170596657432973,
+        "point_difference": -0.1075668301210424,
+        "standard_error": 0.005015163533339621,
+        "upper_bound": -0.09800847715568263
+      },
+      "recall_at_k": {
+        "baseline_estimate": 0.632202545114633,
+        "candidate_estimate": 0.4785527310013693,
+        "excludes_zero": true,
+        "lower_bound": -0.16728054845828366,
+        "point_difference": -0.15364981411326373,
+        "standard_error": 0.006819298809060322,
+        "upper_bound": -0.1398525523002947
+      }
+    },
+    "random_seed": 42,
+    "resampling_unit": "aligned_evaluated_impression_pair",
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 6279
+  },
+  "experiment": "phase05_second_stage_ranker_evaluation",
+  "frozen_inputs": {
+    "phase03_checkpoint_sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8",
+    "phase04_catalog_sha256": "5aae2f910298fc078d7085fd8e4f63e703610def3cfa37ab07c2562d2320f607",
+    "phase05_ranker_sha256": "bd4176eb03a7749cc19c3866a242db75d3674baf212f17df685faa846356312a"
+  },
+  "metrics": {
+    "catalog_coverage_point_delta": -0.008424008424008422,
+    "phase03_two_tower_popularity": {
+      "catalog_coverage_at_k": 0.03151203151203151,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 6279,
+      "hit_rate_at_k": 0.7048893135849658,
+      "k": 10,
+      "mrr_at_k": 0.32451235789745103,
+      "ndcg_at_k": 0.38260168891214524,
+      "recall_at_k": 0.632202545114633,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 6279,
+      "unique_recommended_items": 1616
+    },
+    "phase05_second_stage_ranker": {
+      "catalog_coverage_at_k": 0.023088023088023088,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 6279,
+      "hit_rate_at_k": 0.5351170568561873,
+      "k": 10,
+      "mrr_at_k": 0.22731958632579752,
+      "ndcg_at_k": 0.27503485879110284,
+      "recall_at_k": 0.4785527310013693,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 6279,
+      "unique_recommended_items": 1184
+    }
+  },
+  "protocol": {
+    "baseline_score": "raw_inner_product; ranking-equivalent to Phase-03 temperature-scaled score",
+    "bootstrap_samples": 1000,
+    "confidence_level": 0.95,
+    "dataset": "MINDsmall_train",
+    "k": 10,
+    "official_dev_used": false,
+    "phase03_cutoff": "2019-11-13T20:36:26",
+    "ranker_cutoff": "2019-11-14T14:57:43",
+    "ranker_validation_impressions": 6279,
+    "seed": 42
+  },
+  "selection": {
+    "guardrails_passed": false,
+    "hit_rate_not_significantly_worse": false,
+    "mrr_not_significantly_worse": false,
+    "ndcg_significantly_positive": false,
+    "reason": "Ranker does not satisfy the preregistered Phase-05 selection rule.",
+    "recall_not_significantly_worse": false,
+    "selected_model": "phase03_two_tower_popularity"
+  },
+  "subgroups": {
+    "candidate_count": {
+      "11_25": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.013903513903513904,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1619,
+          "hit_rate_at_k": 0.7893761581222977,
+          "k": 10,
+          "mrr_at_k": 0.3238406521760444,
+          "ndcg_at_k": 0.4108956765877889,
+          "recall_at_k": 0.7465565163681285,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1619,
+          "unique_recommended_items": 713
+        },
+        "impressions": 1619,
+        "point_delta": {
+          "catalog_coverage_at_k": -0.002398502398502398,
+          "hit_rate_at_k": -0.21124150710315004,
+          "mrr_at_k": -0.1393776287537869,
+          "ndcg_at_k": -0.15826161515161025,
+          "recall_at_k": -0.21961601811818
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.011505011505011506,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1619,
+          "hit_rate_at_k": 0.5781346510191476,
+          "k": 10,
+          "mrr_at_k": 0.1844630234222575,
+          "ndcg_at_k": 0.25263406143617867,
+          "recall_at_k": 0.5269404982499485,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1619,
+          "unique_recommended_items": 590
+        }
+      },
+      "26_50": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.018583518583518584,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1428,
+          "hit_rate_at_k": 0.5875350140056023,
+          "k": 10,
+          "mrr_at_k": 0.24108810190742963,
+          "ndcg_at_k": 0.27695754735107414,
+          "recall_at_k": 0.482128002716238,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1428,
+          "unique_recommended_items": 953
+        },
+        "impressions": 1428,
+        "point_delta": {
+          "catalog_coverage_at_k": -0.004621504621504622,
+          "hit_rate_at_k": -0.27030812324929976,
+          "mrr_at_k": -0.12065048241518829,
+          "ndcg_at_k": -0.14786312714352468,
+          "recall_at_k": -0.2519789734075448
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.013962013962013962,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1428,
+          "hit_rate_at_k": 0.3172268907563025,
+          "k": 10,
+          "mrr_at_k": 0.12043761949224134,
+          "ndcg_at_k": 0.12909442020754947,
+          "recall_at_k": 0.23014902930869316,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1428,
+          "unique_recommended_items": 716
+        }
+      },
+      "gt_50": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.025057525057525058,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1612,
+          "hit_rate_at_k": 0.4274193548387097,
+          "k": 10,
+          "mrr_at_k": 0.1724671609752255,
+          "ndcg_at_k": 0.1697488593432436,
+          "recall_at_k": 0.2806736928635192,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1612,
+          "unique_recommended_items": 1285
+        },
+        "impressions": 1612,
+        "point_delta": {
+          "catalog_coverage_at_k": -0.009243009243009245,
+          "hit_rate_at_k": -0.20967741935483872,
+          "mrr_at_k": -0.09107536728504471,
+          "ndcg_at_k": -0.09538329716923324,
+          "recall_at_k": -0.15470401703342151
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.015814515814515814,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1612,
+          "hit_rate_at_k": 0.21774193548387097,
+          "k": 10,
+          "mrr_at_k": 0.08139179369018078,
+          "ndcg_at_k": 0.07436556217401036,
+          "recall_at_k": 0.12596967583009766,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1612,
+          "unique_recommended_items": 811
+        }
+      },
+      "le_10": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.006103506103506104,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1620,
+          "hit_rate_at_k": 1.0,
+          "k": 10,
+          "mrr_at_k": 0.5500149421908681,
+          "ndcg_at_k": 0.6592502255586956,
+          "recall_at_k": 1.0,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1620,
+          "unique_recommended_items": 313
+        },
+        "impressions": 1620,
+        "point_delta": {
+          "catalog_coverage_at_k": 0.0,
+          "hit_rate_at_k": 0.0,
+          "mrr_at_k": -0.04044361160101895,
+          "ndcg_at_k": -0.03350626592704353,
+          "recall_at_k": 0.0
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.006103506103506104,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1620,
+          "hit_rate_at_k": 1.0,
+          "k": 10,
+          "mrr_at_k": 0.5095713305898492,
+          "ndcg_at_k": 0.6257439596316521,
+          "recall_at_k": 1.0,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1620,
+          "unique_recommended_items": 313
+        }
+      }
+    },
+    "history_length": {
+      "11_20": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.027514527514527515,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 4118,
+          "hit_rate_at_k": 0.7073822243807674,
+          "k": 10,
+          "mrr_at_k": 0.3252967035932068,
+          "ndcg_at_k": 0.37722233443570075,
+          "recall_at_k": 0.620534841959077,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 4118,
+          "unique_recommended_items": 1411
+        },
+        "impressions": 4118,
+        "point_delta": {
+          "catalog_coverage_at_k": -0.008034008034008035,
+          "hit_rate_at_k": -0.1877124817872754,
+          "mrr_at_k": -0.10431323573625667,
+          "ndcg_at_k": -0.11550858854294677,
+          "recall_at_k": -0.16800576453927596
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.01948051948051948,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 4118,
+          "hit_rate_at_k": 0.519669742593492,
+          "k": 10,
+          "mrr_at_k": 0.2209834678569501,
+          "ndcg_at_k": 0.261713745892754,
+          "recall_at_k": 0.4525290774198011,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 4118,
+          "unique_recommended_items": 999
+        }
+      },
+      "1_5": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.016107016107016106,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1061,
+          "hit_rate_at_k": 0.6955702167766258,
+          "k": 10,
+          "mrr_at_k": 0.31321118142513055,
+          "ndcg_at_k": 0.38607182578897875,
+          "recall_at_k": 0.6501911194889517,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1061,
+          "unique_recommended_items": 826
+        },
+        "impressions": 1061,
+        "point_delta": {
+          "catalog_coverage_at_k": -0.004075504075504074,
+          "hit_rate_at_k": -0.11875589066918002,
+          "mrr_at_k": -0.06056655147135831,
+          "ndcg_at_k": -0.07162235092039637,
+          "recall_at_k": -0.10813959576919041
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.012031512031512032,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 1061,
+          "hit_rate_at_k": 0.5768143261074458,
+          "k": 10,
+          "mrr_at_k": 0.25264462995377224,
+          "ndcg_at_k": 0.3144494748685824,
+          "recall_at_k": 0.5420515237197613,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 1061,
+          "unique_recommended_items": 617
+        }
+      },
+      "6_10": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.015151515151515152,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 950,
+          "hit_rate_at_k": 0.7252631578947368,
+          "k": 10,
+          "mrr_at_k": 0.35061111111111115,
+          "ndcg_at_k": 0.4186890866055599,
+          "recall_at_k": 0.6805350877192983,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 950,
+          "unique_recommended_items": 777
+        },
+        "impressions": 950,
+        "point_delta": {
+          "catalog_coverage_at_k": -0.004407004407004407,
+          "hit_rate_at_k": -0.1757894736842105,
+          "mrr_at_k": -0.12257936507936512,
+          "ndcg_at_k": -0.13026994145645238,
+          "recall_at_k": -0.1665087719298246
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.010744510744510745,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 950,
+          "hit_rate_at_k": 0.5494736842105263,
+          "k": 10,
+          "mrr_at_k": 0.22803174603174603,
+          "ndcg_at_k": 0.28841914514910755,
+          "recall_at_k": 0.5140263157894737,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 950,
+          "unique_recommended_items": 551
+        }
+      },
+      "fallback": {
+        "baseline": {
+          "catalog_coverage_at_k": 0.004953004953004953,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 150,
+          "hit_rate_at_k": 0.5733333333333334,
+          "k": 10,
+          "mrr_at_k": 0.2176243386243386,
+          "ndcg_at_k": 0.2771839469050388,
+          "recall_at_k": 0.5191746031746032,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 150,
+          "unique_recommended_items": 254
+        },
+        "impressions": 150,
+        "point_delta": {
+          "catalog_coverage_at_k": 0.0,
+          "hit_rate_at_k": 0.0,
+          "mrr_at_k": 0.0,
+          "ndcg_at_k": 0.0,
+          "recall_at_k": 0.0
+        },
+        "ranker": {
+          "catalog_coverage_at_k": 0.004953004953004953,
+          "catalog_size": 51282,
+          "empty_ranking_impressions": 0,
+          "evaluated_fraction": 1.0,
+          "evaluated_impressions": 150,
+          "hit_rate_at_k": 0.5733333333333334,
+          "k": 10,
+          "mrr_at_k": 0.2176243386243386,
+          "ndcg_at_k": 0.2771839469050388,
+          "recall_at_k": 0.5191746031746032,
+          "skipped_no_click_impressions": 0,
+          "total_impressions": 150,
+          "unique_recommended_items": 254
+        }
+      }
+    }
+  }
+}
