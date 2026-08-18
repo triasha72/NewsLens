@@ -1,0 +1,28 @@
+{
+  "article_count": 51282,
+  "embedding_dim": 64,
+  "experiment": "phase04_retrieval_persistence",
+  "flat_exclusion_violations": 0,
+  "flat_index_bytes": 13128237,
+  "flat_index_sha256": "f81e5c4581280ed1411d494a33570ee5ef40e895df301801414d52502f14d0f6",
+  "flat_reload_mismatches": 0,
+  "hnsw": {
+    "ef_construction": 200,
+    "ef_search": 128,
+    "m": 32
+  },
+  "hnsw_exclusion_violations": 0,
+  "hnsw_index_bytes": 27088698,
+  "hnsw_index_sha256": "113e6e806e4643019a1f18312904d8244c992c16bea0814e50e083c495bc1373",
+  "hnsw_reload_mismatches": 0,
+  "passed": true,
+  "query_count": 256,
+  "timing_ms": {
+    "flat_build": 4.574708,
+    "flat_reload": 3.792708,
+    "flat_write": 8.385333,
+    "hnsw_build": 3368.688583,
+    "hnsw_reload": 9.392791,
+    "hnsw_write": 19.9255
+  }
+}
