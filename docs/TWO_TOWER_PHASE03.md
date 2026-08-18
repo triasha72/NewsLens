@@ -167,3 +167,64 @@ using chronological positive interactions and in-batch negatives.
 
 The SVD explained-variance ratio is recorded for reproducibility but is not
 used as a model-selection criterion.
+
+## Phase 03C: Neural training pipeline
+
+The first native PyTorch training objective uses:
+
+- train-only TF-IDF + 256-dimensional SVD article features;
+- user representations derived only from impression-time history;
+- maximum history length of 20 most recent usable articles;
+- shared article tower;
+- masked mean history pooling;
+- 128-dimensional hidden layer;
+- 64-dimensional retrieval embedding;
+- temperature 0.07;
+- dropout 0.10;
+- unique in-batch clicked articles as contrastive classes;
+- AdamW optimization;
+- deterministic seed 42.
+
+Duplicate positive article IDs inside a batch are deduplicated so that two
+users clicking the same article do not incorrectly treat duplicate copies of
+the same article as negatives.
+
+### Training-data accounting
+
+On the chronological training partition:
+
+- input impressions: 125,572
+- positive click occurrences: 187,856
+- usable history-to-click examples: 184,282
+- skipped positive occurrences: 3,574
+- positive articles missing content features: 0
+- histories without usable content features: 0
+- eligible impressions: 123,135
+- histories truncated to the most recent 20 articles: 59,343
+- unique positive articles: 6,294
+
+Approximately 98.1% of positive click occurrences can therefore participate
+in the neural training objective.
+
+The remaining examples are primarily unavoidable empty-history cases rather
+than representation failures.
+
+### Smoke training
+
+A deterministic CPU smoke test used 4,096 training examples for two epochs.
+
+| Epoch | Average loss | In-batch top-1 |
+|---:|---:|---:|
+| 1 | 4.012369 | 14.0381% |
+| 2 | 3.883381 | 13.8184% |
+
+All 4,096 examples were processed in every epoch and no batch was skipped for
+having fewer than two unique positive articles.
+
+The decrease in optimization loss establishes that the training pipeline is
+functioning. In-batch top-1 accuracy is retained only as an optimization
+diagnostic and is not used for architecture selection.
+
+The next step is one full fixed-configuration training run followed by
+chronological ranking evaluation. No hyperparameters are changed based on the
+smoke run.
