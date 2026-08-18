@@ -1,0 +1,144 @@
+{
+  "evaluation": {
+    "baseline": {
+      "catalog_coverage_at_k": 0.03151203151203151,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 6279,
+      "hit_rate_at_k": 0.7048893135849658,
+      "k": 10,
+      "mrr_at_k": 0.32451235789745103,
+      "ndcg_at_k": 0.38260168891214524,
+      "recall_at_k": 0.632202545114633,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 6279,
+      "unique_recommended_items": 1616
+    },
+    "catalog_coverage_point_delta": -0.008424008424008422,
+    "changed_ranking_fraction": 0.9657588788023571,
+    "learned_ranker": {
+      "catalog_coverage_at_k": 0.023088023088023088,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 0,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 6279,
+      "hit_rate_at_k": 0.5351170568561873,
+      "k": 10,
+      "mrr_at_k": 0.22731958632579752,
+      "ndcg_at_k": 0.27503485879110284,
+      "recall_at_k": 0.4785527310013693,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 6279,
+      "unique_recommended_items": 1184
+    },
+    "paired_comparison": {
+      "baseline_model_name": "phase03_two_tower_popularity",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "phase05_second_stage_ranker",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 6279,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.7048893135849658,
+          "candidate_estimate": 0.5351170568561873,
+          "excludes_zero": true,
+          "lower_bound": -0.18363194776238254,
+          "point_difference": -0.1697722567287785,
+          "standard_error": 0.007398072456805687,
+          "upper_bound": -0.15479773849339068
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.32451235789745103,
+          "candidate_estimate": 0.22731958632579752,
+          "excludes_zero": true,
+          "lower_bound": -0.10798840364834163,
+          "point_difference": -0.09719277157165351,
+          "standard_error": 0.00544814781425334,
+          "upper_bound": -0.0864300360612472
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.38260168891214524,
+          "candidate_estimate": 0.27503485879110284,
+          "excludes_zero": true,
+          "lower_bound": -0.1170596657432973,
+          "point_difference": -0.1075668301210424,
+          "standard_error": 0.005015163533339621,
+          "upper_bound": -0.09800847715568263
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.632202545114633,
+          "candidate_estimate": 0.4785527310013693,
+          "excludes_zero": true,
+          "lower_bound": -0.16728054845828366,
+          "point_difference": -0.15364981411326373,
+          "standard_error": 0.006819298809060322,
+          "upper_bound": -0.1398525523002947
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 6279
+    }
+  },
+  "information_boundary": {
+    "dataset": "MINDsmall_train",
+    "official_dev_used": false,
+    "phase03_cutoff": "2019-11-13T20:36:26",
+    "phase05_cutoff": "2019-11-14T14:57:43",
+    "ranker_training_impressions": 25114,
+    "ranker_validation_impressions": 6279
+  },
+  "learned_ranker_promoted": false,
+  "phase": "phase05",
+  "selected_model": "phase03_two_tower_popularity",
+  "selected_retrieval_backend": "faiss_flat",
+  "selection": {
+    "guardrails_passed": false,
+    "hit_rate_not_significantly_worse": false,
+    "mrr_not_significantly_worse": false,
+    "ndcg_significantly_positive": false,
+    "reason": "Ranker does not satisfy the preregistered Phase-05 selection rule.",
+    "recall_not_significantly_worse": false,
+    "selected_model": "phase03_two_tower_popularity"
+  },
+  "serving_decision": {
+    "phase05_ranker_integrated": false,
+    "reason": "The learned second-stage ranker failed the preregistered offline quality gate. The Phase-03 two-tower ordering and Phase-04 retrieval backend remain selected."
+  },
+  "status": "frozen",
+  "training": {
+    "model_config": {
+      "l2_regularization": 0.001,
+      "learning_rate": 0.05,
+      "max_iter": 200,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 50,
+      "seed": 42
+    },
+    "ranker_artifact_sha256": "bd4176eb03a7749cc19c3866a242db75d3674baf212f17df685faa846356312a",
+    "training_matrix": {
+      "available_negative_rows": 969158,
+      "candidate_occurrences": 1033453,
+      "eligible_impressions": 24463,
+      "empty_history_impressions": 651,
+      "feature_count": 11,
+      "impressions_without_click": 0,
+      "input_impressions": 25114,
+      "limited_training_run": false,
+      "max_negatives_per_positive": 5,
+      "positive_fraction": 0.1731625255283404,
+      "positive_rows": 38240,
+      "selected_negative_rows": 182593,
+      "training_rows": 220833,
+      "truncated_history_impressions": 12295,
+      "unique_positive_articles": 1811,
+      "unsupported_history_impressions": 0
+    }
+  }
+}
