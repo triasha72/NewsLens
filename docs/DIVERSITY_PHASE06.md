@@ -242,3 +242,82 @@ This requires the complete 95% interval to remain inside the preregistered
 2% relevance-loss budget.
 
 This interpretation is frozen before observing the Phase-06C MMR sweep.
+
+## Phase 06E: Global retrieval and diversity-serving benchmark
+
+Phase 06E evaluates the already selected Phase-06D MMR policy in the
+global retrieval path.
+
+The selected policy remains:
+
+- MMR lambda = 0.80.
+
+Phase 06E does not reopen Phase-06 policy selection.
+
+### Serving path
+
+The benchmark evaluates:
+
+1. frozen Phase-03 user embedding;
+2. frozen Phase-04 FAISS IndexFlatIP retrieval;
+3. global top-100 retrieval with history exclusion;
+4. Phase-06 MMR lambda=0.80 reranking;
+5. final top-10 recommendations.
+
+The comparison baseline uses the top 10 articles from the same exact FAISS
+top-100 candidate pool in pure relevance-score order.
+
+### Fixed benchmark configuration
+
+- query population: Phase-06 chronological development benchmark;
+- deterministic nonempty-history sample;
+- query count: 512;
+- random seed: 42;
+- FAISS threads: 1;
+- retrieval depth: 100;
+- final recommendation depth: 10;
+- MMR lambda: 0.80;
+- MMR relevance score:
+  frozen two-tower inner product divided by temperature;
+- frozen temperature: 0.07;
+- warm-up queries: 50.
+
+### Metrics
+
+Post-user-embedding system latency:
+
+- FAISS top-100 retrieval p50 / p95 / p99;
+- MMR top-100 to top-10 reranking p50 / p95 / p99;
+- relevance-only post-embedding request p50 / p95 / p99;
+- MMR post-embedding request p50 / p95 / p99.
+
+Recommendation-composition metrics:
+
+- mean intra-list diversity;
+- mean unique categories;
+- mean unique subcategories;
+- category entropy;
+- subcategory entropy;
+- unique exposed articles;
+- catalog coverage;
+- exposure Gini;
+- top-1-percent exposure share;
+- top-10-percent exposure share;
+- fraction of top-10 rankings changed;
+- mean top-10 set overlap.
+
+### Quality boundary
+
+MIND click labels are unavailable for arbitrary global FAISS-retrieved
+catalog articles.
+
+Therefore Phase 06E makes no relevance-quality claim for global retrieval
+candidates.
+
+The benchmark is restricted to systems behavior, recommendation composition,
+diversity, and exposure.
+
+Phase-06D policy selection is not changed based on Phase-06E results.
+
+Full request serving, production optimization, Kubernetes, observability,
+and online A/B-test design remain Phase-07 work.
