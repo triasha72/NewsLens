@@ -188,3 +188,91 @@ For the final evaluation:
 
 If the holdout does not confirm the internal-validation improvement, that
 negative generalization result will be preserved rather than tuned away.
+
+## Final MIND-small dev holdout
+
+The frozen Phase 02 architecture was evaluated exactly once on the official
+`MINDsmall_dev` holdout after both the architecture and evaluator had been
+committed.
+
+### Reproducibility
+
+- architecture freeze commit: `4d0b493`
+- frozen holdout evaluator commit: `da331c6`
+- MINDsmall_dev ZIP SHA-256:
+  `d6ce515dcaa6b6d47ddf0a326eebc8a31b84735ae410285c9882ca2a06eec669`
+- training behaviors: 156,965
+- holdout behaviors: 73,152
+- training articles: 51,282
+- holdout articles: 42,416
+- dev-only articles: 13,956
+- BPR training triples after full-train refit: 683,919
+
+No model architecture, support threshold, fusion weight, or BPR
+hyperparameter was changed after opening the holdout.
+
+### Holdout metrics
+
+| Model | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 |
+|---|---:|---:|---:|---:|
+| Content + fallback | 0.379386 | 0.323244 | 0.624221 | 0.700432 |
+| Frozen gated hybrid | 0.379426 | 0.323254 | 0.624350 | 0.700582 |
+
+Paired bootstrap, frozen gated hybrid minus Content + fallback:
+
+- NDCG@10: +0.000040
+- 95% CI: [-0.000097, +0.000161]
+
+- MRR@10: +0.000010
+- 95% CI: [-0.000122, +0.000122]
+
+- Recall@10: +0.000129
+- 95% CI: [-0.000195, +0.000431]
+
+- Hit Rate@10: +0.000150
+- 95% CI: [-0.000205, +0.000506]
+
+All four point estimates remain in the positive direction, but every 95%
+paired-bootstrap interval contains zero.
+
+The final holdout therefore reproduces the direction of the internal result
+but does not provide evidence for a stable aggregate improvement over
+Content + popularity fallback.
+
+### Support shift
+
+The selected support gate opened on:
+
+- 13,133 / 31,393 internal-validation impressions: 41.83%
+- 4,569 / 73,152 final-holdout impressions: 6.25%
+
+This substantial change in gate availability shows that a collaborative
+policy based on user/item ID support can be sensitive to temporal changes in
+the recommendation population.
+
+The reduced opportunity to apply the collaborative residual is an important
+limitation of the Phase 02 architecture.
+
+### Phase 02 conclusion
+
+Phase 02 does not promote the support-gated BPR hybrid as a proven replacement
+for Content + popularity fallback.
+
+The experiments establish instead that:
+
+1. standalone BPR is substantially weaker than the content-first baseline;
+2. collaborative scores can contain complementary ranking information in
+   sufficiently supported regions;
+3. simple linear fusion can expose a small positive collaborative signal;
+4. a serving-time support gate improves the internal-validation result;
+5. the positive direction persists on the untouched holdout, but the effect
+   is very small and its paired confidence intervals include zero; and
+6. BPR user/item coverage changes substantially under temporal distribution
+   shift.
+
+No post-holdout tuning will be performed.
+
+The next phase should replace ID-only matrix factorization with a learned
+two-tower architecture capable of combining user-history and article
+representations and providing better support for previously unseen or
+temporally new articles.
