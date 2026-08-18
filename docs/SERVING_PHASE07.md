@@ -184,3 +184,43 @@ reference p95, so normal benchmark noise cannot move the target after results
 are observed.
 
 No ranking policy or MMR hyperparameter is changed based on this benchmark.
+
+## Phase 07A result
+
+The optimized vectorized MMR implementation passed the frozen promotion gate.
+
+Frozen workload:
+
+- 512 FAISS top-100 candidate pools;
+- 51,200 candidate occurrences;
+- 15,700 unique candidate articles;
+- zero short candidate pools;
+- zero duplicate candidates;
+- zero history-exclusion violations.
+
+Exact behavioral parity:
+
+- ordered top-10 parity: 512 / 512;
+- parity mismatches: 0.
+
+Optimized MMR latency:
+
+- mean: approximately 4.018 ms;
+- p50: approximately 4.025 ms;
+- p95: approximately 4.096 ms;
+- p99: approximately 4.226 ms.
+
+The frozen Phase-06 reference p95 was approximately 195.871 ms, so the
+predeclared gate-relative speedup is approximately 47.82x.
+
+The same-run Phase-07 reference p95 was approximately 6.122 ms, giving a
+same-run MMR-core speedup of approximately 1.49x.
+
+These two quantities are intentionally reported separately. The 47.82x
+number compares against the frozen Phase-06 benchmark and is used only for
+the preregistered promotion gate. The 1.49x value is the direct same-run
+algorithm comparison after candidate-pool materialization is held constant.
+
+The optimized implementation is promoted as the Phase-07 serving MMR
+implementation because exact recommendation parity and all frozen performance
+gates passed.
