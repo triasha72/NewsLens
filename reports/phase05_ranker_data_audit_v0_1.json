@@ -1,0 +1,114 @@
+{
+  "experiment": "phase05_ranker_data_audit",
+  "feature_names": [
+    "two_tower_score",
+    "mean_history_similarity",
+    "max_history_similarity",
+    "log1p_popularity_clicks",
+    "log1p_popularity_exposures",
+    "popularity_ctr",
+    "category_match_any",
+    "subcategory_match_any",
+    "category_history_fraction",
+    "subcategory_history_fraction",
+    "usable_history_length"
+  ],
+  "feature_summary": {
+    "category_history_fraction": {
+      "maximum": 1.0,
+      "mean": 0.23354147374629974,
+      "minimum": 0.0,
+      "std": 0.21995508670806885
+    },
+    "category_match_any": {
+      "maximum": 1.0,
+      "mean": 0.7953521609306335,
+      "minimum": 0.0,
+      "std": 0.4034440815448761
+    },
+    "log1p_popularity_clicks": {
+      "maximum": 7.726653575897217,
+      "mean": 1.1734520196914673,
+      "minimum": 0.0,
+      "std": 1.8772433996200562
+    },
+    "log1p_popularity_exposures": {
+      "maximum": 9.830916404724121,
+      "mean": 2.6573352813720703,
+      "minimum": 0.0,
+      "std": 2.983901262283325
+    },
+    "max_history_similarity": {
+      "maximum": 1.0000004768371582,
+      "mean": 0.9242677688598633,
+      "minimum": 0.6455345153808594,
+      "std": 0.039205536246299744
+    },
+    "mean_history_similarity": {
+      "maximum": 1.0000001192092896,
+      "mean": 0.9113448858261108,
+      "minimum": 0.6455345749855042,
+      "std": 0.032424166798591614
+    },
+    "popularity_ctr": {
+      "maximum": 1.0,
+      "mean": 0.026447370648384094,
+      "minimum": 0.0,
+      "std": 0.06468028575181961
+    },
+    "subcategory_history_fraction": {
+      "maximum": 1.0,
+      "mean": 0.07883866876363754,
+      "minimum": 0.0,
+      "std": 0.1231754943728447
+    },
+    "subcategory_match_any": {
+      "maximum": 1.0,
+      "mean": 0.48732298612594604,
+      "minimum": 0.0,
+      "std": 0.49983924627304077
+    },
+    "two_tower_score": {
+      "maximum": 0.914591372013092,
+      "mean": 0.7559857368469238,
+      "minimum": 0.13333550095558167,
+      "std": 0.07565580308437347
+    },
+    "usable_history_length": {
+      "maximum": 20.0,
+      "mean": 15.643268585205078,
+      "minimum": 1.0,
+      "std": 6.171511173248291
+    }
+  },
+  "official_dev_used": false,
+  "phase03": {
+    "cutoff": "2019-11-13T20:36:26",
+    "development_pool_impressions": 31393,
+    "training_impressions": 125572
+  },
+  "phase05": {
+    "cutoff": "2019-11-14T14:57:43",
+    "is_leakage_safe": true,
+    "ranker_training_impressions": 25114,
+    "ranker_validation_impressions": 6279
+  },
+  "training_matrix": {
+    "available_negative_rows": 969158,
+    "candidate_occurrences": 1033453,
+    "eligible_impressions": 24463,
+    "empty_history_impressions": 651,
+    "feature_count": 11,
+    "impressions_without_click": 0,
+    "input_impressions": 25114,
+    "limited_training_run": false,
+    "max_negatives_per_positive": 5,
+    "positive_fraction": 0.1731625255283404,
+    "positive_rows": 38240,
+    "selected_negative_rows": 182593,
+    "training_rows": 220833,
+    "truncated_history_impressions": 12295,
+    "unique_positive_articles": 1811,
+    "unsupported_history_impressions": 0
+  }
+}
