@@ -1,0 +1,83 @@
+{
+  "article_count": 51282,
+  "artifacts": {
+    "catalog_vector_bytes": 13128192,
+    "flat_index_bytes": 13128237,
+    "hnsw_index_bytes": 27088698
+  },
+  "batch_backend_qps": {
+    "1": {
+      "faiss_flat": 4447.415487856897,
+      "faiss_hnsw": 16731.342673910378,
+      "numpy_exact": 1367.817899774228
+    },
+    "16": {
+      "faiss_flat": 4486.849456122863,
+      "faiss_hnsw": 17345.98501598253,
+      "numpy_exact": 2020.7159577002817
+    },
+    "256": {
+      "faiss_flat": 8280.524303067934,
+      "faiss_hnsw": 17581.650196517865,
+      "numpy_exact": 2028.5459080036246
+    },
+    "64": {
+      "faiss_flat": 7594.195107020046,
+      "faiss_hnsw": 17429.540105414333,
+      "numpy_exact": 2150.875289667134
+    }
+  },
+  "embedding_dim": 64,
+  "experiment": "phase04_retrieval_system_benchmark",
+  "faiss_threads": 1,
+  "faiss_version": "1.13.2",
+  "hnsw_configuration": {
+    "ef_construction": 200,
+    "ef_search": 128,
+    "m": 32
+  },
+  "persistence_timing_ms": {
+    "flat_build": 4.574708,
+    "flat_reload": 3.792708,
+    "flat_write": 8.385333,
+    "hnsw_build": 3368.688583,
+    "hnsw_reload": 9.392791,
+    "hnsw_write": 19.9255
+  },
+  "quality": {
+    "hnsw_recall_at_10": 0.97080078125,
+    "hnsw_recall_at_100": 0.932373046875,
+    "hnsw_recall_at_50": 0.95166015625,
+    "target_recall_at_100": 0.99
+  },
+  "query_count": 1024,
+  "selection": {
+    "hnsw_materially_faster": true,
+    "minimum_latency_reduction_fraction": 0.2,
+    "p95_latency_reduction_fraction": 0.4794700978406625,
+    "quality_ok": false,
+    "reason": "IndexFlatIP retained because HNSW did not simultaneously meet both the quality and material p95-latency requirements.",
+    "selected_index": "faiss_flat"
+  },
+  "single_query_latency_ms": {
+    "faiss_flat": {
+      "mean": 0.29152366210937497,
+      "p50": 0.284229,
+      "p95": 0.34020619999999996,
+      "p99": 0.38483660999999997
+    },
+    "faiss_hnsw": {
+      "mean": 0.1476760537109375,
+      "p50": 0.146146,
+      "p95": 0.17708749999999998,
+      "p99": 0.20449283999999993
+    },
+    "numpy_exact": {
+      "mean": 14.867677783203124,
+      "p50": 14.5911245,
+      "p95": 15.9079125,
+      "p99": 19.84707940999999
+    }
+  },
+  "top_k": 100
+}

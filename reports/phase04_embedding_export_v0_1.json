@@ -1,0 +1,18 @@
+{
+  "article_count": 51282,
+  "artifact_path": "artifacts/retrieval/article_embeddings_v0_2.npz",
+  "artifact_sha256": "5aae2f910298fc078d7085fd8e4f63e703610def3cfa37ab07c2562d2320f607",
+  "checkpoint_sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8",
+  "cutoff_timestamp": "2019-11-13T20:36:26",
+  "dataset": "MINDsmall_train",
+  "embedding_dim": 64,
+  "experiment": "phase04_frozen_embedding_export",
+  "fit_article_count": 47367,
+  "training_impressions": 125572,
+  "validation_impressions": 31393,
+  "vector_norm": {
+    "maximum": 1.0000001192092896,
+    "mean": 1.0,
+    "minimum": 0.9999998211860657
+  }
+}

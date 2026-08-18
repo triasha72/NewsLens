@@ -1,0 +1,18 @@
+{
+  "article_count": 51282,
+  "deterministic_mismatches": 0,
+  "embedding_dim": 64,
+  "exclusion_violations": 0,
+  "experiment": "phase04_exact_retrieval_audit",
+  "latency_ms": {
+    "mean": 14.932389484374998,
+    "p50": 14.715270499999999,
+    "p95": 15.3210835,
+    "p99": 17.678125149999985
+  },
+  "passed": true,
+  "query_count": 256,
+  "score_order_violations": 0,
+  "short_rankings": 0,
+  "top_k": 100
+}
