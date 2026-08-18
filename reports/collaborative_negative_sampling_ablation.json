@@ -1,0 +1,55 @@
+{
+  "experiment": "bpr_negative_sampling_ablation",
+  "runs": [
+    {
+      "catalog_coverage_at_10": 0.02445302445302445,
+      "empty_ranking_impressions": 8862,
+      "hit_rate_at_10": 0.23521167139171154,
+      "mrr_at_10": 0.10665054488438683,
+      "ndcg_at_10": 0.11395310152914814,
+      "negatives_per_positive": 1,
+      "recall_at_10": 0.18040766508982908,
+      "report": "collaborative_v0_1.json",
+      "training_items": 8061,
+      "training_triples": 187856,
+      "unknown_candidate_fraction": 0.5961828842802825,
+      "unknown_clicked_item_fraction": 0.6557704999175054
+    },
+    {
+      "catalog_coverage_at_10": 0.025642525642525643,
+      "empty_ranking_impressions": 8002,
+      "hit_rate_at_10": 0.2621284999840729,
+      "mrr_at_10": 0.11940152971115288,
+      "ndcg_at_10": 0.12889401738172152,
+      "negatives_per_positive": 3,
+      "recall_at_10": 0.20455351204028216,
+      "report": "collaborative_v0_2_neg3.json",
+      "training_items": 9886,
+      "training_triples": 541860,
+      "unknown_candidate_fraction": 0.565555312109206,
+      "unknown_clicked_item_fraction": 0.6158018478798878
+    },
+    {
+      "catalog_coverage_at_10": 0.026734526734526736,
+      "empty_ranking_impressions": 7116,
+      "hit_rate_at_10": 0.2587838053069156,
+      "mrr_at_10": 0.11443081538246065,
+      "ndcg_at_10": 0.12421273958069651,
+      "negatives_per_positive": 5,
+      "recall_at_10": 0.20119594617188238,
+      "report": "collaborative_v0_3_neg5.json",
+      "training_items": 11052,
+      "training_triples": 877301,
+      "unknown_candidate_fraction": 0.5159117676604287,
+      "unknown_clicked_item_fraction": 0.59872545784524
+    }
+  ],
+  "selected_configuration": {
+    "embedding_dim": 64,
+    "epochs": 10,
+    "negatives_per_positive": 3,
+    "reason": "Best NDCG@10, MRR@10, Recall@10, and Hit Rate@10 among tested configurations.",
+    "seed": 42
+  },
+  "selection_metric": "ndcg_at_10"
+}
