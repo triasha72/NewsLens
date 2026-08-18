@@ -1,0 +1,143 @@
+{
+  "candidates": {
+    "0.80": {
+      "checks": {
+        "gini_improved": true,
+        "ild_improved": true,
+        "ndcg_ci_noninferiority_passed": true,
+        "ndcg_retention_passed": true,
+        "recall_retention_passed": true
+      },
+      "deltas_vs_baseline": {
+        "exposure_gini": -5.329697323031013e-06,
+        "mean_intra_list_diversity": 0.0003635622471983846,
+        "ndcg_at_k": -0.00010181053183583311,
+        "recall_at_k": -8.235380906185252e-05
+      },
+      "eligible": true,
+      "lambda": 0.8,
+      "metrics": {
+        "changed_ranking_fraction": 0.2879439401178532,
+        "exposure_gini": 0.9957770376735489,
+        "mean_intra_list_diversity": 0.15507327454340536,
+        "ndcg_at_k": 0.3824998783803094,
+        "ndcg_ci_lower_bound": -0.0005793015712914463,
+        "recall_at_k": 0.6321201913055712
+      }
+    },
+    "0.85": {
+      "checks": {
+        "gini_improved": true,
+        "ild_improved": true,
+        "ndcg_ci_noninferiority_passed": true,
+        "ndcg_retention_passed": true,
+        "recall_retention_passed": true
+      },
+      "deltas_vs_baseline": {
+        "exposure_gini": -6.042110543891255e-06,
+        "mean_intra_list_diversity": 0.0002440488365524629,
+        "ndcg_at_k": 0.00011555548969988116,
+        "recall_at_k": 0.0004219727822212249
+      },
+      "eligible": true,
+      "lambda": 0.85,
+      "metrics": {
+        "changed_ranking_fraction": 0.2164357381748686,
+        "exposure_gini": 0.995776325260328,
+        "mean_intra_list_diversity": 0.15495376113275944,
+        "ndcg_at_k": 0.3827172444018451,
+        "ndcg_ci_lower_bound": -0.00022847333016388097,
+        "recall_at_k": 0.6326245178968543
+      }
+    },
+    "0.90": {
+      "checks": {
+        "gini_improved": true,
+        "ild_improved": true,
+        "ndcg_ci_noninferiority_passed": true,
+        "ndcg_retention_passed": true,
+        "recall_retention_passed": true
+      },
+      "deltas_vs_baseline": {
+        "exposure_gini": -3.3462260589089965e-06,
+        "mean_intra_list_diversity": 0.00014225076833601635,
+        "ndcg_at_k": -1.8677183420245935e-05,
+        "recall_at_k": 0.0001698094865797417
+      },
+      "eligible": true,
+      "lambda": 0.9,
+      "metrics": {
+        "changed_ranking_fraction": 0.1444497531454053,
+        "exposure_gini": 0.995779021144813,
+        "mean_intra_list_diversity": 0.154851963064543,
+        "ndcg_at_k": 0.382583011728725,
+        "ndcg_ci_lower_bound": -0.00027170088127272514,
+        "recall_at_k": 0.6323723546012128
+      }
+    },
+    "0.95": {
+      "checks": {
+        "gini_improved": true,
+        "ild_improved": true,
+        "ndcg_ci_noninferiority_passed": true,
+        "ndcg_retention_passed": true,
+        "recall_retention_passed": true
+      },
+      "deltas_vs_baseline": {
+        "exposure_gini": -1.7958456042244109e-06,
+        "mean_intra_list_diversity": 7.294909976662822e-05,
+        "ndcg_at_k": 3.106210398684528e-05,
+        "recall_at_k": 0.00017632471048611986
+      },
+      "eligible": true,
+      "lambda": 0.95,
+      "metrics": {
+        "changed_ranking_fraction": 0.07182672400063704,
+        "exposure_gini": 0.9957805715252677,
+        "mean_intra_list_diversity": 0.1547826613959736,
+        "ndcg_at_k": 0.3826327510161321,
+        "ndcg_ci_lower_bound": -0.00011087701965506997,
+        "recall_at_k": 0.6323788698251191
+      }
+    }
+  },
+  "eligible_lambdas": [
+    0.95,
+    0.9,
+    0.85,
+    0.8
+  ],
+  "experiment": "phase06_preregistered_policy_selection",
+  "protocol": {
+    "official_dev_used": false,
+    "selection_rule": "98_percent_relevance_retention_plus_diversity_and_gini_improvement",
+    "tie_break_order": [
+      "higher_mean_intra_list_diversity",
+      "higher_ndcg_at_k",
+      "lower_exposure_gini",
+      "larger_lambda"
+    ]
+  },
+  "selection": {
+    "baseline_retained": false,
+    "metrics": {
+      "catalog_coverage_at_k": 0.03153153153153153,
+      "changed_ranking_fraction": 0.2879439401178532,
+      "exposure_gini": 0.9957770376735489,
+      "mean_intra_list_diversity": 0.15507327454340536,
+      "ndcg_at_k": 0.3824998783803094,
+      "recall_at_k": 0.6321201913055712
+    },
+    "selected_lambda": 0.8,
+    "selected_policy": "mmr_lambda_0.80"
+  },
+  "thresholds": {
+    "baseline_exposure_gini": 0.9957823673708719,
+    "baseline_mean_intra_list_diversity": 0.15470971229620697,
+    "baseline_ndcg_at_k": 0.38260168891214524,
+    "baseline_recall_at_k": 0.632202545114633,
+    "minimum_ndcg_at_k": 0.3749496551339023,
+    "minimum_ndcg_ci_lower_bound": -0.007652033778242905,
+    "minimum_recall_at_k": 0.6195584942123403
+  }
+}

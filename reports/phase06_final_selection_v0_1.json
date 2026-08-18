@@ -1,0 +1,283 @@
+{
+  "conclusions": {
+    "global_catalog_coverage_improved": false,
+    "global_exposure_gini_improved": false,
+    "global_semantic_diversity_improved": true,
+    "logged_candidate_relevance_budget_passed": true,
+    "production_serving_readiness_established": false,
+    "production_serving_reason": "The frozen Phase-06 policy improved semantic diversity, but the correctness-first Python MMR implementation introduced substantial post-embedding latency. Phase 07 will optimize the same policy under exact ranking parity."
+  },
+  "global_faiss_result": {
+    "baseline": {
+      "diversity": {
+        "mean_category_entropy": 0.4926945363192167,
+        "mean_intra_list_diversity": 0.07148235118074808,
+        "mean_subcategory_entropy": 0.8872766889079616,
+        "mean_unique_categories": 2.263671875,
+        "mean_unique_subcategories": 3.6015625
+      },
+      "exposure": {
+        "catalog_coverage": 0.051577551577551575,
+        "category_exposure_entropy": 1.9651430109135088,
+        "exposure_gini": 0.9695015886422136,
+        "subcategory_exposure_entropy": 3.638051072266821,
+        "top_10_percent_exposure_share": 1.0,
+        "top_1_percent_exposure_share": 0.519140625,
+        "unique_exposed_articles": 2645
+      }
+    },
+    "changed_top10_fraction": 0.705078125,
+    "deltas": {
+      "catalog_coverage": -9.750009750009864e-05,
+      "exposure_gini": 7.103796166307852e-05,
+      "mean_intra_list_diversity": 0.0012653102166950703,
+      "mean_unique_categories": 0.03515625,
+      "mean_unique_subcategories": 0.052734375,
+      "top_1_percent_exposure_share": 0.0,
+      "unique_exposed_articles": -5
+    },
+    "final_k": 10,
+    "mean_top10_set_overlap_fraction": 0.9779296875000001,
+    "query_count": 512,
+    "retrieval_k": 100,
+    "selected_mmr": {
+      "diversity": {
+        "mean_category_entropy": 0.5025513317193016,
+        "mean_intra_list_diversity": 0.07274766139744315,
+        "mean_subcategory_entropy": 0.9034731311011597,
+        "mean_unique_categories": 2.298828125,
+        "mean_unique_subcategories": 3.654296875
+      },
+      "exposure": {
+        "catalog_coverage": 0.05148005148005148,
+        "category_exposure_entropy": 1.9638181876815493,
+        "exposure_gini": 0.9695726266038767,
+        "subcategory_exposure_entropy": 3.6404959327168958,
+        "top_10_percent_exposure_share": 1.0,
+        "top_1_percent_exposure_share": 0.519140625,
+        "unique_exposed_articles": 2640
+      }
+    }
+  },
+  "information_boundary": {
+    "dataset": "MINDsmall_train",
+    "global_retrieval_quality_claim": "none",
+    "logged_candidate_benchmark_status": "previously_observed_development_benchmark",
+    "official_dev_used": false
+  },
+  "limitations": [
+    "Global FAISS candidates do not have valid logged MIND relevance labels.",
+    "Phase-06E therefore provides systems, diversity, and exposure evidence only.",
+    "Global MMR improved semantic diversity but did not reduce aggregate exposure Gini.",
+    "Global MMR did not improve catalog coverage.",
+    "Current MMR implementation prioritizes deterministic correctness over serving latency.",
+    "Latency component percentiles were measured in separate benchmark passes and are not additive percentiles."
+  ],
+  "logged_candidate_result": {
+    "baseline": {
+      "changed_ranking_fraction_vs_lambda_1": 0.0,
+      "changed_rankings_vs_lambda_1": 0,
+      "diversity": {
+        "mean_category_entropy": 1.3790821199979917,
+        "mean_intra_list_diversity": 0.15470971229620697,
+        "mean_subcategory_entropy": 1.7541461552733948,
+        "mean_unique_categories": 5.0436375218983915,
+        "mean_unique_subcategories": 6.727504379678293
+      },
+      "exposure": {
+        "catalog_coverage_at_k": 0.03151203151203151,
+        "category_exposure_entropy": 2.390465520200533,
+        "exposure_gini": 0.9957823673708719,
+        "subcategory_exposure_entropy": 3.607329400738108,
+        "top_10_percent_exposure_share": 1.0,
+        "top_1_percent_exposure_share": 0.9521621963791576,
+        "unique_exposed_articles": 1616
+      },
+      "popularity_groups": {
+        "candidate_opportunity_share": {
+          "head": 0.171867417677643,
+          "mid": 0.37802426343154244,
+          "tail": 0.45010831889081454
+        },
+        "exposure_minus_opportunity_gap": {
+          "head": -0.05631515781618272,
+          "mid": -0.00825341464964302,
+          "tail": 0.06456857246582576
+        },
+        "long_tail_recommendation_share": 0.5146768913566403,
+        "recommendation_exposure_share": {
+          "head": 0.11555225986146027,
+          "mid": 0.3697708487818994,
+          "tail": 0.5146768913566403
+        }
+      },
+      "relevance": {
+        "catalog_coverage_at_k": 0.03151203151203151,
+        "catalog_size": 51282,
+        "empty_ranking_impressions": 0,
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 6279,
+        "hit_rate_at_k": 0.7048893135849658,
+        "k": 10,
+        "mrr_at_k": 0.32451235789745103,
+        "ndcg_at_k": 0.38260168891214524,
+        "recall_at_k": 0.632202545114633,
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 6279,
+        "unique_recommended_items": 1616
+      }
+    },
+    "paired_comparison": {
+      "baseline_model_name": "mmr_lambda_1.00",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "mmr_lambda_0.80",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 6279,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.7048893135849658,
+          "candidate_estimate": 0.7040930084408346,
+          "excludes_zero": false,
+          "lower_bound": -0.0025481764612199395,
+          "point_difference": -0.0007963051441312041,
+          "standard_error": 0.0008411166430661873,
+          "upper_bound": 0.0007963051441312311
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.32451235789745103,
+          "candidate_estimate": 0.3243719301172717,
+          "excludes_zero": false,
+          "lower_bound": -0.000553384676055483,
+          "point_difference": -0.00014042778017930857,
+          "standard_error": 0.00020368613490541398,
+          "upper_bound": 0.000254343654964773
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.38260168891214524,
+          "candidate_estimate": 0.3824998783803094,
+          "excludes_zero": false,
+          "lower_bound": -0.0005793015712914463,
+          "point_difference": -0.00010181053183583311,
+          "standard_error": 0.0002326117209428498,
+          "upper_bound": 0.00033008732632732504
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.632202545114633,
+          "candidate_estimate": 0.6321201913055712,
+          "excludes_zero": false,
+          "lower_bound": -0.0012928108813201982,
+          "point_difference": -8.235380906185252e-05,
+          "standard_error": 0.0006088018299431704,
+          "upper_bound": 0.001161154235688397
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 6279
+    },
+    "selected": {
+      "changed_ranking_fraction_vs_lambda_1": 0.2879439401178532,
+      "changed_rankings_vs_lambda_1": 1808,
+      "diversity": {
+        "mean_category_entropy": 1.3826874246398804,
+        "mean_intra_list_diversity": 0.15507327454340536,
+        "mean_subcategory_entropy": 1.7575859169498758,
+        "mean_unique_categories": 5.060996974040452,
+        "mean_unique_subcategories": 6.747412008281573
+      },
+      "exposure": {
+        "catalog_coverage_at_k": 0.03153153153153153,
+        "category_exposure_entropy": 2.3907323262531777,
+        "exposure_gini": 0.9957770376735489,
+        "subcategory_exposure_entropy": 3.6084122380220762,
+        "top_10_percent_exposure_share": 1.0,
+        "top_1_percent_exposure_share": 0.9519994212439638,
+        "unique_exposed_articles": 1617
+      },
+      "popularity_groups": {
+        "candidate_opportunity_share": {
+          "head": 0.171867417677643,
+          "mid": 0.37802426343154244,
+          "tail": 0.45010831889081454
+        },
+        "exposure_minus_opportunity_gap": {
+          "head": -0.055917263041264556,
+          "mid": -0.008181070145112435,
+          "tail": 0.06409833318637709
+        },
+        "long_tail_recommendation_share": 0.5142066520771916,
+        "recommendation_exposure_share": {
+          "head": 0.11595015463637844,
+          "mid": 0.36984319328643,
+          "tail": 0.5142066520771916
+        }
+      },
+      "relevance": {
+        "catalog_coverage_at_k": 0.03153153153153153,
+        "catalog_size": 51282,
+        "empty_ranking_impressions": 0,
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 6279,
+        "hit_rate_at_k": 0.7040930084408346,
+        "k": 10,
+        "mrr_at_k": 0.3243719301172717,
+        "ndcg_at_k": 0.3824998783803094,
+        "recall_at_k": 0.6321201913055712,
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 6279,
+        "unique_recommended_items": 1617
+      }
+    },
+    "selection": {
+      "baseline_retained": false,
+      "metrics": {
+        "catalog_coverage_at_k": 0.03153153153153153,
+        "changed_ranking_fraction": 0.2879439401178532,
+        "exposure_gini": 0.9957770376735489,
+        "mean_intra_list_diversity": 0.15507327454340536,
+        "ndcg_at_k": 0.3824998783803094,
+        "recall_at_k": 0.6321201913055712
+      },
+      "selected_lambda": 0.8,
+      "selected_policy": "mmr_lambda_0.80"
+    }
+  },
+  "offline_selected_policy": "mmr_lambda_0.80",
+  "phase": "phase06",
+  "retrieval_backend": "faiss_flat",
+  "selected_lambda": 0.8,
+  "status": "frozen",
+  "systems_result": {
+    "baseline_post_embedding": {
+      "mean": 0.29829898828125,
+      "p50": 0.2890835,
+      "p95": 0.35714345,
+      "p99": 0.39874075999999997
+    },
+    "latency_scope": "post_user_embedding",
+    "mmr_post_embedding": {
+      "mean": 187.15646923242187,
+      "p50": 186.78452099999998,
+      "p95": 194.10991439999998,
+      "p99": 204.37610563999996
+    },
+    "mmr_rerank_top100_to_top10": {
+      "mean": 188.30326763671874,
+      "p50": 186.719458,
+      "p95": 195.87063314999997,
+      "p99": 234.75395150999992
+    },
+    "p95_mmr_over_baseline_ratio": 543.5068580986156,
+    "retrieval_top100": {
+      "mean": 0.38526094921875,
+      "p50": 0.35675,
+      "p95": 0.4643543499999999,
+      "p99": 0.6188312499999994
+    }
+  }
+}
