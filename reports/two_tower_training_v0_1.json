@@ -1,0 +1,86 @@
+{
+  "checkpoint": {
+    "path": "artifacts/two_tower_v0_1.pt",
+    "sha256": "11fd97c2b8a826de0c8d29c38b2a736935516c7d493ac3e87e460d384db3363c"
+  },
+  "experiment": "phase03_two_tower_training",
+  "features": {
+    "fit_article_count": 47367,
+    "indexed_article_count": 51282,
+    "nonzero_article_count": 51282,
+    "svd_components": 256,
+    "svd_explained_variance_ratio_sum": 0.15357468327008522,
+    "tfidf_vocabulary_size": 50000
+  },
+  "network_config": {
+    "dropout": 0.1,
+    "embedding_dim": 64,
+    "hidden_dim": 128,
+    "input_dim": 256,
+    "temperature": 0.07
+  },
+  "protocol": {
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "dataset": "MINDsmall_train",
+    "limited_training_run": false,
+    "max_training_examples": 0,
+    "official_dev_used": false,
+    "seed": 42,
+    "training_impressions": 125572,
+    "validation_impressions": 31393
+  },
+  "training_config": {
+    "batch_size": 128,
+    "device": "cpu",
+    "epochs": 3,
+    "gradient_clip_norm": 5.0,
+    "learning_rate": 0.001,
+    "seed": 42,
+    "weight_decay": 1e-05
+  },
+  "training_data": {
+    "eligible_impressions": 123135,
+    "empty_history_impressions": 2437,
+    "history_without_features_impressions": 0,
+    "impressions_without_positive": 0,
+    "input_impressions": 125572,
+    "max_history_length": 20,
+    "positive_click_occurrences": 187856,
+    "positive_without_features": 0,
+    "skipped_positive_occurrences": 3574,
+    "truncated_history_impressions": 59343,
+    "unique_positive_articles": 6294,
+    "usable_example_count": 184282
+  },
+  "training_result": {
+    "device": "cpu",
+    "epochs": [
+      {
+        "average_loss": 4.383181248854253,
+        "batches": 1440,
+        "epoch": 1,
+        "examples_seen": 184282,
+        "in_batch_top1_accuracy": 0.052235161328832984,
+        "skipped_no_negative_examples": 0
+      },
+      {
+        "average_loss": 4.330022942679476,
+        "batches": 1440,
+        "epoch": 2,
+        "examples_seen": 184282,
+        "in_batch_top1_accuracy": 0.06052680131537535,
+        "skipped_no_negative_examples": 0
+      },
+      {
+        "average_loss": 4.312826247278458,
+        "batches": 1440,
+        "epoch": 3,
+        "examples_seen": 184282,
+        "in_batch_top1_accuracy": 0.0628167699504021,
+        "skipped_no_negative_examples": 0
+      }
+    ],
+    "feature_dim": 256,
+    "training_examples": 184282
+  }
+}

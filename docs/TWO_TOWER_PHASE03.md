@@ -228,3 +228,70 @@ diagnostic and is not used for architecture selection.
 The next step is one full fixed-configuration training run followed by
 chronological ranking evaluation. No hyperparameters are changed based on the
 smoke run.
+
+## Phase 03C: Full fixed-configuration training
+
+After the successful smoke test, the predefined configuration was trained on
+all usable examples from the chronological training partition.
+
+No architecture or optimization hyperparameter was changed based on the
+smoke result.
+
+### Training configuration
+
+- article input dimension: 256
+- hidden dimension: 128
+- retrieval embedding dimension: 64
+- maximum history length: 20
+- dropout: 0.10
+- temperature: 0.07
+- epochs: 3
+- batch size: 128
+- learning rate: 0.001
+- weight decay: 0.00001
+- gradient clipping norm: 5.0
+- device: CPU
+- seed: 42
+
+### Training-data accounting
+
+- chronological training impressions: 125,572
+- chronological validation impressions: 31,393
+- positive click occurrences: 187,856
+- usable history-to-click examples: 184,282
+- eligible impressions: 123,135
+- empty-history impressions: 2,437
+- positive articles missing features: 0
+- histories without usable features: 0
+- skipped positive occurrences: 3,574
+- histories truncated to the most recent 20 articles: 59,343
+- unique positive articles: 6,294
+
+### Optimization result
+
+| Epoch | Average loss | In-batch top-1 | Examples seen | Skipped |
+|---:|---:|---:|---:|---:|
+| 1 | 4.383181 | 5.2235% | 184,282 | 0 |
+| 2 | 4.330023 | 6.0527% | 184,282 | 0 |
+| 3 | 4.312826 | 6.2817% | 184,282 | 0 |
+
+The optimization loss decreases monotonically while the in-batch top-1
+diagnostic improves across the full training run.
+
+Training loss is not used as the recommendation-selection criterion. The
+three-epoch checkpoint is taken forward unchanged to chronological ranking
+evaluation.
+
+Checkpoint SHA-256:
+
+`11fd97c2b8a826de0c8d29c38b2a736935516c7d493ac3e87e460d384db3363c`
+
+`MINDsmall_dev` was not used.
+
+### Evaluation parity rule
+
+Training uses at most the 20 most recent feature-supported history articles.
+Chronological inference must apply the same history rule.
+
+This parity requirement is part of the already-defined training protocol and
+is not a post-training hyperparameter change.
