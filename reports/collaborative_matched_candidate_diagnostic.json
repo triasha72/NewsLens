@@ -1,0 +1,217 @@
+{
+  "experiment": "phase01_bpr_matched_candidate_diagnostic",
+  "groups": {
+    "all_clicked_known_shared_candidates": {
+      "bpr_metrics": {
+        "catalog_coverage_at_k": 0.021781521781521783,
+        "catalog_size": 51282,
+        "empty_ranking_impressions": 0,
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 7721,
+        "hit_rate_at_k": 0.7306048439321331,
+        "k": 10,
+        "mrr_at_k": 0.34954170547034163,
+        "ndcg_at_k": 0.4260222529434085,
+        "recall_at_k": 0.6953746019411089,
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 7721,
+        "unique_recommended_items": 1117
+      },
+      "fallback_metrics": {
+        "catalog_coverage_at_k": 0.02373152373152373,
+        "catalog_size": 51282,
+        "empty_ranking_impressions": 1,
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 7721,
+        "hit_rate_at_k": 0.7729568708716488,
+        "k": 10,
+        "mrr_at_k": 0.40153338760708274,
+        "ndcg_at_k": 0.47323014815948466,
+        "recall_at_k": 0.7364901583040425,
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 7721,
+        "unique_recommended_items": 1217
+      },
+      "fraction_of_validation": 0.24594654859363552,
+      "impressions": 7721,
+      "name": "all_clicked_known_shared_candidates",
+      "original_candidate_occurrences": 325112,
+      "paired_comparison": {
+        "baseline_model_name": "tfidf_content_with_popularity_fallback",
+        "bootstrap_samples": 1000,
+        "candidate_model_name": "bpr_shared_candidate_all_clicked_known_shared_candidates",
+        "confidence_level": 0.95,
+        "difference_direction": "candidate_minus_baseline",
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 7721,
+        "k": 10,
+        "method": "paired_nonparametric_percentile_bootstrap",
+        "metrics": {
+          "hit_rate_at_k": {
+            "baseline_estimate": 0.7729568708716488,
+            "candidate_estimate": 0.7306048439321331,
+            "excludes_zero": true,
+            "lower_bound": -0.05284937184302551,
+            "point_difference": -0.042352026939515675,
+            "standard_error": 0.005376019801545116,
+            "upper_bound": -0.03237922548892631
+          },
+          "mrr_at_k": {
+            "baseline_estimate": 0.40153338760708274,
+            "candidate_estimate": 0.34954170547034163,
+            "excludes_zero": true,
+            "lower_bound": -0.06128496185418872,
+            "point_difference": -0.0519916821367411,
+            "standard_error": 0.004724360223125608,
+            "upper_bound": -0.0429447299469803
+          },
+          "ndcg_at_k": {
+            "baseline_estimate": 0.47323014815948466,
+            "candidate_estimate": 0.4260222529434085,
+            "excludes_zero": true,
+            "lower_bound": -0.05540756475797719,
+            "point_difference": -0.04720789521607616,
+            "standard_error": 0.004175413095388627,
+            "upper_bound": -0.039203637809489295
+          },
+          "recall_at_k": {
+            "baseline_estimate": 0.7364901583040425,
+            "candidate_estimate": 0.6953746019411089,
+            "excludes_zero": true,
+            "lower_bound": -0.05085679553972195,
+            "point_difference": -0.041115556362933625,
+            "standard_error": 0.005063769680015137,
+            "upper_bound": -0.03168182147580868
+          }
+        },
+        "random_seed": 42,
+        "resampling_unit": "aligned_evaluated_impression_pair",
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 7721
+      },
+      "supported_candidate_fraction": 0.5665462978911883,
+      "supported_candidate_occurrences": 184191
+    },
+    "all_clicked_known_shared_topk_scoreable": {
+      "bpr_metrics": {
+        "catalog_coverage_at_k": 0.021333021333021333,
+        "catalog_size": 51282,
+        "empty_ranking_impressions": 0,
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 5069,
+        "hit_rate_at_k": 0.589662655356086,
+        "k": 10,
+        "mrr_at_k": 0.2185718826229775,
+        "ndcg_at_k": 0.28399166046227947,
+        "recall_at_k": 0.5360006513291186,
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 5069,
+        "unique_recommended_items": 1094
+      },
+      "fallback_metrics": {
+        "catalog_coverage_at_k": 0.023283023283023282,
+        "catalog_size": 51282,
+        "empty_ranking_impressions": 0,
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 5069,
+        "hit_rate_at_k": 0.6612744130992306,
+        "k": 10,
+        "mrr_at_k": 0.2833168152511218,
+        "ndcg_at_k": 0.3467394127291,
+        "recall_at_k": 0.6057290416779467,
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 5069,
+        "unique_recommended_items": 1194
+      },
+      "fraction_of_validation": 0.1614691173191476,
+      "impressions": 5069,
+      "name": "all_clicked_known_shared_topk_scoreable",
+      "original_candidate_occurrences": 286642,
+      "paired_comparison": {
+        "baseline_model_name": "tfidf_content_with_popularity_fallback",
+        "bootstrap_samples": 1000,
+        "candidate_model_name": "bpr_shared_candidate_all_clicked_known_shared_topk_scoreable",
+        "confidence_level": 0.95,
+        "difference_direction": "candidate_minus_baseline",
+        "evaluated_fraction": 1.0,
+        "evaluated_impressions": 5069,
+        "k": 10,
+        "method": "paired_nonparametric_percentile_bootstrap",
+        "metrics": {
+          "hit_rate_at_k": {
+            "baseline_estimate": 0.6612744130992306,
+            "candidate_estimate": 0.589662655356086,
+            "excludes_zero": true,
+            "lower_bound": -0.08818800552377194,
+            "point_difference": -0.07161175774314466,
+            "standard_error": 0.008364615837058649,
+            "upper_bound": -0.0552229236535806
+          },
+          "mrr_at_k": {
+            "baseline_estimate": 0.2833168152511218,
+            "candidate_estimate": 0.2185718826229775,
+            "excludes_zero": true,
+            "lower_bound": -0.07657301853469736,
+            "point_difference": -0.06474493262814429,
+            "standard_error": 0.005710644733127087,
+            "upper_bound": -0.05421523648257233
+          },
+          "ndcg_at_k": {
+            "baseline_estimate": 0.3467394127291,
+            "candidate_estimate": 0.28399166046227947,
+            "excludes_zero": true,
+            "lower_bound": -0.07370282789764049,
+            "point_difference": -0.06274775226682056,
+            "standard_error": 0.005355416084169724,
+            "upper_bound": -0.053160633559389915
+          },
+          "recall_at_k": {
+            "baseline_estimate": 0.6057290416779467,
+            "candidate_estimate": 0.5360006513291186,
+            "excludes_zero": true,
+            "lower_bound": -0.08604228903042765,
+            "point_difference": -0.06972839034882816,
+            "standard_error": 0.00789219197649342,
+            "upper_bound": -0.05458746303180608
+          }
+        },
+        "random_seed": 42,
+        "resampling_unit": "aligned_evaluated_impression_pair",
+        "skipped_no_click_impressions": 0,
+        "total_impressions": 5069
+      },
+      "supported_candidate_fraction": 0.6003028167539998,
+      "supported_candidate_occurrences": 172072
+    }
+  },
+  "interpretation_boundary": {
+    "deployable_gate": false,
+    "oracle_diagnostic": true,
+    "reason": "Eligibility conditions on clicked items being representable by BPR."
+  },
+  "protocol": {
+    "bootstrap_samples": 1000,
+    "confidence_level": 0.95,
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "k": 10,
+    "seed": 42,
+    "validation_impressions": 31393
+  },
+  "purpose": "Compare BPR and Content+Fallback on exactly the same BPR-supported candidate universe.",
+  "selected_bpr": {
+    "batch_size": 2048,
+    "embedding_dim": 64,
+    "epochs": 10,
+    "known_items": 9886,
+    "known_users": 45848,
+    "learning_rate": 0.01,
+    "max_negatives_per_positive": 3,
+    "training_triples": 541860,
+    "weight_decay": 1e-06
+  },
+  "selection_accounting": {
+    "skipped_no_supported_candidates": 0,
+    "skipped_unknown_clicked_item": 18468,
+    "skipped_unknown_user": 5204
+  }
+}

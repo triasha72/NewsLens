@@ -1,0 +1,55 @@
+{
+  "hyperparameters": {
+    "batch_size": 2048,
+    "embedding_dim": 64,
+    "epochs": 10,
+    "k": 10,
+    "learning_rate": 0.01,
+    "max_negatives_per_positive": 1,
+    "seed": 42,
+    "weight_decay": 1e-06
+  },
+  "metrics": {
+    "catalog_coverage_at_k": 0.02445302445302445,
+    "catalog_size": 51282,
+    "empty_ranking_impressions": 8862,
+    "evaluated_fraction": 1.0,
+    "evaluated_impressions": 31393,
+    "hit_rate_at_k": 0.23521167139171154,
+    "k": 10,
+    "mrr_at_k": 0.10665054488438683,
+    "ndcg_at_k": 0.11395310152914814,
+    "recall_at_k": 0.18040766508982908,
+    "skipped_no_click_impressions": 0,
+    "total_impressions": 31393,
+    "unique_recommended_items": 1254
+  },
+  "model_name": "bpr_matrix_factorization",
+  "protocol": {
+    "candidate_set_evaluation": true,
+    "cold_start_user_policy": "empty ranking; no fallback",
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "training_boundary": "event_timestamp < cutoff",
+    "unknown_item_policy": "not scored by BPR; retained in validation relevance",
+    "validation_boundary": "event_timestamp >= cutoff"
+  },
+  "training": {
+    "items": 8061,
+    "triples": 187856,
+    "users": 45848
+  },
+  "validation": {
+    "candidate_occurrences": 1264253,
+    "clicked_item_occurrences": 48488,
+    "cold_start_user_fraction": 0.1657694390469213,
+    "cold_start_user_impressions": 5204,
+    "impressions": 31393,
+    "impressions_with_no_model_candidates": 4509,
+    "known_user_impressions": 26189,
+    "model_known_candidate_occurrences": 510527,
+    "unknown_candidate_fraction": 0.5961828842802825,
+    "unknown_candidate_occurrences": 753726,
+    "unknown_clicked_item_fraction": 0.6557704999175054,
+    "unknown_clicked_item_occurrences": 31797
+  }
+}

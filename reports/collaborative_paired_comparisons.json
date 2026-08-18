@@ -1,0 +1,228 @@
+{
+  "comparisons": {
+    "content": {
+      "baseline_model_name": "tfidf_history_content",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "bpr_matrix_factorization_neg3",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.6610072309113497,
+          "candidate_estimate": 0.2621284999840729,
+          "excludes_zero": true,
+          "lower_bound": -0.40598381804860956,
+          "point_difference": -0.3988787309272768,
+          "standard_error": 0.0035789672535935847,
+          "upper_bound": -0.39215509827031503
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.3133368120180467,
+          "candidate_estimate": 0.11940152971115288,
+          "excludes_zero": true,
+          "lower_bound": -0.19868244626872938,
+          "point_difference": -0.19393528230689383,
+          "standard_error": 0.002439590447508289,
+          "upper_bound": -0.1894457881369772
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.35944802884811794,
+          "candidate_estimate": 0.12889401738172152,
+          "excludes_zero": true,
+          "lower_bound": -0.23505474210986096,
+          "point_difference": -0.23055401146639642,
+          "standard_error": 0.0023228858905910373,
+          "upper_bound": -0.22594286445470907
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.5819427026473807,
+          "candidate_estimate": 0.20455351204028216,
+          "excludes_zero": true,
+          "lower_bound": -0.38381866430971745,
+          "point_difference": -0.3773891906070985,
+          "standard_error": 0.0032022658777980995,
+          "upper_bound": -0.3713321124476997
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393
+    },
+    "content_fallback": {
+      "baseline_model_name": "tfidf_content_with_popularity_fallback",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "bpr_matrix_factorization_neg3",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.6762335552511707,
+          "candidate_estimate": 0.2621284999840729,
+          "excludes_zero": true,
+          "lower_bound": -0.42130411238174115,
+          "point_difference": -0.4141050552670978,
+          "standard_error": 0.0035320029305820704,
+          "upper_bound": -0.40779632402127863
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.31794652432374215,
+          "candidate_estimate": 0.11940152971115288,
+          "excludes_zero": true,
+          "lower_bound": -0.2034792216215399,
+          "point_difference": -0.1985449946125893,
+          "standard_error": 0.0024617998448514177,
+          "upper_bound": -0.19384730204741585
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.3663605124218536,
+          "candidate_estimate": 0.12889401738172152,
+          "excludes_zero": true,
+          "lower_bound": -0.2421637122586145,
+          "point_difference": -0.23746649504013206,
+          "standard_error": 0.002329780844375041,
+          "upper_bound": -0.23302441099140023
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.5954741541538584,
+          "candidate_estimate": 0.20455351204028216,
+          "excludes_zero": true,
+          "lower_bound": -0.3974508651660094,
+          "point_difference": -0.39092064211357624,
+          "standard_error": 0.0031676093542763375,
+          "upper_bound": -0.3852905510154263
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393
+    },
+    "popularity": {
+      "baseline_model_name": "training_click_count_popularity",
+      "bootstrap_samples": 1000,
+      "candidate_model_name": "bpr_matrix_factorization_neg3",
+      "confidence_level": 0.95,
+      "difference_direction": "candidate_minus_baseline",
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "k": 10,
+      "method": "paired_nonparametric_percentile_bootstrap",
+      "metrics": {
+        "hit_rate_at_k": {
+          "baseline_estimate": 0.570477494982958,
+          "candidate_estimate": 0.2621284999840729,
+          "excludes_zero": true,
+          "lower_bound": -0.3145964068422897,
+          "point_difference": -0.3083489949988851,
+          "standard_error": 0.0032704540363119785,
+          "upper_bound": -0.3021055649348581
+        },
+        "mrr_at_k": {
+          "baseline_estimate": 0.2308225496635333,
+          "candidate_estimate": 0.11940152971115288,
+          "excludes_zero": true,
+          "lower_bound": -0.11515042340851543,
+          "point_difference": -0.11142101995238042,
+          "standard_error": 0.001924500380259578,
+          "upper_bound": -0.10790051802317732
+        },
+        "ndcg_at_k": {
+          "baseline_estimate": 0.28526233059191086,
+          "candidate_estimate": 0.12889401738172152,
+          "excludes_zero": true,
+          "lower_bound": -0.16012302246735582,
+          "point_difference": -0.15636831321018935,
+          "standard_error": 0.0019162799107953086,
+          "upper_bound": -0.15276866040972797
+        },
+        "recall_at_k": {
+          "baseline_estimate": 0.5046507560117974,
+          "candidate_estimate": 0.20455351204028216,
+          "excludes_zero": true,
+          "lower_bound": -0.3058406647725679,
+          "point_difference": -0.30009724397151527,
+          "standard_error": 0.0029940398202557075,
+          "upper_bound": -0.29432801564377026
+        }
+      },
+      "random_seed": 42,
+      "resampling_unit": "aligned_evaluated_impression_pair",
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393
+    }
+  },
+  "experiment": "phase01_collaborative_baseline_comparison",
+  "protocol": {
+    "bootstrap_samples": 1000,
+    "confidence_level": 0.95,
+    "cutoff_timestamp": "2019-11-13T20:36:26",
+    "difference_direction": "BPR minus baseline",
+    "k": 10,
+    "random_seed": 42,
+    "validation_impressions": 31393
+  },
+  "selected_bpr": {
+    "hyperparameters": {
+      "batch_size": 2048,
+      "embedding_dim": 64,
+      "epochs": 10,
+      "k": 10,
+      "learning_rate": 0.01,
+      "max_negatives_per_positive": 3,
+      "seed": 42,
+      "weight_decay": 1e-06
+    },
+    "metrics": {
+      "catalog_coverage_at_k": 0.025642525642525643,
+      "catalog_size": 51282,
+      "empty_ranking_impressions": 8002,
+      "evaluated_fraction": 1.0,
+      "evaluated_impressions": 31393,
+      "hit_rate_at_k": 0.2621284999840729,
+      "k": 10,
+      "mrr_at_k": 0.11940152971115288,
+      "ndcg_at_k": 0.12889401738172152,
+      "recall_at_k": 0.20455351204028216,
+      "skipped_no_click_impressions": 0,
+      "total_impressions": 31393,
+      "unique_recommended_items": 1315
+    },
+    "model_name": "bpr_matrix_factorization",
+    "protocol": {
+      "candidate_set_evaluation": true,
+      "cold_start_user_policy": "empty ranking; no fallback",
+      "cutoff_timestamp": "2019-11-13T20:36:26",
+      "training_boundary": "event_timestamp < cutoff",
+      "unknown_item_policy": "not scored by BPR; retained in validation relevance",
+      "validation_boundary": "event_timestamp >= cutoff"
+    },
+    "training": {
+      "items": 9886,
+      "triples": 541860,
+      "users": 45848
+    },
+    "validation": {
+      "candidate_occurrences": 1264253,
+      "clicked_item_occurrences": 48488,
+      "cold_start_user_fraction": 0.1657694390469213,
+      "cold_start_user_impressions": 5204,
+      "impressions": 31393,
+      "impressions_with_no_model_candidates": 3472,
+      "known_user_impressions": 26189,
+      "model_known_candidate_occurrences": 549248,
+      "unknown_candidate_fraction": 0.565555312109206,
+      "unknown_candidate_occurrences": 715005,
+      "unknown_clicked_item_fraction": 0.6158018478798878,
+      "unknown_clicked_item_occurrences": 29859
+    }
+  }
+}
