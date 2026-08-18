@@ -295,3 +295,64 @@ Chronological inference must apply the same history rule.
 
 This parity requirement is part of the already-defined training protocol and
 is not a post-training hyperparameter change.
+
+## Phase 03D: First chronological ranking evaluation
+
+The frozen three-epoch two-tower checkpoint was evaluated on the same 31,393
+chronological validation impressions used by previous internal experiments.
+
+The evaluation protocol was committed before the ranking result was observed.
+
+### Results
+
+| Model | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 | Empty |
+|---|---:|---:|---:|---:|---:|
+| Content + popularity fallback | 0.366361 | 0.317947 | 0.595474 | 0.676234 | 0 |
+| Raw two-tower | 0.357428 | 0.305928 | 0.589788 | 0.668907 | 801 |
+| Two-tower + popularity fallback | 0.364966 | 0.311884 | 0.603411 | 0.684261 | 0 |
+
+Paired bootstrap, two-tower + popularity minus Content + fallback:
+
+- NDCG@10: -0.001395
+- 95% CI: [-0.004475, +0.001718]
+
+- MRR@10: -0.006063
+- 95% CI: [-0.009697, -0.002579]
+
+- Recall@10: +0.007937
+- 95% CI: [+0.003696, +0.011967]
+
+- Hit Rate@10: +0.008027
+- 95% CI: [+0.003280, +0.012391]
+
+### Interpretation
+
+The first two-tower model improves top-10 retrieval breadth but not top-rank
+ordering.
+
+Recall and Hit Rate improve with paired intervals entirely above zero, while
+MRR decreases with its interval entirely below zero. NDCG is slightly lower
+and statistically inconclusive.
+
+This pattern indicates that the learned representation contains useful
+retrieval signal but the in-batch-negative training objective is insufficiently
+aligned with candidate-level ordering.
+
+Raw two-tower rankings are available for 30,592 / 31,393 validation
+impressions (97.45%). The remaining 801 impressions have empty histories.
+There are no feature-support abstentions among nonempty histories.
+
+The representation-coverage objective of Phase 03 is therefore satisfied.
+
+### Next bounded experiment
+
+Only one training-objective ablation will be attempted next:
+
+**same-impression hard negatives**
+
+The article representation, history construction, network architecture, and
+all existing optimization hyperparameters remain fixed.
+
+This ablation tests whether negatives actually shown alongside clicked
+articles improve top-rank ordering without sacrificing the two-tower's
+observed Recall/Hit advantage.
