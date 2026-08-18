@@ -118,3 +118,69 @@ After MMR optimization:
 - controlled online A/B experiment design.
 
 Phase 07 does not claim that offline MIND metrics are online business impact.
+
+## Phase 07A-2: Frozen real-workload parity benchmark
+
+The optimization benchmark reuses the Phase-06E workload definition.
+
+The workload is reconstructed deterministically using:
+
+- the same Phase-06 chronological benchmark partition;
+- query count = 512;
+- seed = 42;
+- exact FAISS IndexFlatIP;
+- FAISS threads = 1;
+- retrieval depth = 100;
+- final depth = 10;
+- MMR lambda = 0.80;
+- frozen two-tower temperature = 0.07;
+- complete user-history exclusion.
+
+Candidate pools are generated once and shared by both MMR implementations.
+
+The reference and optimized implementations therefore receive exactly the
+same:
+
+- candidate IDs;
+- relevance scores;
+- candidate embeddings;
+- lambda;
+- top-k.
+
+The reference implementation remains the behavioral oracle.
+
+### Timing methodology
+
+The first 50 candidate pools are used for warm-up.
+
+For measured queries, reference and optimized execution order alternates by
+query index to reduce systematic order/cache bias.
+
+Each of the 512 frozen candidate pools contributes one measured latency
+observation per implementation.
+
+The benchmark reports:
+
+- reference mean / p50 / p95 / p99;
+- optimized mean / p50 / p95 / p99;
+- speedup relative to the measured reference;
+- speedup relative to the frozen Phase-06E reference p95;
+- ordered top-10 parity count;
+- parity mismatch count.
+
+### Promotion gate
+
+The gate remains the previously frozen Phase-07A rule:
+
+- 512 / 512 ordered top-10 parity;
+- zero parity mismatches;
+- at least 20x p95 speedup relative to the frozen Phase-06 reference;
+- optimized p95 <= 10 ms.
+
+The measured reference timing in Phase 07A-2 is diagnostic.
+
+The preregistered performance gate is evaluated against the frozen Phase-06E
+reference p95, so normal benchmark noise cannot move the target after results
+are observed.
+
+No ranking policy or MMR hyperparameter is changed based on this benchmark.
