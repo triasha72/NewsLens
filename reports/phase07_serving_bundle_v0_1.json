@@ -1,0 +1,43 @@
+{
+  "artifact_type": "newslens_phase07_serving_bundle",
+  "config": {
+    "artifact_version": "phase07-v0.1",
+    "faiss_threads": 1,
+    "final_k": 10,
+    "lambda_weight": 0.8,
+    "max_history_length": 20,
+    "retrieval_backend": "faiss_flat",
+    "retrieval_k": 100,
+    "selected_policy": "mmr_lambda_0.80",
+    "temperature": 0.07
+  },
+  "evidence": {
+    "phase06_final_report_sha256": "1db7926f35c7495fcca56f4de5ba71ffbfa57bf1b8ca1b7fa36a8cb0133f1fa2",
+    "phase07_optimization_report_sha256": "5682a2889c3afca71e09c1139cba96dcea333aee103df2b436af2ac3a0802322"
+  },
+  "files": {
+    "catalog": {
+      "name": "article_embeddings.npz",
+      "sha256": "5aae2f910298fc078d7085fd8e4f63e703610def3cfa37ab07c2562d2320f607"
+    },
+    "checkpoint": {
+      "name": "two_tower.pt",
+      "sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8"
+    },
+    "faiss_index": {
+      "name": "faiss_flat.index",
+      "sha256": "f81e5c4581280ed1411d494a33570ee5ef40e895df301801414d52502f14d0f6"
+    },
+    "popularity": {
+      "name": "popularity.json",
+      "sha256": "4ca14f1c569fff19fc1b651f97baeeb9bb183c55a9bb6e631789a344e8aac1f5"
+    }
+  },
+  "integrity": {
+    "catalog_matches_phase07": true,
+    "checkpoint_matches_phase07": true,
+    "passed": true,
+    "phase07_promotion_gate_passed": true
+  },
+  "schema_version": "1.0.0"
+}
