@@ -1,0 +1,62 @@
+{
+  "experiment": "phase07_mmr_vectorization_benchmark",
+  "frozen_inputs": {
+    "phase03_checkpoint_sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8",
+    "phase04_catalog_sha256": "5aae2f910298fc078d7085fd8e4f63e703610def3cfa37ab07c2562d2320f607",
+    "phase06_reference_p95_ms": 195.87063314999997,
+    "workload_sha256": "76995456de506b8b2e20c182319a442e4ce1b24ff37dc7399a416074ff0478ef"
+  },
+  "latency_ms": {
+    "optimized": {
+      "mean": 4.018339083984374,
+      "p50": 4.025354,
+      "p95": 4.09570845,
+      "p99": 4.226363629999999
+    },
+    "reference": {
+      "mean": 5.991158837890625,
+      "p50": 5.980979,
+      "p95": 6.1223125,
+      "p99": 6.26740111
+    },
+    "speedup_vs_frozen_phase06_p95": 47.823382826480234,
+    "speedup_vs_measured_reference_p95": 1.4948115996879612
+  },
+  "parity": {
+    "mismatch_count": 0,
+    "mismatches": [],
+    "parity_count": 512,
+    "parity_fraction": 1.0,
+    "passed": true
+  },
+  "promotion_gate": {
+    "exact_parity_passed": true,
+    "latency_gate_passed": true,
+    "maximum_optimized_p95_ms": 10.0,
+    "passed": true,
+    "required_minimum_speedup": 20.0,
+    "required_parity_count": 512,
+    "speedup_gate_passed": true
+  },
+  "protocol": {
+    "benchmark_source": "phase06_faiss_mmr_serving_benchmark",
+    "execution_order": "alternating_reference_optimized",
+    "faiss_threads": 1,
+    "final_k": 10,
+    "lambda": 0.8,
+    "query_count": 512,
+    "retrieval_k": 100,
+    "seed": 42,
+    "temperature": 0.07,
+    "timing_scope": "mmr_top100_to_top10_only",
+    "warmup_count": 50
+  },
+  "workload": {
+    "candidate_pool_occurrences": 51200,
+    "candidate_pool_unique_articles": 15700,
+    "duplicate_candidate_violations": 0,
+    "history_exclusion_violations": 0,
+    "matches_phase06_accounting": true,
+    "short_candidate_pools": 0
+  }
+}
