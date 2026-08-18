@@ -202,3 +202,43 @@ Phase 06 does not:
 
 Phase 07 handles production serving, Kubernetes, observability, and A/B-test
 design.
+
+## Phase 06C score-scale operationalization
+
+The relevance term used inside MMR is the frozen Phase-03 inference score
+returned by `TwoTowerNetwork.score_candidates`.
+
+For normalized user and article embeddings this is:
+
+`inner_product / frozen_temperature`
+
+The frozen Phase-03 temperature is 0.07.
+
+Raw inner product and temperature-scaled score produce identical pure
+two-tower ordering, which is why the Phase-06B baseline remains unchanged.
+They are not equivalent when mixed with the MMR diversity penalty.
+
+Therefore all non-baseline Phase-06 MMR policies use the frozen
+temperature-scaled score.
+
+No per-impression min-max normalization, standardization, calibration, or
+other post-hoc score rescaling is performed.
+
+### Relevance-budget confidence-interval rule
+
+The 2% NDCG retention budget is operationalized as a non-inferiority margin.
+
+For baseline NDCG `B`, the allowed absolute loss is:
+
+`0.02 * B`
+
+A candidate satisfies the confidence-interval guardrail only when the lower
+bound of its paired candidate-minus-baseline NDCG interval is greater than or
+equal to:
+
+`-0.02 * B`
+
+This requires the complete 95% interval to remain inside the preregistered
+2% relevance-loss budget.
+
+This interpretation is frozen before observing the Phase-06C MMR sweep.
