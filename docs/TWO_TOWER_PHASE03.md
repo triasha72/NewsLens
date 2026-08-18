@@ -356,3 +356,132 @@ all existing optimization hyperparameters remain fixed.
 This ablation tests whether negatives actually shown alongside clicked
 articles improve top-rank ordering without sacrificing the two-tower's
 observed Recall/Hit advantage.
+
+## Phase 03E: Same-impression hard-negative ablation
+
+### Motivation
+
+Phase 03D shows a clear retrieval-versus-ordering tradeoff.
+
+Compared with Content + popularity fallback, the first two-tower model with
+popularity fallback produces:
+
+- NDCG@10 difference: -0.001395,
+  95% CI [-0.004475, +0.001718];
+- MRR@10 difference: -0.006063,
+  95% CI [-0.009697, -0.002579];
+- Recall@10 difference: +0.007937,
+  95% CI [+0.003696, +0.011967];
+- Hit Rate@10 difference: +0.008027,
+  95% CI [+0.003280, +0.012391].
+
+The model therefore retrieves clicked articles into the top 10 more often,
+but ranks those clicked articles less effectively near the top of the list.
+
+### Hypothesis
+
+The original in-batch objective mostly contrasts a user's clicked article
+against clicked articles from unrelated impressions.
+
+This is useful for representation learning and retrieval, but does not
+directly teach the model to distinguish the clicked article from articles
+that were actually shown alongside it.
+
+One bounded objective ablation will therefore add the unclicked candidates
+from the same impression as hard negatives.
+
+### Frozen components
+
+The following remain unchanged:
+
+- TF-IDF maximum features: 50,000
+- SVD components: 256
+- maximum history length: 20
+- hidden dimension: 128
+- embedding dimension: 64
+- dropout: 0.10
+- temperature: 0.07
+- epochs: 3
+- batch size: 128
+- learning rate: 0.001
+- weight decay: 0.00001
+- gradient clipping norm: 5.0
+- seed: 42
+- chronological train/validation split
+
+### Hard-negative policy
+
+For each trainable click:
+
+1. preserve the original in-batch positive-article candidate set;
+2. include every feature-supported candidate labeled unclicked in that same
+   impression as an additional row-specific negative;
+3. do not sample or tune a hard-negative count;
+4. do not assign additional weighting to the hard-negative loss.
+
+An unclicked candidate is treated only as an implicit training negative. It
+is not interpreted as a verified user dislike.
+
+### Decision rule
+
+The primary question is whether candidate-aware negatives repair the
+top-ordering weakness observed in v0.1.
+
+The ablation is considered useful if v0.2 improves MRR/NDCG relative to v0.1
+without materially eliminating the Recall/Hit advantage over the
+Content + popularity fallback baseline.
+
+No additional objective or neural hyperparameter sweep will follow this
+ablation.
+
+### Phase 03E implementation validation
+
+The same-impression hard-negative implementation was validated before the
+full ablation run.
+
+Two correctness safeguards were added.
+
+First, distinct clicked articles belonging to the same impression are masked
+from one another in the shared in-batch positive pool. They therefore cannot
+be accidentally treated as negatives for the same user context.
+
+A deterministic unit-level check produced:
+
+- row 1 valid-positive mask: `[True, False, True]`
+- row 2 valid-positive mask: `[False, True, True]`
+- unrelated row mask: `[True, True, True]`
+
+This confirms that known co-clicked articles are excluded as false negatives
+while unrelated in-batch clicked articles remain valid contrastive negatives.
+
+Second, training reports serialize aggregate accounting only. The complete
+184,282-example interaction collection is not included in report JSON.
+
+### Corrected Phase 03E smoke run
+
+The corrected hard-negative objective was trained on a deterministic
+4,096-example prefix for two epochs.
+
+| Epoch | Loss | In-batch top-1 | Examples | Hard negatives | Skipped batches |
+|---:|---:|---:|---:|---:|---:|
+| 1 | 4.449878 | 13.9893% | 4,096 | 189,285 | 0 |
+| 2 | 4.341978 | 14.3555% | 4,096 | 189,285 | 0 |
+
+The loss remains finite and decreases while the diagnostic top-1 accuracy
+increases.
+
+The full chronological training construction contains:
+
+- 184,282 usable examples;
+- 184,282 examples with at least one same-impression hard negative;
+- 0 examples without hard negatives;
+- 8,420,452 attached hard-negative occurrences;
+- 16,661 unique hard-negative articles;
+- 6,294 unique positive articles;
+- 0 positive articles missing content features;
+- 0 nonempty histories missing content features.
+
+The smoke run therefore clears the Phase 03E implementation gate.
+
+No architecture or optimizer hyperparameter is changed before the full
+hard-negative ablation.
