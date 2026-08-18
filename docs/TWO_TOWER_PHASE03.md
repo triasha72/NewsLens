@@ -485,3 +485,65 @@ The smoke run therefore clears the Phase 03E implementation gate.
 
 No architecture or optimizer hyperparameter is changed before the full
 hard-negative ablation.
+
+## Phase 03E: Full hard-negative evaluation
+
+The frozen hard-negative objective was trained for the predefined three
+epochs on all 184,282 usable chronological training examples.
+
+Each epoch processed 8,420,452 attached same-impression hard-negative
+occurrences and skipped no batches.
+
+### Optimization result
+
+| Epoch | Loss | Diagnostic top-1 |
+|---:|---:|---:|
+| 1 | 4.732982 | 3.5592% |
+| 2 | 4.688528 | 4.0145% |
+| 3 | 4.673004 | 4.2457% |
+
+Checkpoint SHA-256:
+
+`1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8`
+
+### Chronological validation result
+
+| Model | NDCG@10 | MRR@10 | Recall@10 | Hit Rate@10 |
+|---|---:|---:|---:|---:|
+| Content + popularity fallback | 0.366361 | 0.317947 | 0.595474 | 0.676234 |
+| Raw hard-negative two-tower | 0.365065 | 0.313482 | 0.600528 | 0.681235 |
+| Hard-negative two-tower + popularity fallback | 0.372602 | 0.319438 | 0.614151 | 0.696588 |
+
+Paired bootstrap, hard-negative two-tower + popularity fallback minus
+Content + popularity fallback:
+
+- NDCG@10: +0.006242,
+  95% CI [+0.003161, +0.009405];
+- MRR@10: +0.001491,
+  95% CI [-0.002282, +0.005179];
+- Recall@10: +0.018677,
+  95% CI [+0.014384, +0.023024];
+- Hit Rate@10: +0.020355,
+  95% CI [+0.015544, +0.024943].
+
+The paired intervals for NDCG, Recall, and Hit Rate are entirely above zero.
+The MRR point estimate is positive but its interval includes zero.
+
+### Interpretation
+
+The same-impression hard-negative objective repairs the retrieval-versus-
+ordering tradeoff observed in the first two-tower experiment.
+
+Compared with the original v0.1 two-tower + popularity model, v0.2 improves
+the aggregate point estimates by approximately:
+
+- NDCG@10: +0.007636
+- MRR@10: +0.007554
+- Recall@10: +0.010740
+- Hit Rate@10: +0.012327
+
+A direct paired v0.2-versus-v0.1 bootstrap comparison is performed next before
+the Phase 03 model is frozen.
+
+No additional two-tower architecture or hyperparameter tuning will be
+performed.
