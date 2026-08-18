@@ -1,0 +1,22 @@
+{
+  "article_count": 51282,
+  "checkpoint_sha256": "1fd73a1236c8a84e29ac7ec7e94089e95b1bdd42aa828378dfaf04e816760cd8",
+  "cutoff_timestamp": "2019-11-13T20:36:26",
+  "dataset": "MINDsmall_train",
+  "embedding_artifact_sha256": "5aae2f910298fc078d7085fd8e4f63e703610def3cfa37ab07c2562d2320f607",
+  "embedding_dim": 64,
+  "exact_order_match_fraction_at_10": 1.0,
+  "exact_order_match_fraction_at_100": 0.982,
+  "exact_order_match_fraction_at_50": 0.996,
+  "exclusion_violations": 0,
+  "experiment": "phase04_faiss_flat_parity",
+  "faiss_version": "1.13.2",
+  "metric": "inner_product",
+  "official_dev_used": false,
+  "parity_passed": true,
+  "query_count": 1000,
+  "recall_at_10": 1.0,
+  "recall_at_100": 1.0,
+  "recall_at_50": 1.0,
+  "short_rankings": 0
+}
