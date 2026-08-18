@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import subprocess
 from pathlib import Path
 
 import torch
@@ -18,9 +19,6 @@ from newslens.models.popularity import (
 )
 from newslens.retrieval.catalog import (
     RetrievalCatalog,
-)
-from newslens.retrieval.faiss_flat import (
-    FaissFlatIPRetriever,
 )
 from newslens.serving.bundle import (
     sha256_file,
@@ -71,7 +69,29 @@ def main() -> None:
         required=True,
     )
 
+    parser.add_argument(
+        "--faiss-python",
+        type=Path,
+        required=True,
+        help=(
+            "Python interpreter for the isolated "
+            "FAISS-only index builder."
+        ),
+    )
+
     args = parser.parse_args()
+
+    faiss_python = (
+        args.faiss_python
+        .expanduser()
+        .resolve()
+    )
+
+    if not faiss_python.is_file():
+        raise RuntimeError(
+            "FAISS Python interpreter does not exist: "
+            f"{faiss_python}"
+        )
 
     phase05 = json.loads(
         args.phase05_audit_report.read_text()
@@ -246,15 +266,38 @@ def main() -> None:
         catalog_target,
     )
 
-    retriever = (
-        FaissFlatIPRetriever(
-            catalog
+    faiss_builder = (
+        Path(__file__)
+        .with_name(
+            "build_faiss_index_phase07.py"
         )
+        .resolve()
     )
 
-    retriever.save(
-        index_target
+    subprocess.run(
+        [
+            str(
+                faiss_python
+            ),
+            str(
+                faiss_builder
+            ),
+            "--catalog",
+            str(
+                catalog_target
+            ),
+            "--output",
+            str(
+                index_target
+            ),
+        ],
+        check=True,
     )
+
+    if not index_target.is_file():
+        raise RuntimeError(
+            "Isolated FAISS builder did not create the index."
+        )
 
     popularity_payload = {
         "schema_version": "1.0.0",
