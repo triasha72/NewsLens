@@ -3,11 +3,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: newslens-api:0.3.0
+    image: newslens-api:phase07
     ports:
       - "8000:8000"
     environment:
-      NEWSLENS_ARTIFACT_PATH: /models/newslens-fallback-0.3.0
+      NEWSLENS_SERVING_BUNDLE_PATH: /models/phase07
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      VECLIB_MAXIMUM_THREADS: "1"
     volumes:
-      - ./artifacts/newslens-fallback-0.3.0:/models/newslens-fallback-0.3.0:ro
+      - ./artifacts/serving/phase07_v0_1:/models/phase07:ro
     init: true

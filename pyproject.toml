@@ -27,6 +27,9 @@ dependencies = [
 recsys = [
   "torch>=2.4,<2.13",
 ]
+serving = [
+  "faiss-cpu>=1.9,<2.0",
+]
 dev = [
   "httpx>=0.27,<1.0",
   "ipykernel>=6.29",

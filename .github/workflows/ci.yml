@@ -41,7 +41,7 @@ jobs:
       - name: Validate Compose configuration
         run: docker compose config
 
-      - name: Build NewsLens image
+      - name: Build production image
         run: docker build --tag newslens-api:ci .
 
       - name: Start artifact-free container
@@ -70,7 +70,7 @@ jobs:
           docker logs newslens-api-ci
           exit 1
 
-      - name: Verify artifact-free readiness contract
+      - name: Verify artifact-free readiness
         run: |
           status_code="$(
             curl \
@@ -81,7 +81,16 @@ jobs:
           )"
 
           cat /tmp/readiness.json
+
           test "$status_code" = "503"
+
+      - name: Verify metrics endpoint
+        run: |
+          curl \
+            --fail \
+            --silent \
+            http://127.0.0.1:8000/metrics \
+            | grep newslens_model_ready
 
       - name: Show container logs
         if: always()
