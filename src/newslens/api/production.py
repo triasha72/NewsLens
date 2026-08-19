@@ -1,21 +1,24 @@
-"""Production FastAPI application for Phase-07 serving."""
+"""Production FastAPI application for the frozen Phase-07 recommender."""
 
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from time import perf_counter
 
 from fastapi import (
     FastAPI,
     HTTPException,
     Request,
+    Response,
     status,
 )
 
 from newslens import __version__
 from newslens.serving import ServingRuntime
 
+from .metrics import ServingMetrics
 from .observability import (
     get_request_id,
     install_request_observability,
@@ -34,6 +37,16 @@ from .settings_phase07 import (
 )
 
 SERVICE_NAME = "newslens-production"
+
+KNOWN_METRIC_ROUTES = frozenset(
+    {
+        "/health",
+        "/ready",
+        "/model-info",
+        "/metrics",
+        "/v1/recommend",
+    }
+)
 
 
 def _require_runtime(
@@ -76,6 +89,8 @@ def create_production_app(
         )
     )
 
+    metrics = ServingMetrics()
+
     @asynccontextmanager
     async def lifespan(
         application: FastAPI,
@@ -96,13 +111,22 @@ def create_production_app(
             loaded_runtime
         )
 
+        metrics.set_ready(
+            loaded_runtime is not None
+        )
+
         try:
             yield
         finally:
+            metrics.set_ready(False)
             application.state.serving_runtime = None
 
     application = FastAPI(
         title="NewsLens Production API",
+        summary=(
+            "Frozen two-tower, FAISS, "
+            "and MMR recommendation service."
+        ),
         version=__version__,
         lifespan=lifespan,
     )
@@ -110,6 +134,50 @@ def create_production_app(
     install_request_observability(
         application
     )
+
+    @application.middleware("http")
+    async def collect_metrics(
+        request: Request,
+        call_next,
+    ):
+        started = perf_counter()
+
+        route = (
+            request.url.path
+            if request.url.path
+            in KNOWN_METRIC_ROUTES
+            else "other"
+        )
+
+        try:
+            response = await call_next(
+                request
+            )
+        except Exception:
+            metrics.observe_http(
+                method=request.method,
+                route=route,
+                status_code=500,
+                duration_seconds=(
+                    perf_counter()
+                    - started
+                ),
+            )
+            raise
+
+        metrics.observe_http(
+            method=request.method,
+            route=route,
+            status_code=(
+                response.status_code
+            ),
+            duration_seconds=(
+                perf_counter()
+                - started
+            ),
+        )
+
+        return response
 
     @application.get(
         "/health",
@@ -195,6 +263,20 @@ def create_production_app(
             ),
         )
 
+    @application.get(
+        "/metrics",
+        include_in_schema=False,
+    )
+    def prometheus_metrics() -> Response:
+        content, media_type = (
+            metrics.render()
+        )
+
+        return Response(
+            content=content,
+            media_type=media_type,
+        )
+
     @application.post(
         "/v1/recommend",
         response_model=(
@@ -212,6 +294,10 @@ def create_production_app(
         result = active_runtime.recommend(
             payload.history_news_ids,
             top_k=payload.top_k,
+        )
+
+        metrics.observe_result(
+            result
         )
 
         return ProductionRecommendationResponse(
