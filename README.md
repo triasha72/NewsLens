@@ -49,6 +49,7 @@ research phases that preserve both promoted and rejected experiments:
 | FAISS retrieval | Selected exact `IndexFlatIP`; it retained Recall@100 `1.0`, while the faster HNSW candidate missed the preregistered quality gate |
 | Learned second-stage ranker | Rejected after NDCG@10 fell from `0.3826` to `0.2750` under the frozen Phase-05 comparison |
 | Diversity and exposure | Selected deterministic MMR with lambda `0.80`; it preserved logged-candidate relevance within budget and improved semantic diversity, but did not improve global exposure concentration or serving latency |
+| Online experiment design | Added fixed-horizon power planning, guardrails, sample-ratio-mismatch checks, team-draft interleaving, and offline-online divergence reporting; no live-user impact is claimed |
 
 These are research artifacts on `main`, not retroactive claims about the
 `v0.3.0` container. Frozen reports live in [`reports/`](reports/) and the

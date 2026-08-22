@@ -9,10 +9,10 @@ exact and approximate FAISS evaluation, a rejected learned second-stage ranker,
 and constrained MMR diversity reranking. These main-branch studies do not
 silently replace the released content-plus-fallback serving artifact.
 
-The next bounded phase is Phase 07: optimize the frozen MMR `lambda=0.80`
-policy under exact ranking parity, then establish serving latency,
-observability, containerization, Kubernetes deployment, and an online
-experiment contract before considering it production-ready.
+Phase 07 now includes a tested online-experiment contract with power planning,
+guardrails, sample-ratio-mismatch detection, team-draft interleaving, and an
+offline-online divergence check. Live serving optimization, event collection,
+and user assignment remain necessary before any product-impact claim.
 
 This roadmap records questions worth testing next. It is intentionally not a list of technologies to add for their own sake.
 
@@ -205,6 +205,9 @@ Before any online test, define:
 - privacy and retention constraints.
 
 No online experiment has been conducted, and the roadmap does not treat offline improvements as a substitute for one.
+
+The deterministic planning and diagnostic layer is implemented in
+`newslens.experimentation`; see [`docs/ONLINE_EXPERIMENTATION_PHASE07.md`](docs/ONLINE_EXPERIMENTATION_PHASE07.md).
 
 ## Working method
 
