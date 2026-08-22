@@ -35,6 +35,25 @@ NewsLens currently includes:
 
 The repository contains more than 400 automated tests.
 
+### Main-branch research after `v0.3.0`
+
+The public `v0.3.0` release remains the production baseline described above.
+The current `main` branch also contains six frozen recommendation-system
+research phases that preserve both promoted and rejected experiments:
+
+| Phase | Evidence-backed result |
+|---|---|
+| Collaborative filtering | Added a BPR baseline and support-aware comparison without replacing the production content/fallback route |
+| Gated hybrid | Frozen before the official MIND-small development holdout; the measured NDCG@10 change was positive but its paired interval included zero, so no improvement is claimed |
+| Two-tower retrieval | Hard-negative training improved the earlier two-tower model to NDCG@10 `0.3726` and Recall@10 `0.6142` on the internal chronological protocol |
+| FAISS retrieval | Selected exact `IndexFlatIP`; it retained Recall@100 `1.0`, while the faster HNSW candidate missed the preregistered quality gate |
+| Learned second-stage ranker | Rejected after NDCG@10 fell from `0.3826` to `0.2750` under the frozen Phase-05 comparison |
+| Diversity and exposure | Selected deterministic MMR with lambda `0.80`; it preserved logged-candidate relevance within budget and improved semantic diversity, but did not improve global exposure concentration or serving latency |
+
+These are research artifacts on `main`, not retroactive claims about the
+`v0.3.0` container. Frozen reports live in [`reports/`](reports/) and the
+information boundaries and selection rules live in [`docs/`](docs/).
+
 ## Questions that shaped NewsLens
 
 The system was not designed from a predetermined architecture checklist. Its components were added as earlier experiments exposed new questions:
@@ -58,11 +77,13 @@ flowchart TD
     B --> C["Normalized DuckDB warehouse and SQL features"]
     B --> D["Leakage-safe chronological split"]
     C --> D
-    D --> E["Popularity and TF-IDF models"]
-    E --> F["Offline evaluation and diagnostics"]
-    F --> G["Versioned model artifact"]
-    G --> H["FastAPI recommendation service"]
-    H --> I["Docker and GitHub Container Registry"]
+    D --> E["Popularity, TF-IDF, collaborative, and two-tower models"]
+    E --> F["Support-gated hybrid and model comparison"]
+    F --> G["Exact FAISS candidate retrieval"]
+    G --> H["Second-stage and MMR experiments"]
+    H --> I["Frozen evaluation, diagnostics, and selection reports"]
+    I --> J["Versioned v0.3.0 model artifact"]
+    J --> K["FastAPI, Docker, and GitHub Container Registry"]
 ```
 
 The selected model uses TF-IDF content recommendations when the user history produces a positive similarity signal. Cold-start and zero-signal requests are routed to a popularity model trained only on the appropriate training partition.
