@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: newslens-api
+  namespace: newslens
+  labels:
+    app.kubernetes.io/name: newslens-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: newslens-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: newslens-api
+    spec:
+      serviceAccountName: newslens-api
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: ghcr.io/triasha72/newslens:0.3.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NEWSLENS_ARTIFACT_PATH
+              value: /models/newslens-fallback-0.3.0
+          ports:
+            - name: http
+              containerPort: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 5
+            failureThreshold: 24
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: model
+              mountPath: /models/newslens-fallback-0.3.0
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: model
+          persistentVolumeClaim:
+            claimName: newslens-model
+            readOnly: true
+        - name: tmp
+          emptyDir: {}
+
