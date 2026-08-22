@@ -10,11 +10,12 @@ NewsLens began with a simple question: how much of a news recommender's apparent
 
 It grew into a leakage-aware news search and recommendation system built on the Microsoft MIND news-recommendation dataset. The project follows several connected questions—temporal leakage, sparse histories, cold-start routing, incompatible score scales, and reproducible serving—from raw records to a tested API and published container.
 
-## Project status
+## What was built and why
 
-**Current release:** `v0.3.0`
+**Release:** `v0.3.0`
 
-NewsLens currently includes:
+To answer the research question without hiding leakage or operational failure,
+NewsLens combines:
 
 - validated MIND-small ingestion and dataset auditing;
 - a normalized DuckDB warehouse with SQL audit and feature queries;
@@ -35,11 +36,10 @@ NewsLens currently includes:
 
 The repository contains more than 400 automated tests.
 
-### Main-branch research after `v0.3.0`
+### Experiments and engineering decisions
 
-The public `v0.3.0` release remains the production baseline described above.
-The current `main` branch also contains six frozen recommendation-system
-research phases that preserve both promoted and rejected experiments:
+The project preserved each frozen recommendation experiment, including the
+approaches that failed their selection rules:
 
 | Phase | Evidence-backed result |
 |---|---|
@@ -51,9 +51,10 @@ research phases that preserve both promoted and rejected experiments:
 | Diversity and exposure | Selected deterministic MMR with lambda `0.80`; it preserved logged-candidate relevance within budget and improved semantic diversity, but did not improve global exposure concentration or serving latency |
 | Online experiment design | Added fixed-horizon power planning, guardrails, sample-ratio-mismatch checks, team-draft interleaving, and offline-online divergence reporting; no live-user impact is claimed |
 
-These are research artifacts on `main`, not retroactive claims about the
-`v0.3.0` container. Frozen reports live in [`reports/`](reports/) and the
-information boundaries and selection rules live in [`docs/`](docs/).
+The released container serves the tested content-plus-fallback artifact; the
+neural and reranking studies remain reproducible offline experiments. Frozen
+reports live in [`reports/`](reports/), while their information boundaries and
+selection rules live in [`docs/`](docs/).
 
 ## Questions that shaped NewsLens
 
@@ -68,7 +69,8 @@ The system was not designed from a predetermined architecture checklist. Its com
 - What information must be preserved to reproduce exactly the same rankings outside the training process?
 - How should liveness, readiness, integrity checks, and observability behave when that model is served?
 
-The current implementation is one evidence-backed answer to those questions, not a claim that news recommendation is solved. Open questions and proposed follow-up experiments are tracked in [`docs/RESEARCH_QUESTIONS.md`](docs/RESEARCH_QUESTIONS.md) and [`ROADMAP.md`](ROADMAP.md).
+The implementation records one evidence-backed answer to each question rather
+than presenting any single model as universally best.
 
 ## System architecture
 
@@ -780,12 +782,14 @@ GitHub Actions runs two main CI jobs:
 
 Tagged releases also publish multi-platform images to GitHub Container Registry.
 
-## Current limitations and non-claims
+## Evidence boundaries
 
 - The official MIND-small development split has not been consumed as a final untouched holdout.
 - The selected candidate uses a deterministic switching policy rather than a learned joint ranker.
-- No neural, transformer, or large-language-model recommender has been trained.
-- TF-IDF captures lexical overlap rather than deeper semantic meaning.
+- The released serving artifact uses TF-IDF and popularity routing; the neural
+  models were evaluated offline and were not promoted into that artifact.
+- TF-IDF captures lexical overlap, while the two-tower experiment captures a
+  learned representation under a separate frozen protocol.
 - User-history articles currently receive equal weight.
 - Popularity scores reflect historical exposure as well as user interest.
 - Category, history, and exposure results are descriptive rather than causal.
@@ -815,7 +819,7 @@ A change is considered complete only when:
 
 ## Release
 
-The current release is [`v0.3.0`](https://github.com/triasha72/NewsLens/releases/tag/v0.3.0).
+The packaged release is [`v0.3.0`](https://github.com/triasha72/NewsLens/releases/tag/v0.3.0).
 
 Versioned container images are available from the [NewsLens GitHub Container Registry package](https://github.com/triasha72/NewsLens/pkgs/container/newslens).
 
