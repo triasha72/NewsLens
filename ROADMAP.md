@@ -3,10 +3,16 @@
 NewsLens began as an investigation into a deceptively simple problem: evaluating a news recommender without letting future behavior influence past recommendations. Each later component was added because an earlier result raised another question.
 
 The current release is `v0.3.0`. The main branch now also includes a verified
-normalized DuckDB analytical layer alongside the leakage-aware evaluation,
-TF-IDF history model with training-only popularity fallback, uncertainty
-analysis, versioned artifacts, FastAPI inference, observability, Docker
-deployment, CI, and multi-platform container publishing.
+normalized DuckDB analytical layer and six frozen research phases covering
+collaborative filtering, support-gated hybrid ranking, two-tower retrieval,
+exact and approximate FAISS evaluation, a rejected learned second-stage ranker,
+and constrained MMR diversity reranking. These main-branch studies do not
+silently replace the released content-plus-fallback serving artifact.
+
+The next bounded phase is Phase 07: optimize the frozen MMR `lambda=0.80`
+policy under exact ranking parity, then establish serving latency,
+observability, containerization, Kubernetes deployment, and an online
+experiment contract before considering it production-ready.
 
 This roadmap records questions worth testing next. It is intentionally not a list of technologies to add for their own sake.
 
