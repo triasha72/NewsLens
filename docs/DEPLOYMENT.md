@@ -104,3 +104,53 @@ A service can be live while not ready. Starting without an artifact allows `/hea
 ## Security note
 
 NewsLens artifacts use joblib/pickle-compatible deserialization. Only mount artifacts produced by a trusted NewsLens training workflow. Checksums detect corruption but do not make untrusted serialized Python objects safe.
+
+## Kubernetes
+
+The manifests in `deploy/kubernetes` run two non-root replicas, use the API's
+separate liveness and readiness endpoints, mount the model read-only, and add a
+service, CPU autoscaling, a disruption budget, and a default-deny egress policy.
+
+The `newslens-model` claim must be bound to storage containing the files from
+`artifacts/newslens-fallback-0.3.0` at the root of that volume. The repository
+cannot create this data because MIND is licensed and trained artifacts are not
+committed. Adjust the claim or add a storage-class-specific population job for
+the target cluster, then validate and deploy:
+
+```bash
+kubectl kustomize deploy/kubernetes
+kubectl apply -k deploy/kubernetes
+kubectl -n newslens rollout status deployment/newslens-api
+kubectl -n newslens port-forward service/newslens-api 8000:80
+```
+
+The HPA requires the Kubernetes Metrics Server. The NetworkPolicy requires a
+network plugin that enforces `networking.k8s.io/v1` policies.
+
+## Repeatable load test
+
+Create a request using article IDs present in the mounted artifact:
+
+```json
+{
+  "history_news_ids": ["N123"],
+  "candidate_news_ids": ["N456", "N789"],
+  "top_k": 2
+}
+```
+
+Save it as `/tmp/newslens-request.json`, then run:
+
+```bash
+python scripts/load_test_api.py \
+  --payload /tmp/newslens-request.json \
+  --requests 1000 \
+  --concurrency 20 \
+  --output reports/load-test.json
+```
+
+The runner refuses to start unless `/ready` succeeds. It records every client
+request plus observed throughput, success rate, and p50/p95/p99 latency. Commit
+or quote a report only when its target, cluster resources, artifact, and command
+are also disclosed; the repository does not include a fabricated performance
+result.

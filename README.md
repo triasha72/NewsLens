@@ -31,6 +31,8 @@ NewsLens combines:
 - liveness, readiness, request tracing, and latency reporting;
 - a non-root Docker image with a health check;
 - Docker Compose deployment with a read-only model volume;
+- Kubernetes deployment with health probes, autoscaling, and disruption protection;
+- a repeatable concurrent load runner with latency and failure reporting;
 - automated Python and container validation in GitHub Actions; and
 - multi-platform container publication to GitHub Container Registry.
 
