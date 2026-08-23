@@ -64,6 +64,11 @@ Docker observations are documented in
 [`docs/MINDSMALL_LOCAL_SERVING_EVIDENCE.md`](docs/MINDSMALL_LOCAL_SERVING_EVIDENCE.md);
 licensed records and generated artifacts remain outside version control.
 
+The same artifact was subsequently deployed as two ready replicas on a local
+Docker Desktop Kubernetes cluster. The manifest fixes, bounded service result,
+and limits of that single-node evidence are recorded in
+[`docs/KUBERNETES_LOCAL_EVIDENCE.md`](docs/KUBERNETES_LOCAL_EVIDENCE.md).
+
 ## Questions that shaped NewsLens
 
 The system was not designed from a predetermined architecture checklist. Its components were added as earlier experiments exposed new questions:
