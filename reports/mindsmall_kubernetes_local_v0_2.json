@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "recorded_at_utc": "2026-08-23T12:17:05Z",
+  "scope": "Local HPA, ingress, eviction, and NetworkPolicy evidence",
+  "cluster": {
+    "context": "docker-desktop",
+    "distribution": "Docker Desktop Kind",
+    "kubernetes_version": "v1.36.1",
+    "nodes": 1,
+    "cni_image": "docker.io/kindest/kindnetd:v20260528-9350166c",
+    "metrics_server_image": "registry.k8s.io/metrics-server/metrics-server:v0.9.0",
+    "ingress_controller_image": "registry.k8s.io/ingress-nginx/controller:v1.14.0@sha256:e4127065d0317bd11dc64c4dd38dcf7fb1c3d72e468110b4086e636dbaac943d",
+    "local_metrics_tls_exception": "--kubelet-insecure-tls"
+  },
+  "autoscaling": {
+    "target": "Deployment/newslens-api",
+    "metric": "cpu utilization against container request",
+    "target_utilization_percent": 70,
+    "minimum_replicas": 2,
+    "maximum_replicas": 10,
+    "observed_peak_utilization_percent": 389,
+    "observed_peak_replicas": 10,
+    "peak_ready_replicas": 10,
+    "final_replicas_after_stabilization": 2,
+    "scale_down_stabilization_seconds": 300,
+    "stimulus": {
+      "location": "in-cluster pod",
+      "tool": "k6 0.54.0",
+      "virtual_users": 100,
+      "duration_seconds": 120,
+      "requests": 50182,
+      "successful_requests": 50182,
+      "failed_requests": 0,
+      "requests_per_second": 417.989362,
+      "latency_ms": {
+        "average": 238.85,
+        "median": 195.52,
+        "p90": 392.38,
+        "p95": 507.5,
+        "maximum": 1640.0
+      }
+    }
+  },
+  "ingress": {
+    "controller": "ingress-nginx",
+    "local_url": "http://localhost",
+    "health": "ok",
+    "readiness": "ready",
+    "load": {
+      "requests": 1000,
+      "concurrency": 20,
+      "successful_requests": 1000,
+      "failed_requests": 0,
+      "requests_per_second": 875.654953,
+      "latency_ms": {
+        "p50": 18.671104,
+        "p95": 50.594986,
+        "p99": 75.578431,
+        "maximum": 95.827833
+      }
+    }
+  },
+  "disruption": {
+    "method": "policy/v1 Eviction API",
+    "pod_disruption_budget_min_available": 1,
+    "eviction_accepted": true,
+    "ready_replicas_after_recovery": 2
+  },
+  "network_policy": {
+    "allowed_readiness_client_succeeded": true,
+    "selected_pod_egress_to_kubernetes_service_blocked": true,
+    "unselected_control_pod_egress_to_kubernetes_service_succeeded": true
+  },
+  "boundaries": [
+    "The results come from one local node and are not a production capacity claim or SLO.",
+    "The kubelet TLS verification exception is restricted to the disposable Docker Desktop Metrics Server deployment.",
+    "Multi-node storage, node failure, public DNS, TLS, and cloud load balancing were not tested.",
+    "Licensed request identifiers and raw per-request results are excluded from version control."
+  ]
+}
