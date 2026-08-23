@@ -2,6 +2,10 @@
 
 NewsLens provides a Dockerized FastAPI recommendation service.
 
+It also includes a separate local Compose topology for real-time ingestion and
+search. The two deployments share the Python package but do not require one
+another to be ready.
+
 ## Prerequisites
 
 - Docker Desktop
@@ -149,6 +153,44 @@ curl --fail http://localhost/ready
 
 The HPA requires the Kubernetes Metrics Server. The NetworkPolicy requires a
 network plugin that enforces `networking.k8s.io/v1` policies.
+
+## Real-time search stack
+
+Start Kafka, PostgreSQL, the Go producer, two Go consumers, the Python search
+API, and Prometheus:
+
+```bash
+./scripts/realtime/start_stack.sh
+```
+
+The script uses `deploy/realtime/compose.yaml`, builds immutable PostgreSQL and
+Prometheus configuration images, waits for container health, and verifies all
+four application readiness endpoints. Ports are:
+
+| Port | Service |
+|---:|---|
+| 8000 | search and recommendation API |
+| 8080 | Go event producer |
+| 8081 | consumer 1 health and metrics |
+| 8082 | consumer 2 health and metrics |
+| 9090 | Prometheus |
+
+Run the evidence suite only after readiness succeeds:
+
+```bash
+PYTHONPATH=src python scripts/evaluate_realtime_search.py
+python scripts/realtime/benchmark_ingestion.py \
+  --events 500 --concurrency 20 --freshness-samples 25 --duplicate-probes 25
+python scripts/realtime/failure_recovery.py
+python scripts/realtime/verify_dlq.py
+python scripts/realtime/verify_ordering.py
+```
+
+The failure script stops and starts consumers in this named local Compose
+project. See [`REALTIME_OPERATIONS.md`](REALTIME_OPERATIONS.md) for the event
+contract, DLQ inspection, recovery procedure, and data-reset command. Measured
+local results and their limits are in
+[`REALTIME_LOCAL_EVIDENCE.md`](REALTIME_LOCAL_EVIDENCE.md).
 
 ## Repeatable load test
 

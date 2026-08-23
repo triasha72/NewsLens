@@ -1,0 +1,38 @@
+{
+  "schema_version": "newslens.realtime-load.v1",
+  "generated_at": "2026-08-23T20:22:13.981615+00:00",
+  "environment": "local Docker Compose",
+  "configuration": {
+    "events": 500,
+    "concurrency": 20,
+    "freshness_samples": 25,
+    "duplicate_probes": 25
+  },
+  "publish": {
+    "accepted": 500,
+    "failed": 0,
+    "failure_rate": 0.0,
+    "throughput_events_per_second": 1225.46579188993,
+    "latency_ms": {
+      "mean": 16.248251977958716,
+      "p50": 15.150916500715539,
+      "p95": 20.018879147392,
+      "p99": 44.12482450177776
+    }
+  },
+  "produced_to_searchable_ms": {
+    "successful_samples": 25,
+    "failed_samples": 0,
+    "p50": 62.514,
+    "p95": 78.7624,
+    "p99": 82.07351999999999
+  },
+  "idempotency": {
+    "duplicate_probes_accepted": 25,
+    "duplicates_observed_by_consumers": 25
+  },
+  "limitations": [
+    "This is a single-machine Docker Compose result, not a production capacity claim.",
+    "Freshness is sampled and includes client polling time only through the stored produced-to-indexed timestamp."
+  ]
+}

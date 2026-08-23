@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: newslens-ingestion-api
+    static_configs:
+      - targets: ["ingestion-api:8080"]
+  - job_name: newslens-consumers
+    static_configs:
+      - targets: ["consumer-1:8080", "consumer-2:8080"]

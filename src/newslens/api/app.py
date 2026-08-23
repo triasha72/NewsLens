@@ -11,6 +11,7 @@ from typing import cast
 from fastapi import (
     FastAPI,
     HTTPException,
+    Query,
     Request,
     status,
 )
@@ -19,6 +20,12 @@ from newslens import __version__
 from newslens.artifacts import LoadedArtifact, load_artifact
 from newslens.models import (
     ContentPopularityFallbackRecommender,
+)
+from newslens.realtime import (
+    ArticleRepository,
+    FreshnessRanker,
+    PostgresArticleRepository,
+    understand_query,
 )
 
 from .observability import (
@@ -29,10 +36,14 @@ from .observability import (
 from .schemas import (
     HealthResponse,
     ModelInfoResponse,
+    QueryIntentResponse,
     ReadinessResponse,
     RecommendationItem,
     RecommendationRequest,
     RecommendationResponse,
+    SearchReadinessResponse,
+    SearchResponse,
+    SearchResultItem,
 )
 from .settings import ApiSettings
 
@@ -84,16 +95,26 @@ def _require_loaded_artifact(
 def create_app(
     *,
     artifact_path: str | Path | None = None,
+    realtime_repository: ArticleRepository | None = None,
 ) -> FastAPI:
     """Create an isolated NewsLens ASGI application."""
 
-    configured_artifact_path = _resolve_artifact_path(artifact_path)
+    settings = ApiSettings.from_environment()
+    configured_artifact_path = (
+        Path(artifact_path).expanduser()
+        if artifact_path is not None
+        else settings.artifact_path
+    )
+    configured_realtime_repository = realtime_repository
+    candidate_limit = settings.realtime_candidate_limit
 
     @asynccontextmanager
     async def lifespan(
         application: FastAPI,
     ) -> AsyncIterator[None]:
         loaded_artifact: LoadedArtifact | None = None
+        live_repository = configured_realtime_repository
+        owns_live_repository = False
 
         if configured_artifact_path is not None:
             loaded_artifact = load_artifact(configured_artifact_path)
@@ -106,12 +127,21 @@ def create_app(
                     "The configured artifact does not contain a NewsLens fallback recommender."
                 )
 
+        if live_repository is None and settings.realtime_database_url is not None:
+            live_repository = PostgresArticleRepository(settings.realtime_database_url)
+            owns_live_repository = True
+
         application.state.loaded_artifact = loaded_artifact
+        application.state.realtime_repository = live_repository
 
         try:
             yield
         finally:
             application.state.loaded_artifact = None
+            application.state.realtime_repository = None
+
+            if owns_live_repository and live_repository is not None:
+                live_repository.close()
 
     application = FastAPI(
         title="NewsLens API",
@@ -121,6 +151,7 @@ def create_app(
     )
 
     install_request_observability(application)
+    ranker = FreshnessRanker()
 
     @application.get(
         "/health",
@@ -156,6 +187,31 @@ def create_app(
             model_ready=True,
             artifact_version=(loaded.metadata.artifact_version),
         )
+
+    @application.get(
+        "/realtime/ready",
+        response_model=SearchReadinessResponse,
+        tags=["service"],
+        summary="Check streamed-article search readiness",
+        responses={
+            status.HTTP_503_SERVICE_UNAVAILABLE: {
+                "description": "The real-time article store is not ready."
+            }
+        },
+    )
+    def realtime_readiness(request: Request) -> SearchReadinessResponse:
+        repository = cast(
+            ArticleRepository | None,
+            getattr(request.app.state, "realtime_repository", None),
+        )
+
+        if repository is None or not repository.ping():
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Real-time article store is not ready.",
+            )
+
+        return SearchReadinessResponse(status="ready", realtime_store_ready=True)
 
     @application.get(
         "/model-info",
@@ -257,6 +313,77 @@ def create_app(
             returned_count=len(items),
             inference_ms=inference_ms,
             recommendations=items,
+        )
+
+    @application.get(
+        "/search",
+        response_model=SearchResponse,
+        tags=["search"],
+        summary="Search newly ingested articles with freshness-aware ranking",
+        responses={
+            status.HTTP_503_SERVICE_UNAVAILABLE: {
+                "description": "The real-time article store is not ready."
+            }
+        },
+    )
+    def search(
+        request: Request,
+        q: str = Query(min_length=1, max_length=500),
+        top_k: int = Query(default=10, ge=1, le=100),
+    ) -> SearchResponse:
+        repository = cast(
+            ArticleRepository | None,
+            getattr(request.app.state, "realtime_repository", None),
+        )
+
+        if repository is None:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Real-time article store is not ready.",
+            )
+
+        intent = understand_query(q)
+        search_started_at = perf_counter()
+        candidates = repository.list_candidates(intent, limit=candidate_limit)
+        ranked = ranker.rank(intent, candidates, top_k=top_k)
+        search_ms = (perf_counter() - search_started_at) * 1_000
+        request_id = get_request_id(request)
+
+        LOGGER.info(
+            "search_completed request_id=%s candidate_count=%d returned_count=%d "
+            "freshness_intent=%s search_ms=%.3f",
+            request_id,
+            len(candidates),
+            len(ranked),
+            intent.prefers_freshness,
+            search_ms,
+        )
+
+        return SearchResponse(
+            request_id=request_id,
+            intent=QueryIntentResponse(
+                normalized_query=intent.normalized_query,
+                category=intent.category,
+                entity=intent.entity,
+                prefers_freshness=intent.prefers_freshness,
+            ),
+            candidate_count=len(candidates),
+            returned_count=len(ranked),
+            search_ms=search_ms,
+            results=tuple(
+                SearchResultItem(
+                    article_id=item.document.article_id,
+                    title=item.document.title,
+                    category=item.document.category,
+                    published_at=item.document.published_at.isoformat(),
+                    score=item.score,
+                    relevance_score=item.relevance_score,
+                    freshness_score=item.freshness_score,
+                    popularity_score=item.popularity_score,
+                    index_freshness_ms=item.index_freshness_ms,
+                )
+                for item in ranked
+            ),
         )
 
     return application
