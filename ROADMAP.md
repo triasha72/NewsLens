@@ -20,7 +20,7 @@ This roadmap records questions worth testing next. It is intentionally not a lis
 
 ### Chronological evaluation
 
-A strict chronological 80/20 split produces 125,572 training records and 31,393 validation records with no temporal overlap. The official MIND-small development split remains unused as a final holdout.
+A strict chronological 80/20 split produces 125,572 training records and 31,393 validation records with no temporal overlap. After the gated-hybrid design and evaluator were frozen, the official MIND-small development split was consumed once as the final holdout. The measured change remained positive, but its paired interval included zero, so no holdout improvement is claimed.
 
 ### Model behavior
 
@@ -42,7 +42,7 @@ Paired bootstrap intervals favor the fallback system over content-only ranking f
 
 ### Reproducible serving
 
-The selected model can be exported as a versioned, checksummed artifact, loaded by a typed API, mounted read-only into a non-root container, validated in CI, and published for both `linux/amd64` and `linux/arm64`.
+The selected model can be exported as a versioned, checksummed artifact, loaded by a typed API, mounted read-only into a non-root container, validated in CI, and published for both `linux/amd64` and `linux/arm64`. The same artifact was also served through two replicas on Docker Desktop Kubernetes with probes, service routing, restricted egress checks, and a bounded load run.
 
 ### Reproducible analytical data
 
@@ -98,28 +98,22 @@ summaries, and cutoff-aware feature export. It remains a local analytical layer;
 a shared PostgreSQL service or online feature store would require a distinct use
 case and operational design.
 
+### Did the selected design retain its validation advantage on the final holdout?
+
+The direction stayed positive on the one-time MIND-small development holdout,
+but the paired bootstrap interval included zero. The result is kept as a
+non-confirming holdout rather than used to retune the model.
+
+### Can the deployment manifests run against a real Kubernetes control plane?
+
+Yes. The API ran as two non-root replicas on Docker Desktop Kubernetes, passed
+health and service-routing checks, and completed the documented bounded load
+test. This is local deployment evidence, not cloud or multi-node production
+evidence.
+
 ## Next investigations
 
-### 1. Untouched holdout evaluation
-
-**Question:** Do the selected model and routing rules retain their advantage on the reserved MIND-small development split?
-
-**Plan:**
-
-- freeze the current model, preprocessing, routing, and metric definitions;
-- document a one-time holdout protocol before reading results;
-- evaluate popularity, content-only, and fallback systems once;
-- report paired differences and uncertainty without retuning on the holdout; and
-- keep the original validation results alongside the holdout results.
-
-**Completion evidence:**
-
-- a dated protocol;
-- a deterministic report;
-- explicit confirmation that no post-holdout tuning occurred; and
-- documented discrepancies between validation and holdout behavior.
-
-### 2. History recency and weighting
+### 1. History recency and weighting
 
 **Question:** Does treating every history article equally discard useful temporal information?
 
@@ -132,7 +126,7 @@ case and operational design.
 
 A weighting scheme should be retained only if it improves more than the aggregate score while avoiding a material regression in cold-start and short-history cohorts.
 
-### 3. Stronger sparse-text baselines
+### 2. Stronger sparse-text baselines
 
 **Question:** Are the current results specific to TF-IDF, or do other transparent lexical methods produce a better quality–complexity tradeoff?
 
@@ -146,7 +140,7 @@ A weighting scheme should be retained only if it improves more than the aggregat
 
 The goal is to establish a stronger interpretable baseline before introducing dense representations.
 
-### 4. Semantic representations
+### 3. Semantic representations
 
 **Question:** Which failures come from lexical mismatch rather than insufficient user signal?
 
@@ -160,7 +154,7 @@ The goal is to establish a stronger interpretable baseline before introducing de
 
 A semantic model should not replace the lexical baseline unless the added complexity is supported by both ranking and diagnostic evidence.
 
-### 5. Routing and score calibration
+### 4. Routing and score calibration
 
 **Question:** Can routing decisions use evidence beyond the binary presence of a positive TF-IDF signal?
 
@@ -174,7 +168,7 @@ A semantic model should not replace the lexical baseline unless the added comple
 
 Content and popularity scores must remain separate unless a defensible calibration maps them onto a comparable interpretation.
 
-### 6. Performance and reliability
+### 5. Performance and reliability
 
 **Question:** Where are the serving limits of the current artifact and API?
 
@@ -190,7 +184,7 @@ Content and popularity scores must remain separate unless a defensible calibrati
 The same investigation should benchmark warehouse build time, database size, and
 representative analytical queries before considering a shared PostgreSQL backend.
 
-### 7. Online-experiment design
+### 6. Online-experiment design
 
 **Question:** What evidence would be needed before claiming user or product impact?
 
@@ -231,7 +225,7 @@ Negative results should be retained when they change the understanding of the pr
 - DuckDB database files and exported warehouse features derived from licensed
   records are never committed or copied into published images.
 - Generated model artifacts remain outside Git.
-- The official development split stays untouched until a written holdout protocol is frozen.
+- The official development split was consumed once under the frozen holdout protocol; no post-holdout tuning is permitted.
 - New models do not get a different split, catalog, candidate policy, or metric implementation merely because it improves their score.
 - Checksums detect corruption; they do not make untrusted pickle-compatible artifacts safe.
 - A passing test suite and a healthy container do not establish production impact.
