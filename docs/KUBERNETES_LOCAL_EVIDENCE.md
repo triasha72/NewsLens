@@ -16,6 +16,37 @@ The port-forwarded service received 1,000 recommendation requests at concurrency
 
 The request used licensed article identifiers from MIND-small, so its payload and raw per-request records are not committed. Aggregate results and the exact environment are stored in [`reports/mindsmall_kubernetes_local_v0_1.json`](../reports/mindsmall_kubernetes_local_v0_1.json).
 
+## Autoscaling, ingress, policy, and disruption follow-up
+
+Metrics Server `v0.9.0` was added to the local cluster so the HPA could act on
+real CPU measurements. Docker Desktop's kubelet certificate did not contain its
+node IP as a subject alternative name, so this disposable cluster used the
+documented local-only `--kubelet-insecure-tls` exception.
+
+An in-cluster k6 workload held 100 virtual users for two minutes. All 50,182
+requests succeeded. CPU reached 389% of the configured request, the HPA raised
+NewsLens from 2 to its maximum of 10 ready replicas, and the Deployment returned
+to 2 replicas after the five-minute stabilization window.
+
+The Docker Desktop overlay now includes an nginx Ingress. A separate bounded
+run through `http://localhost` completed 1,000 of 1,000 requests successfully,
+with p95 latency of 50.59 ms.
+
+The Eviction API accepted removal of one ready replica while the disruption
+budget required one to remain available. The Deployment replaced the pod and
+returned to two ready replicas. NetworkPolicy enforcement was checked by
+connecting to the Kubernetes API service: a selected NewsLens pod was blocked,
+while an otherwise equivalent unselected control pod connected; an allowed
+client still reached the NewsLens readiness endpoint.
+
+The follow-up environment and aggregate measurements are recorded in
+[`reports/mindsmall_kubernetes_local_v0_2.json`](../reports/mindsmall_kubernetes_local_v0_2.json).
+
 ## Evidence boundaries
 
-This run verifies a two-replica rollout, artifact-backed readiness, a ClusterIP service, a bound local claim, a pod disruption budget, the HPA resource, and numeric non-root execution on one Docker Desktop node. Docker Desktop did not provide the Metrics API, so CPU-driven HPA scaling was not exercised. Its Kind networking also does not establish that the NetworkPolicy is enforced, and the run does not test multi-node volume attachment, node failure, ingress, TLS, or cloud load balancing.
+Together these runs verify artifact-backed rollout and readiness, service and
+Ingress traffic, CPU-driven scale-up and scale-down, PDB-aware eviction, egress
+policy enforcement, and numeric non-root execution on one Docker Desktop node.
+They do not test multi-node volume attachment, complete node failure, public
+DNS, TLS, or a cloud load balancer. The Metrics Server TLS exception is evidence
+for this disposable local cluster only and must not be copied into production.

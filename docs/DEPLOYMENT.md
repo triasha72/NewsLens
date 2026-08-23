@@ -138,6 +138,15 @@ The overlay changes only the claim to `ReadWriteOnce`; both replicas can share
 it because Docker Desktop schedules them on the same node. Do not use this
 overlay as a substitute for multi-node storage validation.
 
+The overlay also adds an nginx Ingress for local testing. After installing the
+ingress-nginx controller, verify the same readiness contract without a port
+forward:
+
+```bash
+curl --fail http://localhost/health
+curl --fail http://localhost/ready
+```
+
 The HPA requires the Kubernetes Metrics Server. The NetworkPolicy requires a
 network plugin that enforces `networking.k8s.io/v1` policies.
 
