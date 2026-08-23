@@ -797,7 +797,12 @@ Tagged releases also publish multi-platform images to GitHub Container Registry.
 
 ## Evidence boundaries
 
-- The official MIND-small development split has not been consumed as a final untouched holdout.
+- The official MIND-small development split was consumed once as the final
+  untouched holdout after the gated-hybrid architecture and hyperparameters
+  were frozen. The candidate's NDCG@10 change was positive, but its paired 95%
+  interval included zero, so the serving baseline was not replaced and no
+  aggregate improvement is claimed; the frozen record is
+  [`reports/hybrid_final_mindsmall_dev.json`](reports/hybrid_final_mindsmall_dev.json).
 - The selected candidate uses a deterministic switching policy rather than a learned joint ranker.
 - The released serving artifact uses TF-IDF and popularity routing; the neural
   models were evaluated offline and were not promoted into that artifact.
