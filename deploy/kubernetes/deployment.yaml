@@ -18,6 +18,8 @@ spec:
       serviceAccountName: newslens-api
       securityContext:
         runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -76,4 +78,3 @@ spec:
             readOnly: true
         - name: tmp
           emptyDir: {}
-

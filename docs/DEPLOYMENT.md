@@ -124,6 +124,20 @@ kubectl -n newslens rollout status deployment/newslens-api
 kubectl -n newslens port-forward service/newslens-api 8000:80
 ```
 
+Docker Desktop's single-node local-path provisioner does not support the base
+claim's `ReadOnlyMany` access mode. After populating a local claim with the
+three artifact files at its root, use the development overlay instead:
+
+```bash
+kubectl kustomize deploy/overlays/docker-desktop
+kubectl apply -k deploy/overlays/docker-desktop
+kubectl -n newslens rollout status deployment/newslens-api
+```
+
+The overlay changes only the claim to `ReadWriteOnce`; both replicas can share
+it because Docker Desktop schedules them on the same node. Do not use this
+overlay as a substitute for multi-node storage validation.
+
 The HPA requires the Kubernetes Metrics Server. The NetworkPolicy requires a
 network plugin that enforces `networking.k8s.io/v1` policies.
 

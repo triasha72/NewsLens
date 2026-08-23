@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "recorded_at_utc": "2026-08-23T03:52:51Z",
+  "scope": "Single-node Docker Desktop Kubernetes deployment with the MIND-small artifact",
+  "cluster": {
+    "context": "docker-desktop",
+    "distribution": "Docker Desktop Kind",
+    "kubernetes_version": "v1.36.1",
+    "nodes": 1,
+    "node_architecture": "arm64",
+    "storage_class": "standard",
+    "metrics_api_available": false
+  },
+  "workload": {
+    "namespace": "newslens",
+    "deployment": "newslens-api",
+    "desired_replicas": 2,
+    "ready_replicas": 2,
+    "container_image": "ghcr.io/triasha72/newslens:0.3.0",
+    "container_image_digest": "sha256:1f974a8e3260935749194220d5cc4a32e7e2e3150d7cb5a7c681bf1898831f35",
+    "run_as_user": 10001,
+    "run_as_group": 10001,
+    "cpu_request": "250m",
+    "memory_request": "512Mi",
+    "cpu_limit": "1",
+    "memory_limit": "2Gi",
+    "persistent_volume_access_mode": "ReadWriteOnce",
+    "persistent_volume_capacity": "1Gi",
+    "service_type": "ClusterIP",
+    "pod_disruption_budget_min_available": 1,
+    "hpa_min_replicas": 2,
+    "hpa_max_replicas": 10,
+    "single_pod_replacement_recovered": true,
+    "ready_replicas_after_recovery": 2
+  },
+  "artifact": {
+    "artifact_version": "0.3.0",
+    "model_name": "tfidf_content_with_popularity_fallback",
+    "model_sha256": "3486cbe48d6671cc275469293c94c263b21ff7b4f791831d5afa74fdec496a6d",
+    "metadata_sha256": "bcbf0df096109d5aa9dfe014b2b3f9b4d8216633fe8b5debf8e39c265c7e1f59",
+    "manifest_sha256": "14da77756c12d13df00eff5b6afea391f741c6b142a6b140d9f96c721b574a21"
+  },
+  "service_checks": {
+    "health": "ok",
+    "readiness": "ready",
+    "model_ready": true,
+    "artifact_version": "0.3.0"
+  },
+  "load": {
+    "transport": "kubectl port-forward to ClusterIP service",
+    "requests": 1000,
+    "concurrency": 20,
+    "successful_requests": 1000,
+    "failed_requests": 0,
+    "elapsed_seconds": 1.86635,
+    "throughput_requests_per_second": 535.805241,
+    "latency_ms": {
+      "p50": 33.209,
+      "p95": 65.19654,
+      "p99": 74.919769,
+      "max": 81.249584
+    }
+  },
+  "boundaries": [
+    "The figures are client-observed on one local machine and are not a production capacity claim or SLO.",
+    "The Metrics API was unavailable, so CPU-driven HPA behavior was not tested.",
+    "NetworkPolicy enforcement, multi-node storage, node failure, ingress, TLS, and cloud load balancing were not tested.",
+    "Licensed data, request identifiers, the generated artifact, and raw per-request results are excluded from version control."
+  ]
+}

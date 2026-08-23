@@ -25,4 +25,7 @@ These are client-observed results from one Apple M4 MacBook Air with 16 GB of me
 
 The archive, artifact, environment, and aggregate load details are recorded in [`reports/mindsmall_local_serving_v0_1.json`](../reports/mindsmall_local_serving_v0_1.json). The MIND-small files, generated artifact, request payload, and raw load results stay outside version control.
 
-This check does not establish Kubernetes behavior because no cluster was used. Kubernetes evidence still requires a real cluster, artifact storage accessible to its nodes, recorded workload resources, and a load run against the deployed service.
+This original check did not use Kubernetes. A later Docker Desktop deployment
+connected the same artifact to the repository manifests; its separate scope
+and results are recorded in
+[`KUBERNETES_LOCAL_EVIDENCE.md`](KUBERNETES_LOCAL_EVIDENCE.md).
