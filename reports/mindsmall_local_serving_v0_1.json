@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "recorded_at_utc": "2026-08-23T03:35:00Z",
+  "scope": "MIND-small archive validation, artifact export, and bounded local serving checks",
+  "dataset": {
+    "license_note": "The source archives and extracted records are not committed to this repository.",
+    "train_archive_sha256": "a966e5138ad103376e9817e02395719bf1c62ec56e6e98c30d46fbb991a7fafa",
+    "dev_archive_sha256": "b315cde1c9b9d45008b5a7c4b2e1f87647659f09f74892ae3899c0005d5d6155",
+    "train": {
+      "behavior_records": 156965,
+      "news_articles": 51282,
+      "candidate_impressions": 5843444,
+      "clicks": 236344,
+      "unique_users": 50000,
+      "referenced_news_missing_metadata": 0
+    },
+    "dev": {
+      "behavior_records": 73152,
+      "news_articles": 42416,
+      "candidate_impressions": 2740998,
+      "clicks": 111383,
+      "unique_users": 50000,
+      "referenced_news_missing_metadata": 0
+    }
+  },
+  "artifact": {
+    "artifact_version": "0.3.0",
+    "model_name": "tfidf_content_with_popularity_fallback",
+    "source_split": "train",
+    "training_records": 156965,
+    "indexed_article_count": 51282,
+    "vocabulary_size": 50000,
+    "model_sha256": "3486cbe48d6671cc275469293c94c263b21ff7b4f791831d5afa74fdec496a6d",
+    "metadata_sha256": "bcbf0df096109d5aa9dfe014b2b3f9b4d8216633fe8b5debf8e39c265c7e1f59"
+  },
+  "environment": {
+    "host": "MacBook Air (Mac16,12)",
+    "chip": "Apple M4",
+    "memory_gb": 16,
+    "architecture": "arm64",
+    "python": "3.12",
+    "docker": "29.7.2",
+    "docker_image": "newslens-api:0.3.0"
+  },
+  "checks": {
+    "local_api": {
+      "health": "ok",
+      "readiness": "ready",
+      "artifact_version": "0.3.0",
+      "load": {
+        "requests": 1000,
+        "concurrency": 20,
+        "successful_requests": 1000,
+        "failed_requests": 0,
+        "elapsed_seconds": 1.068098,
+        "throughput_requests_per_second": 936.243678,
+        "latency_ms": {
+          "p50": 19.480708,
+          "p95": 40.328802,
+          "p99": 64.581405,
+          "max": 76.614125
+        }
+      }
+    },
+    "docker_compose": {
+      "health": "healthy",
+      "readiness": "ready",
+      "artifact_version": "0.3.0",
+      "load": {
+        "requests": 1000,
+        "concurrency": 20,
+        "successful_requests": 1000,
+        "failed_requests": 0,
+        "elapsed_seconds": 1.347138,
+        "throughput_requests_per_second": 742.3147,
+        "latency_ms": {
+          "p50": 25.341854,
+          "p95": 44.82951,
+          "p99": 66.139646,
+          "max": 70.9905
+        }
+      }
+    }
+  },
+  "boundaries": [
+    "The load figures are client-observed measurements from one local machine, not an SLO or production capacity claim.",
+    "This run does not provide Kubernetes, cloud, or live-user evidence.",
+    "Request payloads, per-request records, licensed dataset files, and the generated model artifact are intentionally excluded from version control."
+  ]
+}
