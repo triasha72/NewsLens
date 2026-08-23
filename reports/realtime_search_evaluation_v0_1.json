@@ -1,0 +1,187 @@
+{
+  "schema_version": "newslens.realtime-search-evaluation.v1",
+  "generated_at": "2026-08-23T20:04:08.761624+00:00",
+  "fixture": {
+    "queries": 6,
+    "articles": 10,
+    "reference_time": "2026-08-23T12:00:00+00:00",
+    "source": "small, hand-labeled deterministic contract fixture"
+  },
+  "query_understanding": {
+    "field_accuracy": 1.0,
+    "correct_fields": 18,
+    "total_fields": 18,
+    "cases": [
+      {
+        "query": "latest Apple AI chip",
+        "expected": {
+          "category": "technology",
+          "entity": "Apple",
+          "prefers_freshness": true
+        },
+        "observed": {
+          "category": "technology",
+          "entity": "Apple",
+          "prefers_freshness": true
+        }
+      },
+      {
+        "query": "Apple AI chip analysis",
+        "expected": {
+          "category": "technology",
+          "entity": "Apple",
+          "prefers_freshness": false
+        },
+        "observed": {
+          "category": "technology",
+          "entity": "Apple",
+          "prefers_freshness": false
+        }
+      },
+      {
+        "query": "NASA recent Mars research",
+        "expected": {
+          "category": "science",
+          "entity": "NASA Mars",
+          "prefers_freshness": true
+        },
+        "observed": {
+          "category": "science",
+          "entity": "NASA Mars",
+          "prefers_freshness": true
+        }
+      },
+      {
+        "query": "Falcons football score tonight",
+        "expected": {
+          "category": "sports",
+          "entity": "Falcons",
+          "prefers_freshness": true
+        },
+        "observed": {
+          "category": "sports",
+          "entity": "Falcons",
+          "prefers_freshness": true
+        }
+      },
+      {
+        "query": "latest Microsoft market earnings",
+        "expected": {
+          "category": "business",
+          "entity": "Microsoft",
+          "prefers_freshness": true
+        },
+        "observed": {
+          "category": "business",
+          "entity": "Microsoft",
+          "prefers_freshness": true
+        }
+      },
+      {
+        "query": "Pfizer vaccine research",
+        "expected": {
+          "category": "health",
+          "entity": "Pfizer",
+          "prefers_freshness": false
+        },
+        "observed": {
+          "category": "health",
+          "entity": "Pfizer",
+          "prefers_freshness": false
+        }
+      }
+    ]
+  },
+  "ranking": {
+    "relevance_only": {
+      "ndcg_at_10": 0.8686305730985519,
+      "mrr_at_10": 1.0,
+      "recall_at_10": 1.0,
+      "freshness_weighted_ndcg_at_10": 0.6335919732394809
+    },
+    "freshness_aware": {
+      "ndcg_at_10": 1.0,
+      "mrr_at_10": 1.0,
+      "recall_at_10": 1.0,
+      "freshness_weighted_ndcg_at_10": 0.8775572100937762
+    }
+  },
+  "ranking_configuration": {
+    "relevance_only": {
+      "relevance": 0.95,
+      "freshness": 0.0,
+      "popularity": 0.05
+    },
+    "freshness_aware": {
+      "relevance": 0.75,
+      "freshness": 0.2,
+      "popularity": 0.05
+    }
+  },
+  "cases": [
+    {
+      "query": "latest Apple AI chip",
+      "category": "technology",
+      "entity": "Apple",
+      "prefers_freshness": true,
+      "relevance": {
+        "tech-new": 3,
+        "tech-old": 2
+      }
+    },
+    {
+      "query": "Apple AI chip analysis",
+      "category": "technology",
+      "entity": "Apple",
+      "prefers_freshness": false,
+      "relevance": {
+        "tech-old": 3,
+        "tech-new": 2
+      }
+    },
+    {
+      "query": "NASA recent Mars research",
+      "category": "science",
+      "entity": "NASA Mars",
+      "prefers_freshness": true,
+      "relevance": {
+        "space-new": 3,
+        "space-old": 2
+      }
+    },
+    {
+      "query": "Falcons football score tonight",
+      "category": "sports",
+      "entity": "Falcons",
+      "prefers_freshness": true,
+      "relevance": {
+        "sport-new": 3,
+        "sport-old": 1
+      }
+    },
+    {
+      "query": "latest Microsoft market earnings",
+      "category": "business",
+      "entity": "Microsoft",
+      "prefers_freshness": true,
+      "relevance": {
+        "market-new": 3,
+        "market-old": 2
+      }
+    },
+    {
+      "query": "Pfizer vaccine research",
+      "category": "health",
+      "entity": "Pfizer",
+      "prefers_freshness": false,
+      "relevance": {
+        "health-old": 3,
+        "health-new": 2
+      }
+    }
+  ],
+  "limitations": [
+    "This fixture verifies ranking behavior; it is not evidence of generalization to live traffic.",
+    "A larger independently judged query set is still needed before product-quality claims."
+  ]
+}

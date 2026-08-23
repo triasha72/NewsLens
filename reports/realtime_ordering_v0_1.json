@@ -1,0 +1,11 @@
+{
+  "schema_version": "newslens.realtime-ordering.v1",
+  "generated_at": "2026-08-23T20:27:13.738678+00:00",
+  "environment": "local Docker Compose",
+  "distinct_events_processed": 2,
+  "newer_version_preserved": true,
+  "observed_title": "Ordering70a9d1542b9b4b2a9e3a05ce68b65828 Current",
+  "limitations": [
+    "Producer clocks must be trustworthy because ordering uses produced_at."
+  ]
+}

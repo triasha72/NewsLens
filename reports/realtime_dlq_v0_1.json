@@ -1,0 +1,11 @@
+{
+  "schema_version": "newslens.realtime-dlq.v1",
+  "generated_at": "2026-08-23T20:24:14.971361+00:00",
+  "environment": "local Docker Compose",
+  "invalid_events_observed": 1,
+  "dead_letter_events_observed": 1,
+  "dead_letter_envelope_valid": true,
+  "limitations": [
+    "This probes malformed JSON; database-exhaustion DLQ behavior is unit tested."
+  ]
+}

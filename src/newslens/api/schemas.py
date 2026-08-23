@@ -119,3 +119,52 @@ class RecommendationResponse(BaseModel):
     returned_count: int
     inference_ms: float = Field(ge=0.0)
     recommendations: tuple[RecommendationItem, ...]
+
+
+class SearchReadinessResponse(BaseModel):
+    """Readiness information for the streamed-article search path."""
+
+    model_config = ConfigDict(frozen=True)
+
+    status: Literal["ready"]
+    realtime_store_ready: Literal[True]
+
+
+class QueryIntentResponse(BaseModel):
+    """Parsed query information returned for inspectability."""
+
+    model_config = ConfigDict(frozen=True)
+
+    normalized_query: str
+    category: str | None
+    entity: str | None
+    prefers_freshness: bool
+
+
+class SearchResultItem(BaseModel):
+    """One freshness-aware search result."""
+
+    model_config = ConfigDict(frozen=True)
+
+    article_id: str
+    title: str
+    category: str
+    published_at: str
+    score: float
+    relevance_score: float
+    freshness_score: float
+    popularity_score: float
+    index_freshness_ms: float = Field(ge=0.0)
+
+
+class SearchResponse(BaseModel):
+    """Real-time search response with query and ranking diagnostics."""
+
+    model_config = ConfigDict(frozen=True)
+
+    request_id: str
+    intent: QueryIntentResponse
+    candidate_count: int
+    returned_count: int
+    search_ms: float = Field(ge=0.0)
+    results: tuple[SearchResultItem, ...]

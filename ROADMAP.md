@@ -44,6 +44,20 @@ Paired bootstrap intervals favor the fallback system over content-only ranking f
 
 The selected model can be exported as a versioned, checksummed artifact, loaded by a typed API, mounted read-only into a non-root container, validated in CI, and published for both `linux/amd64` and `linux/arm64`. The same artifact was also served through two replicas on Docker Desktop Kubernetes with probes, service routing, restricted egress checks, and a bounded load run.
 
+### Real-time search and ingestion
+
+A separate Go service now validates and publishes article events to a
+three-partition Kafka topic. Two group consumers apply bounded retries and write
+to PostgreSQL through a transactional event ledger, so redelivery is idempotent
+and an older update cannot overwrite a newer article. Invalid or exhausted
+records move to a DLQ, and Prometheus scrapes producer and consumer signals.
+
+FastAPI reads a bounded article set and returns category, entity, and freshness
+intent with inspectable ranking components. The local end-to-end evidence covers
+500-event load, 25 duplicate replays, a targeted partition reassignment, retained
+backlog recovery, and a malformed-event DLQ envelope. Exact results and non-claims
+are in [`docs/REALTIME_LOCAL_EVIDENCE.md`](docs/REALTIME_LOCAL_EVIDENCE.md).
+
 ### Reproducible analytical data
 
 Validated MIND records can be materialized into normalized DuckDB tables for
@@ -111,6 +125,14 @@ health and service-routing checks, and completed the documented bounded load
 test. This is local deployment evidence, not cloud or multi-node production
 evidence.
 
+### Can a new article move from acceptance to searchable state through a recoverable event path?
+
+Yes, within the tested single-host topology. Go publishes keyed events to Kafka,
+group consumers persist them idempotently to PostgreSQL, and FastAPI ranks the
+stored article. Local evidence also covers duplicate delivery, malformed-event
+dead lettering, consumer reassignment, and backlog recovery. Broker replication,
+database high availability, and live-traffic relevance remain outside that claim.
+
 ## Next investigations
 
 ### 1. History recency and weighting
@@ -170,14 +192,17 @@ Content and popularity scores must remain separate unless a defensible calibrati
 
 ### 5. Performance and reliability
 
-**Question:** Where are the serving limits of the current artifact and API?
+**Question:** Where are the sustained and multi-host limits beyond the current
+bounded local evidence?
 
 **Plan:**
 
-- benchmark startup time, memory, throughput, and p50/p95/p99 latency;
+- extend the current p50/p95/p99, freshness, and recovery measurements into a
+  sustained soak workload;
 - test multiple history and candidate-set sizes;
 - exercise corrupt, missing, and incompatible artifacts;
-- add graceful shutdown and concurrency tests;
+- add broker and PostgreSQL failure exercises beyond the existing consumer
+  process recovery test;
 - publish the hardware and workload used for every benchmark; and
 - define thresholds before optimizing.
 

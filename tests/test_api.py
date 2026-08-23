@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -14,6 +15,7 @@ from newslens.artifacts import (
     ArtifactNotFoundError,
     export_fallback_artifact,
 )
+from newslens.realtime import InMemoryArticleRepository, SearchDocument
 
 pytestmark = pytest.mark.filterwarnings(
     "ignore:Setting the shape on a NumPy array has been deprecated:DeprecationWarning"
@@ -171,9 +173,73 @@ def test_openapi_schema_lists_service_endpoints() -> None:
     assert set(response.json()["paths"]) == {
         "/health",
         "/ready",
+        "/realtime/ready",
         "/model-info",
         "/recommend",
+        "/search",
     }
+
+
+def test_realtime_readiness_is_honest_without_store() -> None:
+    with TestClient(create_app()) as client:
+        response = client.get("/realtime/ready")
+
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Real-time article store is not ready."}
+
+
+def test_search_requires_realtime_store() -> None:
+    with TestClient(create_app()) as client:
+        response = client.get("/search", params={"q": "latest Apple earnings"})
+
+    assert response.status_code == 503
+
+
+def test_search_returns_intent_and_freshness_diagnostics() -> None:
+    now = datetime.now(UTC)
+    repository = InMemoryArticleRepository(
+        (
+            SearchDocument(
+                article_id="N-new",
+                title="Apple reports latest earnings",
+                body="Quarterly market results.",
+                category="business",
+                published_at=now - timedelta(hours=1),
+                produced_at=now - timedelta(seconds=1),
+                indexed_at=now - timedelta(milliseconds=800),
+                popularity=10,
+            ),
+            SearchDocument(
+                article_id="N-old",
+                title="Apple reports earnings",
+                body="An older quarterly market report.",
+                category="business",
+                published_at=now - timedelta(days=5),
+                produced_at=now - timedelta(days=5, seconds=1),
+                indexed_at=now - timedelta(days=5),
+                popularity=100,
+            ),
+        )
+    )
+
+    with TestClient(create_app(realtime_repository=repository)) as client:
+        readiness = client.get("/realtime/ready")
+        response = client.get(
+            "/search",
+            params={"q": "latest Apple earnings", "top_k": 2},
+        )
+
+    assert readiness.status_code == 200
+    assert response.status_code == 200
+    body = response.json()
+    assert body["intent"] == {
+        "normalized_query": "latest Apple earnings",
+        "category": "business",
+        "entity": "Apple",
+        "prefers_freshness": True,
+    }
+    assert body["results"][0]["article_id"] == "N-new"
+    assert body["results"][0]["index_freshness_ms"] == pytest.approx(200.0)
 
 
 def test_unknown_route_returns_not_found() -> None:

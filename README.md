@@ -4,11 +4,17 @@
 [![Publish container](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml)
 [![Release](https://img.shields.io/badge/release-v0.3.0-blue)](https://github.com/triasha72/NewsLens/releases/tag/v0.3.0)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://www.python.org/)
+[![Go](https://img.shields.io/badge/go-1.23-blue)](https://go.dev/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 NewsLens began with a simple question: how much of a news recommender's apparent quality survives once recommendations are evaluated in the order they could actually have been made?
 
-It grew into a leakage-aware news search and recommendation system built on the Microsoft MIND news-recommendation dataset. The project follows several connected questions—temporal leakage, sparse histories, cold-start routing, incompatible score scales, and reproducible serving—from raw records to a tested API and published container.
+It grew into a leakage-aware news recommendation system and a real-time search
+platform. The offline path follows temporal leakage, sparse histories, cold-start
+routing, incompatible score scales, and reproducible serving from Microsoft MIND
+records to a tested API. The real-time path follows a new article through Go,
+Kafka, PostgreSQL, and freshness-aware search, including the failures that can
+happen between acceptance and indexing.
 
 ## What was built and why
 
@@ -35,6 +41,17 @@ NewsLens combines:
 - a repeatable concurrent load runner with latency and failure reporting;
 - automated Python and container validation in GitHub Actions; and
 - multi-platform container publication to GitHub Container Registry.
+
+The real-time search path adds:
+
+- a Go ingestion API with strict event validation and bounded publish timeouts;
+- Kafka with three ordered partitions and a two-member consumer group;
+- transactional PostgreSQL idempotency and stale-update protection;
+- bounded retries, dead-letter records, fetch backoff, and graceful shutdown;
+- category, entity, and freshness query understanding;
+- inspectable relevance, freshness, and popularity score components;
+- Prometheus counters and lag/freshness gauges; and
+- repeatable load, duplicate, DLQ, failover, and backlog-recovery exercises.
 
 The repository contains more than 400 automated tests.
 
@@ -69,6 +86,16 @@ Docker Desktop Kubernetes cluster. The manifest fixes, bounded service result,
 and limits of that single-node evidence are recorded in
 [`docs/KUBERNETES_LOCAL_EVIDENCE.md`](docs/KUBERNETES_LOCAL_EVIDENCE.md).
 
+The separate real-time stack was also built and exercised end to end on Docker
+Desktop. In a 500-event, concurrency-20 local run, all events were accepted at
+1,225 events/s; publish p99 was 44.12 ms and sampled produced-to-indexed p95 was
+78.76 ms. All 25 duplicate replays were recognized. A deliberately stopped
+consumer's assigned partition recovered in 5.67 seconds, a retained backlog event
+became searchable 2.43 seconds after a consumer restarted, and a malformed Kafka
+record reached the DLQ with its original bytes intact. These are bounded
+single-machine observations, documented with limitations in
+[`docs/REALTIME_LOCAL_EVIDENCE.md`](docs/REALTIME_LOCAL_EVIDENCE.md).
+
 ## Questions that shaped NewsLens
 
 The system was not designed from a predetermined architecture checklist. Its components were added as earlier experiments exposed new questions:
@@ -100,6 +127,12 @@ flowchart TD
     H --> I["Frozen evaluation, diagnostics, and selection reports"]
     I --> J["Versioned v0.3.0 model artifact"]
     J --> K["FastAPI, Docker, and GitHub Container Registry"]
+
+    L["Article publisher"] --> M["Go ingestion API"]
+    M --> N["Kafka: 3 partitions"]
+    N --> O["Go consumer group"]
+    O --> P["PostgreSQL idempotent article store"]
+    P --> Q["FastAPI query understanding and freshness ranking"]
 ```
 
 The selected model uses TF-IDF content recommendations when the user history produces a positive similarity signal. Cold-start and zero-signal requests are routed to a popularity model trained only on the appropriate training partition.
@@ -332,11 +365,26 @@ Only load artifacts produced by a trusted NewsLens training workflow. The artifa
 - `GET /ready` for model-serving readiness;
 - `GET /model-info` for model metadata;
 - `POST /recommend` for candidate ranking;
+- `GET /realtime/ready` for PostgreSQL-backed search readiness;
+- `GET /search` for query understanding and freshness-aware ranking;
 - fail-fast startup for corrupt configured artifacts;
 - HTTP `503` when inference is unavailable;
 - request IDs;
 - HTTP and inference latency reporting; and
 - structured request and recommendation logs.
+
+### Real-time article path
+
+- a statically linked Go producer and consumer binary;
+- keyed Kafka delivery across three partitions;
+- two consumers in one group with bounded failure detection;
+- transactional event-ledger idempotency in PostgreSQL;
+- stale article update protection;
+- bounded database and broker retry delays;
+- a dead-letter topic that preserves malformed source bytes;
+- graceful process shutdown; and
+- Prometheus metrics for accepted, processed, duplicate, failed, dead-lettered,
+  lag, and freshness signals.
 
 ### Container and CI/CD
 
@@ -345,6 +393,7 @@ Only load artifacts produced by a trusted NewsLens training workflow. The artifa
 - artifact-free image construction;
 - read-only artifact mounting through Docker Compose;
 - Python linting and test execution in CI;
+- Go formatting, vet, test, and build checks in CI;
 - container build validation in CI;
 - artifact-free liveness and readiness-contract checks;
 - multi-platform `linux/amd64` and `linux/arm64` images;
@@ -589,6 +638,38 @@ A successful response includes:
 
 See [`docs/API.md`](docs/API.md) for the complete API contract.
 
+## Run real-time search locally
+
+This path does not need the MIND files or a recommendation artifact. It needs
+Docker Desktop with Compose v2:
+
+```bash
+./scripts/realtime/start_stack.sh
+```
+
+Publish and search one article:
+
+```bash
+curl -X POST http://127.0.0.1:8080/events \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "event_id": "readme-event-1",
+    "article_id": "readme-article-1",
+    "title": "Apple launches an AI chip today",
+    "category": "technology",
+    "published_at": "2026-08-23T12:00:00Z",
+    "produced_at": "2026-08-23T12:00:01Z",
+    "body": "A local end-to-end example."
+  }'
+
+curl --get \
+  --data-urlencode 'q=latest Apple AI chip' \
+  http://127.0.0.1:8000/search
+```
+
+The operations guide covers load, duplicate, DLQ, ordering, and recovery checks:
+[`docs/REALTIME_OPERATIONS.md`](docs/REALTIME_OPERATIONS.md).
+
 ## Docker deployment
 
 Before starting Docker Compose, generate the local artifact:
@@ -680,16 +761,26 @@ NewsLens/
 │   ├── DECISIONS.md
 │   ├── DEPLOYMENT.md
 │   ├── EVALUATION.md
+│   ├── REALTIME_ARCHITECTURE.md
+│   ├── REALTIME_LOCAL_EVIDENCE.md
+│   ├── REALTIME_OPERATIONS.md
 │   └── RESEARCH_QUESTIONS.md
+├── deploy/
+│   └── realtime/
 ├── reports/
 │   ├── content_metrics.json
 │   ├── fallback_metrics.json
 │   ├── mindsmall_dev_audit.json
 │   ├── mindsmall_train_audit.json
+│   ├── realtime_load_v0_1.json
+│   ├── realtime_recovery_v0_1.json
 │   └── popularity_metrics.json
 ├── scripts/
+│   ├── realtime/
 │   ├── setup.ps1
 │   └── setup.sh
+├── services/
+│   └── ingestion/
 ├── src/
 │   └── newslens/
 │       ├── api/
@@ -726,6 +817,7 @@ NewsLens/
 │       │   ├── fallback.py
 │       │   ├── popularity.py
 │       │   └── tfidf.py
+│       ├── realtime/
 │       ├── __init__.py
 │       ├── __main__.py
 │       └── cli.py
@@ -786,12 +878,16 @@ The automated suite covers:
 - request and response validation;
 - readiness and failure behavior;
 - request observability; and
-- API integration.
+- API integration;
+- Go event validation and HTTP behavior; and
+- idempotent worker outcomes, retries, and dead-letter routing.
 
-GitHub Actions runs two main CI jobs:
+GitHub Actions runs three CI jobs:
 
 1. **Quality:** installs the project, runs Ruff, and executes the full Python test suite.
 2. **Container:** validates Compose, builds the Docker image, starts an artifact-free container, checks liveness, and verifies that readiness correctly returns HTTP `503` without a model.
+3. **Ingestion:** checks Go formatting, runs `go vet` and unit tests, and builds
+   the ingestion binary.
 
 Tagged releases also publish multi-platform images to GitHub Container Registry.
 
@@ -814,9 +910,13 @@ Tagged releases also publish multi-platform images to GitHub Container Registry.
 - Category and exposure cohorts can overlap.
 - Subgroup-specific confidence intervals are not currently reported.
 - The published container does not include the licensed dataset or generated model artifact.
-- The DuckDB layer is a local analytical batch database, not a hosted PostgreSQL
-  service, streaming ingestion system, or online feature store.
-- Request logs and latency headers provide service-level observability, but there is no external metrics store or alerting system.
+- The DuckDB layer remains a local analytical batch database. The separate
+  PostgreSQL store contains streamed articles and is not an online feature store
+  for the recommendation model.
+- The local real-time stack has Prometheus scraping, but no durable external
+  metrics store, alerting policy, or operated DLQ replay process.
+- The real-time evidence uses one Kafka broker and one PostgreSQL instance on one
+  Docker Desktop host; it does not establish replicated or multi-zone operation.
 - A versioned container is published, but NewsLens is not operated as a public, always-on hosted service.
 - No online experiment has been conducted.
 - Offline metric improvements do not establish production or business impact.

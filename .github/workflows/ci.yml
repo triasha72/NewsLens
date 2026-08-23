@@ -39,7 +39,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate Compose configuration
-        run: docker compose config
+        run: |
+          docker compose config
+          docker compose -f deploy/realtime/compose.yaml config --quiet
 
       - name: Build NewsLens image
         run: docker build --tag newslens-api:ci .
@@ -90,3 +92,32 @@ jobs:
       - name: Remove container
         if: always()
         run: docker rm --force newslens-api-ci || true
+
+  ingestion:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: services/ingestion
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: services/ingestion/go.mod
+          cache-dependency-path: services/ingestion/go.sum
+
+      - name: Check formatting
+        run: test -z "$(gofmt -l .)"
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: Build ingestion binary
+        run: go build ./cmd/newslens-ingestion
