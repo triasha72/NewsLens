@@ -58,6 +58,12 @@ neural and reranking studies remain reproducible offline experiments. Frozen
 reports live in [`reports/`](reports/), while their information boundaries and
 selection rules live in [`docs/`](docs/).
 
+The full MIND-small train and development archives were also used to validate
+the ingestion-to-serving path on a local machine. The audit, artifact, API, and
+Docker observations are documented in
+[`docs/MINDSMALL_LOCAL_SERVING_EVIDENCE.md`](docs/MINDSMALL_LOCAL_SERVING_EVIDENCE.md);
+licensed records and generated artifacts remain outside version control.
+
 ## Questions that shaped NewsLens
 
 The system was not designed from a predetermined architecture checklist. Its components were added as earlier experiments exposed new questions:
