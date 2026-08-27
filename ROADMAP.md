@@ -1,5 +1,7 @@
 # NewsLens research and engineering roadmap
 
+[Project overview and measured results](README.md)
+
 NewsLens began as an investigation into a deceptively simple problem: evaluating a news recommender without letting future behavior influence past recommendations. Each later component was added because an earlier result raised another question.
 
 The current release is `v0.3.0`. The main branch now also includes a verified
