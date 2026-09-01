@@ -1,0 +1,21 @@
+name: Recommendation experiment
+description: Define an offline, retrieval, serving, or online study before looking at results.
+title: "experiment: "
+labels: ["experiment"]
+body:
+  - type: textarea
+    id: decision
+    attributes: {label: "Decision", description: "What change could this experiment justify?"}
+    validations: {required: true}
+  - type: textarea
+    id: boundary
+    attributes: {label: "MIND data and time boundary", description: "Record the licensed source, chronology, candidate policy, and protected holdout."}
+    validations: {required: true}
+  - type: textarea
+    id: measures
+    attributes: {label: "Relevance and guardrails", description: "Include uncertainty, cold start, exposure, freshness, failures, and latency where relevant."}
+    validations: {required: true}
+  - type: textarea
+    id: online
+    attributes: {label: "Offline versus online claim", description: "State whether users are involved and what causal claim is allowed."}
+    validations: {required: true}

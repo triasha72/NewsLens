@@ -18,6 +18,28 @@ records to a tested API. The real-time path follows a new article through Go,
 Kafka, PostgreSQL, and freshness-aware search, including the failures that can
 happen between acceptance and indexing.
 
+## Project story
+
+**Situation.** A news recommender can appear strong when future interactions
+leak into training, and an offline ranking metric says little about cold starts,
+fresh articles, or failures between ingestion and indexing.
+
+**Task.** I wanted one system that treated chronological evaluation and serving
+reliability as parts of the same problem.
+
+**Action.** I built the offline path on licensed Microsoft MIND-small records,
+with chronological splits, paired uncertainty, fallback routing, subgroup
+analysis, and checksummed artifacts. I then added a Go ingestion service, Kafka,
+PostgreSQL idempotency, freshness-aware search, FastAPI serving, containers,
+Kubernetes manifests, and failure-recovery exercises.
+
+**Result.** The selected content-plus-fallback model reached NDCG@10 `0.3664`
+and removed 927 empty rankings on the chronological validation protocol. A
+learned second-stage ranker was rejected after NDCG@10 fell from `0.3826` to
+`0.2750`. In a bounded local real-time run, 500 events were accepted at 1,225
+events/s and sampled produced-to-indexed p95 was 78.76 ms. These are offline and
+single-machine results; no live-user lift or cloud-scale claim is made.
+
 ## What was built and why
 
 **Release:** `v0.3.0`
