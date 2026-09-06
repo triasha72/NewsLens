@@ -211,6 +211,10 @@ bounded local evidence?
 The same investigation should benchmark warehouse build time, database size, and
 representative analytical queries before considering a shared PostgreSQL backend.
 
+The readiness command now combines load, freshness, recovery, DLQ, soak length,
+event volume, and multi-host evidence. The current local run is correctly
+blocked on soak duration, volume, and deployment topology.
+
 ### 6. Online-experiment design
 
 **Question:** What evidence would be needed before claiming user or product impact?

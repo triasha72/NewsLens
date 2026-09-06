@@ -1,0 +1,42 @@
+{
+  "schema_version": "newslens.realtime-readiness.v1",
+  "decision": "blocked",
+  "checks": {
+    "sustained_soak_duration": {
+      "value": null,
+      "minimum_minutes": 60,
+      "passed": false
+    },
+    "minimum_events": {
+      "value": 500,
+      "minimum": 100000,
+      "passed": false
+    },
+    "publish_failure_rate": {
+      "value": 0.0,
+      "maximum": 0.001,
+      "passed": true
+    },
+    "freshness_p95_ms": {
+      "value": 78.7624,
+      "maximum": 1000,
+      "passed": true
+    },
+    "full_outage_recovery_ms": {
+      "value": 2429.43025000568,
+      "maximum": 30000,
+      "passed": true
+    },
+    "dead_letter_envelope": {
+      "value": true,
+      "required": true,
+      "passed": true
+    },
+    "multi_host_environment": {
+      "value": "local Docker Compose",
+      "required": "multi-host",
+      "passed": false
+    }
+  },
+  "product_impact": "not measured; requires a separately approved online experiment"
+}
