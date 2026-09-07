@@ -692,6 +692,17 @@ curl --get \
 ```
 
 The operations guide covers load, duplicate, DLQ, ordering, and recovery checks:
+
+```bash
+scripts/realtime/start_stack.sh
+PYTHONPATH=src python scripts/realtime/run_soak_evidence.py \
+  --duration-minutes 60 --events 100000
+```
+
+The runner spreads the events over one burst per minute, then executes the
+existing recovery and DLQ probes and writes aggregate receipts. It remains a
+single-host Compose exercise, so its readiness decision will stay blocked on
+the multi-host gate.
 [`docs/REALTIME_OPERATIONS.md`](docs/REALTIME_OPERATIONS.md).
 
 ## Docker deployment
