@@ -2,6 +2,8 @@
 
 [Portfolio case study](https://triasha72.github.io/Portfolio/case-newslens.html)
 
+[Interview brief](docs/INTERVIEW_BRIEF.md) — the problem, evidence boundary, reproduction check, and next validation.
+
 [![CI](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml)
 [![Publish container](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml)
 [![Release](https://img.shields.io/badge/release-v0.3.0-blue)](https://github.com/triasha72/NewsLens/releases/tag/v0.3.0)
