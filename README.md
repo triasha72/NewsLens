@@ -2,7 +2,7 @@
 
 [Portfolio case study](https://triasha72.github.io/Portfolio/case-newslens.html)
 
-[Interview brief](docs/INTERVIEW_BRIEF.md) — the problem, evidence boundary, reproduction check, and next validation.
+[Project overview](docs/PROJECT_OVERVIEW.md) — the problem, evidence boundary, reproduction check, and next validation.
 
 [![CI](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml)
 [![Publish container](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml)
@@ -10,6 +10,27 @@
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://www.python.org/)
 [![Go](https://img.shields.io/badge/go-1.23-blue)](https://go.dev/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+## In brief
+
+NewsLens pairs a leakage-safe news recommender with a real-time article-search
+path. The recommender is evaluated chronologically; the serving path tests
+idempotency, dead letters, freshness, and consumer recovery. Current results
+are offline and single-machine measurements, not user-lift or cloud-scale
+claims.
+
+## System architecture
+
+```mermaid
+flowchart LR
+    A[MIND records] --> B[Chronological split]
+    B --> C[Content ranking and\npopularity fallback]
+    C --> D[Frozen offline evaluation]
+    E[Article publisher] --> F[Go ingestion API]
+    F --> G[Kafka]
+    G --> H[PostgreSQL consumer]
+    H --> I[FastAPI freshness-aware search]
+```
 
 NewsLens began with a simple question: how much of a news recommender's apparent quality survives once recommendations are evaluated in the order they could actually have been made?
 

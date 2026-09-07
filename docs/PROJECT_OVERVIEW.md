@@ -1,4 +1,4 @@
-# NewsLens interview brief
+# NewsLens project overview
 
 ## The problem
 
@@ -34,7 +34,7 @@ python -m pytest
 The MIND dataset requires separate access under its license. Reproduction,
 dataset layout, and system workflows are linked from the [README](../README.md).
 
-## The next validation
+## Next validation
 
 The remaining question is user impact: an online experiment with a fixed
 horizon, guardrails, and sample-ratio checks would be needed before claiming
