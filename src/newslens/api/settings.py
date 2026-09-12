@@ -29,6 +29,16 @@ class ApiSettings:
 
         raw_artifact_path = os.getenv(ARTIFACT_PATH_ENVIRONMENT_VARIABLE)
 
+        release_root = os.getenv("NEWSLENS_RELEASE_ROOT")
+        if release_root is not None:
+            if not release_root.strip() or raw_artifact_path is not None:
+                raise ApiSettingsError(
+                    "Set one nonempty NEWSLENS_RELEASE_ROOT or NEWSLENS_ARTIFACT_PATH."
+                )
+            from newslens.operations.lifecycle import serving_path
+
+            raw_artifact_path = str(serving_path(Path(release_root).expanduser()))
+
         raw_database_url = os.getenv(REALTIME_DATABASE_URL_ENVIRONMENT_VARIABLE)
         raw_candidate_limit = os.getenv(REALTIME_CANDIDATE_LIMIT_ENVIRONMENT_VARIABLE)
 

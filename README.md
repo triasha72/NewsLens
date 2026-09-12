@@ -1008,3 +1008,7 @@ Versioned container images are available from the [NewsLens GitHub Container Reg
 NewsLens source code is released under the [MIT License](LICENSE).
 
 The Microsoft MIND dataset is governed by separate Microsoft Research License Terms and is not redistributed by this repository.
+
+## Implementation update
+
+See [implementation and evidence limits](docs/model-lifecycle.md).
