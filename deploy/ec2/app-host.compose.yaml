@@ -7,7 +7,7 @@ services:
       dockerfile: services/ingestion/Dockerfile
     environment:
       NEWSLENS_INGESTION_MODE: consumer
-      NEWSLENS_KAFKA_BROKERS: ${NEWSLENS_STATE_PRIVATE_IP:?set NEWSLENS_STATE_PRIVATE_IP}:9092
+      NEWSLENS_KAFKA_BROKERS: ${NEWSLENS_STATE_PRIVATE_IP:?set NEWSLENS_STATE_PRIVATE_IP}:19092
       NEWSLENS_KAFKA_TOPIC: news-events
       NEWSLENS_KAFKA_DLQ_TOPIC: news-events-dlq
       NEWSLENS_KAFKA_GROUP_ID: newslens-indexers

@@ -9,7 +9,7 @@ does not claim stateful high availability.
 
 - Keep the instances in the same VPC and use private addresses for Kafka and
   PostgreSQL.
-- Give both instances the same security group. Allow ports `5432` and `9092`
+- Give both instances the same security group. Allow ports `5432` and `19092`
   only from that security group itself. Allow ports `8000` and `8080` only from
   your current public IP.
 - Use a fresh, random `NEWSLENS_POSTGRES_PASSWORD`; do not commit it.
