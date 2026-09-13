@@ -15,4 +15,5 @@ def test_local_evidence_is_blocked_as_production_evidence():
     assert result["decision"] == "blocked"
     assert result["checks"]["publish_failure_rate"]["passed"]
     assert not result["checks"]["sustained_soak_duration"]["passed"]
-    assert not result["checks"]["multi_host_environment"]["passed"]
+    assert not result["checks"]["multi_host_application_tier"]["passed"]
+    assert not result["checks"]["stateful_services_high_availability"]["passed"]

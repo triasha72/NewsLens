@@ -39,10 +39,20 @@ docker compose --env-file .env -f deploy/ec2/app-host.compose.yaml up --build --
 ```
 
 Run the soak command from the state host, with the ingestion and search URLs
-pointing at `localhost`. Stop the second consumer host during the recovery
-portion, then capture the aggregate reports. Keep the resulting receipt marked
-as application-tier multi-host evidence; it is not a Kafka or PostgreSQL
-failover result.
+pointing at `localhost`:
+
+```bash
+python scripts/realtime/run_soak_evidence.py \
+  --duration-minutes 60 --events 100000 --concurrency 20 \
+  --environment "AWS EC2 multi-host application tier" \
+  --application-hosts 2 \
+  --output-dir reports/ec2-multi-host
+```
+
+Stop the second consumer host during the recovery portion, then capture the
+aggregate reports. The receipt separately records that the application tier is
+multi-host and that Kafka/PostgreSQL are still single-host. It must not be
+presented as a full stateful failover result.
 
 ## Teardown
 

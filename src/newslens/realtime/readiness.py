@@ -35,9 +35,22 @@ def assess_realtime_readiness(
             "value": dlq["dead_letter_envelope_valid"], "required": True,
             "passed": dlq["dead_letter_envelope_valid"] is True,
         },
-        "multi_host_environment": {
-            "value": load.get("environment"), "required": "multi-host",
-            "passed": "multi-host" in load.get("environment", "").lower(),
+        "multi_host_application_tier": {
+            "value": {
+                "environment": load.get("environment"),
+                "application_hosts": load.get("topology", {}).get("application_hosts", 1),
+            },
+            "minimum_hosts": 2,
+            "passed": (
+                "multi-host" in load.get("environment", "").lower()
+                and load.get("topology", {}).get("application_hosts", 1) >= 2
+            ),
+        },
+        "stateful_services_high_availability": {
+            "value": load.get("topology", {}).get("stateful_services_highly_available", False),
+            "required": True,
+            "passed": load.get("topology", {}).get("stateful_services_highly_available", False)
+            is True,
         },
     }
     return {

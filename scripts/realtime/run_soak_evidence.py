@@ -1,4 +1,4 @@
-"""Run a bounded local soak, recovery, DLQ, and readiness evidence workflow."""
+"""Run a bounded soak, recovery, DLQ, and readiness evidence workflow."""
 
 from __future__ import annotations
 
@@ -20,18 +20,29 @@ def run(command: list[str]) -> None:
     subprocess.run(command, check=True)
 
 
-def aggregate_load(reports: list[dict], duration_minutes: int) -> dict:
+def aggregate_load(
+    reports: list[dict],
+    duration_minutes: int,
+    *,
+    environment: str = "local Docker Compose",
+    application_hosts: int = 1,
+    stateful_services_highly_available: bool = False,
+) -> dict:
     accepted = sum(item["publish"]["accepted"] for item in reports)
     failed = sum(item["publish"]["failed"] for item in reports)
-    return {
+    result = {
         "schema_version": "newslens.realtime-load.v1",
         "generated_at": datetime.now(UTC).isoformat(),
-        "environment": "local Docker Compose",
+        "environment": environment,
         "configuration": {
             "events": accepted + failed,
             "duration_minutes": duration_minutes,
             "bursts": len(reports),
             "events_per_burst": (accepted + failed) // len(reports),
+        },
+        "topology": {
+            "application_hosts": application_hosts,
+            "stateful_services_highly_available": stateful_services_highly_available,
         },
         "publish": {
             "accepted": accepted,
@@ -44,10 +55,18 @@ def aggregate_load(reports: list[dict], duration_minutes: int) -> dict:
         },
         "burst_reports": len(reports),
         "limitations": [
-            "This is a single-host Docker Compose soak, not a multi-host production result.",
             "The aggregate freshness value is the worst per-burst p95, not a pooled percentile.",
         ],
     }
+    if application_hosts < 2:
+        result["limitations"].insert(
+            0, "This is a single-host soak, not a multi-host application result."
+        )
+    if not stateful_services_highly_available:
+        result["limitations"].append(
+            "Kafka and PostgreSQL are not highly available in this topology."
+        )
+    return result
 
 
 def main() -> int:
@@ -56,10 +75,15 @@ def main() -> int:
     parser.add_argument("--events", type=int, default=100_000)
     parser.add_argument("--concurrency", type=int, default=20)
     parser.add_argument("--output-dir", type=Path, default=Path("reports"))
+    parser.add_argument("--environment", default="local Docker Compose")
+    parser.add_argument("--application-hosts", type=int, default=1)
+    parser.add_argument("--stateful-services-highly-available", action="store_true")
     parser.add_argument("--skip-recovery", action="store_true")
     args = parser.parse_args()
     if args.duration_minutes < 1 or args.events < args.duration_minutes:
         parser.error("events must be at least duration-minutes so every minute has a burst")
+    if args.application_hosts < 1:
+        parser.error("application-hosts must be at least 1")
 
     root = Path(__file__).resolve().parents[2]
     benchmark = root / "scripts/realtime/benchmark_ingestion.py"
@@ -84,7 +108,13 @@ def main() -> int:
             if burst + 1 < args.duration_minutes and remaining > 0:
                 time.sleep(remaining)
 
-    load_report = aggregate_load(reports, args.duration_minutes)
+    load_report = aggregate_load(
+        reports,
+        args.duration_minutes,
+        environment=args.environment,
+        application_hosts=args.application_hosts,
+        stateful_services_highly_available=args.stateful_services_highly_available,
+    )
     load_path = args.output_dir / "realtime_soak_load_v0_1.json"
     load_path.write_text(json.dumps(load_report, indent=2) + "\n", encoding="utf-8")
     recovery_path = args.output_dir / "realtime_soak_recovery_v0_1.json"
