@@ -1017,3 +1017,9 @@ The Microsoft MIND dataset is governed by separate Microsoft Research License Te
 ## Implementation update
 
 See [implementation and evidence limits](docs/model-lifecycle.md).
+
+## Where this stands
+
+The two-host layout and Kafka listener split are documented. I still need to
+verify the private state-host listener from the application host and retain that
+check with the deployment evidence.
