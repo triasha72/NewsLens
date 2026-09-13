@@ -12,6 +12,9 @@ does not claim stateful high availability.
 - Give both instances the same security group. Allow ports `5432` and `19092`
   only from that security group itself. Allow ports `8000` and `8080` only from
   your current public IP.
+- The state host uses Kafka's internal Docker listener (`kafka:9092`); the app
+  host uses the private EC2 listener (`19092`). This split is required because
+  Kafka clients must receive an address reachable from their own network.
 - Use a fresh, random `NEWSLENS_POSTGRES_PASSWORD`; do not commit it.
 
 ## Start the state host
