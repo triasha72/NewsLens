@@ -100,6 +100,14 @@ def test_health_endpoint_reports_liveness() -> None:
     }
 
 
+def test_root_redirects_visitors_to_the_api_documentation() -> None:
+    with TestClient(create_app()) as client:
+        response = client.get("/", follow_redirects=False)
+
+    assert response.status_code == 307
+    assert response.headers["location"] == "/docs"
+
+
 def test_model_info_is_honest_without_artifact() -> None:
     with TestClient(create_app()) as client:
         response = client.get("/model-info")

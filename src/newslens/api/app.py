@@ -15,6 +15,7 @@ from fastapi import (
     Request,
     status,
 )
+from fastapi.responses import RedirectResponse
 
 from newslens import __version__
 from newslens.artifacts import LoadedArtifact, load_artifact
@@ -155,6 +156,12 @@ def create_app(
 
     install_request_observability(application)
     ranker = FreshnessRanker()
+
+    @application.get("/", include_in_schema=False)
+    def demo_entrypoint() -> RedirectResponse:
+        """Send a visitor at the service root to the interactive API page."""
+
+        return RedirectResponse(url="/docs")
 
     @application.get(
         "/health",
