@@ -34,6 +34,8 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      # Keep the single-broker evidence stack inside a 1 GiB t3.micro.
+      KAFKA_HEAP_OPTS: "-Xms256m -Xmx256m"
     ports:
       - "9092:9092"
     healthcheck:
