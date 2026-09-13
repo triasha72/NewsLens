@@ -2,9 +2,10 @@
 
 [Portfolio case study](https://triasha72.github.io/Portfolio/case-newslens.html)
 
-[Run the safe public-search demo](docs/PUBLIC_DEMO.md) — a synthetic, no-licensed-data
-mode for inspecting the real-time search API. It is not a live news service or
-recommendation-quality demonstration.
+[Try the safe public-search demo](https://newslens-demo.onrender.com/docs) or
+[read its limits](docs/PUBLIC_DEMO.md). It uses a synthetic fixture corpus with
+no licensed data, trained artifacts, or user data. It is not a live news
+service or recommendation-quality demonstration.
 
 [Project overview](docs/PROJECT_OVERVIEW.md) — the problem, evidence boundary, reproduction check, and next validation.
 

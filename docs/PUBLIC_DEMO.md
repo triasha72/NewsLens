@@ -67,3 +67,12 @@ curl --get --fail --data-urlencode 'q=latest AI chip' \
 Use the service description or linked documentation to state that this is a
 synthetic search demonstration, not a live news or personalized recommendation
 service. Configure log retention before sharing the URL publicly.
+
+## Hosted demonstration
+
+The synthetic demonstration is available at
+<https://newslens-demo.onrender.com/docs>. Its health endpoint is
+<https://newslens-demo.onrender.com/health>.
+
+The service runs on Render's free tier and can take time to start after it has
+been idle. A successful response shows only synthetic fixture content.
