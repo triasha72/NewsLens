@@ -15,7 +15,7 @@ recommendation-quality demonstration.
 [![Go](https://img.shields.io/badge/go-1.23-blue)](https://go.dev/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-## In brief
+## Overview
 
 NewsLens pairs a leakage-safe news recommender with a real-time article-search
 path. The recommender is evaluated chronologically; the serving path tests
@@ -45,7 +45,7 @@ records to a tested API. The real-time path follows a new article through Go,
 Kafka, PostgreSQL, and freshness-aware search, including the failures that can
 happen between acceptance and indexing.
 
-## Project story
+## Background
 
 **Situation.** A news recommender can appear strong when future interactions
 leak into training, and an offline ranking metric says little about cold starts,
