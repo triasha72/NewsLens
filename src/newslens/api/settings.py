@@ -9,6 +9,7 @@ from pathlib import Path
 ARTIFACT_PATH_ENVIRONMENT_VARIABLE = "NEWSLENS_ARTIFACT_PATH"
 REALTIME_DATABASE_URL_ENVIRONMENT_VARIABLE = "NEWSLENS_REALTIME_DATABASE_URL"
 REALTIME_CANDIDATE_LIMIT_ENVIRONMENT_VARIABLE = "NEWSLENS_REALTIME_CANDIDATE_LIMIT"
+DEMO_MODE_ENVIRONMENT_VARIABLE = "NEWSLENS_DEMO_MODE"
 
 
 class ApiSettingsError(ValueError):
@@ -22,6 +23,7 @@ class ApiSettings:
     artifact_path: Path | None = None
     realtime_database_url: str | None = None
     realtime_candidate_limit: int = 200
+    demo_mode: bool = False
 
     @classmethod
     def from_environment(cls) -> ApiSettings:
@@ -41,6 +43,7 @@ class ApiSettings:
 
         raw_database_url = os.getenv(REALTIME_DATABASE_URL_ENVIRONMENT_VARIABLE)
         raw_candidate_limit = os.getenv(REALTIME_CANDIDATE_LIMIT_ENVIRONMENT_VARIABLE)
+        raw_demo_mode = os.getenv(DEMO_MODE_ENVIRONMENT_VARIABLE)
 
         artifact_path: Path | None = None
 
@@ -77,8 +80,24 @@ class ApiSettings:
                     f"{REALTIME_CANDIDATE_LIMIT_ENVIRONMENT_VARIABLE} must be between 1 and 10000."
                 )
 
+        demo_mode = False
+        if raw_demo_mode is not None:
+            normalized_demo_mode = raw_demo_mode.strip().lower()
+            if normalized_demo_mode not in {"true", "false"}:
+                raise ApiSettingsError(
+                    f"{DEMO_MODE_ENVIRONMENT_VARIABLE} must be true or false."
+                )
+            demo_mode = normalized_demo_mode == "true"
+
+        if demo_mode and database_url is not None:
+            raise ApiSettingsError(
+                f"{DEMO_MODE_ENVIRONMENT_VARIABLE} cannot be combined with "
+                f"{REALTIME_DATABASE_URL_ENVIRONMENT_VARIABLE}."
+            )
+
         return cls(
             artifact_path=artifact_path,
             realtime_database_url=database_url,
             realtime_candidate_limit=candidate_limit,
+            demo_mode=demo_mode,
         )

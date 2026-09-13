@@ -195,6 +195,30 @@ def test_search_requires_realtime_store() -> None:
     assert response.status_code == 503
 
 
+def test_demo_mode_exposes_only_synthetic_search_content(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("NEWSLENS_DEMO_MODE", "true")
+
+    with TestClient(create_app()) as client:
+        readiness = client.get("/realtime/ready")
+        response = client.get("/search", params={"q": "latest AI chip", "top_k": 2})
+
+    assert readiness.status_code == 200
+    assert response.status_code == 200
+    assert response.json()["results"][0]["article_id"] == "demo-ai-chip"
+
+
+def test_demo_mode_rejects_a_live_database_url(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("NEWSLENS_DEMO_MODE", "true")
+    monkeypatch.setenv("NEWSLENS_REALTIME_DATABASE_URL", "postgresql://example.test/newslens")
+
+    with pytest.raises(ValueError, match="cannot be combined"):
+        create_app()
+
+
 def test_search_returns_intent_and_freshness_diagnostics() -> None:
     now = datetime.now(UTC)
     repository = InMemoryArticleRepository(

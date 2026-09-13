@@ -25,6 +25,7 @@ from newslens.realtime import (
     ArticleRepository,
     FreshnessRanker,
     PostgresArticleRepository,
+    create_demo_repository,
     understand_query,
 )
 
@@ -130,6 +131,8 @@ def create_app(
         if live_repository is None and settings.realtime_database_url is not None:
             live_repository = PostgresArticleRepository(settings.realtime_database_url)
             owns_live_repository = True
+        elif live_repository is None and settings.demo_mode:
+            live_repository = create_demo_repository()
 
         application.state.loaded_artifact = loaded_artifact
         application.state.realtime_repository = live_repository

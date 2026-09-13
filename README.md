@@ -2,6 +2,10 @@
 
 [Portfolio case study](https://triasha72.github.io/Portfolio/case-newslens.html)
 
+[Run the safe public-search demo](docs/PUBLIC_DEMO.md) — a synthetic, no-licensed-data
+mode for inspecting the real-time search API. It is not a live news service or
+recommendation-quality demonstration.
+
 [Project overview](docs/PROJECT_OVERVIEW.md) — the problem, evidence boundary, reproduction check, and next validation.
 
 [![CI](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml)
