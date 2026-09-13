@@ -1,0 +1,11 @@
+{
+  "schema_version": "newslens.realtime-recovery.v1",
+  "stopped_consumer_partition": 2,
+  "one_consumer_stopped_searchable_ms": 18422.78666701168,
+  "full_consumer_outage_recovery_ms": 3125.286791997496,
+  "generated_at": "2026-09-13T15:00:41.205706+00:00",
+  "environment": "local Docker Compose",
+  "limitations": [
+    "Single-host process failure exercise; broker and host failures are out of scope."
+  ]
+}

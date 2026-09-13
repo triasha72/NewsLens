@@ -212,8 +212,9 @@ The same investigation should benchmark warehouse build time, database size, and
 representative analytical queries before considering a shared PostgreSQL backend.
 
 The readiness command now combines load, freshness, recovery, DLQ, soak length,
-event volume, and multi-host evidence. The current local run is correctly
-blocked on soak duration, volume, and deployment topology.
+event volume, and multi-host evidence. The completed local soak met its
+60-minute and 100,000-event targets, along with the failure-rate, freshness,
+recovery, and DLQ checks. It is correctly blocked only on deployment topology.
 
 ### 6. Online-experiment design
 

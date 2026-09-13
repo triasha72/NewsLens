@@ -1,0 +1,25 @@
+{
+  "schema_version": "newslens.realtime-load.v1",
+  "generated_at": "2026-09-13T15:00:06.913453+00:00",
+  "environment": "local Docker Compose",
+  "configuration": {
+    "events": 100000,
+    "duration_minutes": 60,
+    "bursts": 60,
+    "events_per_burst": 1666
+  },
+  "publish": {
+    "accepted": 100000,
+    "failed": 0,
+    "failure_rate": 0.0
+  },
+  "produced_to_searchable_ms": {
+    "p95": 224.48059999999998,
+    "failed_samples": 0
+  },
+  "burst_reports": 60,
+  "limitations": [
+    "This is a single-host Docker Compose soak, not a multi-host production result.",
+    "The aggregate freshness value is the worst per-burst p95, not a pooled percentile."
+  ]
+}

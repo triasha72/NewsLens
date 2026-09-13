@@ -978,10 +978,10 @@ Tagged releases also publish multi-platform images to GitHub Container Registry.
   for the recommendation model.
 - The local real-time stack has Prometheus scraping, but no durable external
   metrics store, alerting policy, or operated DLQ replay process.
-- The combined real-time readiness report passes the current failure-rate,
-  freshness, recovery, and DLQ checks. It remains blocked because the measured
-  run contains only 500 events, has no 60-minute soak, and uses one host. See
-  [`reports/realtime_readiness_v0_1.json`](reports/realtime_readiness_v0_1.json).
+- The completed 60-minute, 100,000-event local soak passes the current
+  failure-rate, freshness, recovery, and DLQ checks. It remains blocked only
+  because the environment is one Docker Compose host. See
+  [`reports/realtime_soak_readiness_v0_1.json`](reports/realtime_soak_readiness_v0_1.json).
 - The real-time evidence uses one Kafka broker and one PostgreSQL instance on one
   Docker Desktop host; it does not establish replicated or multi-zone operation.
 - A versioned container is published, but NewsLens is not operated as a public, always-on hosted service.
