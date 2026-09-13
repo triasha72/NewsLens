@@ -67,3 +67,28 @@ def test_training_retry_cutoff_and_api_release(tmp_path, monkeypatch):
         ApiSettings.from_environment()
     with pytest.raises(ValueError, match="no behaviors"):
         train(snapshot, root, **{**args, "cutoff": "1999-01-01"})
+
+
+def test_rehearsal_refuses_live_registry(tmp_path):
+    from scripts.rehearse_lifecycle import rehearse
+
+    with pytest.raises(ValueError, match="isolated registry"):
+        rehearse(tmp_path, tmp_path, ["2020-01-01", "2020-01-02"], 0, 1)
+
+
+def test_complete_release_rehearsal(tmp_path):
+    from scripts.rehearse_lifecycle import rehearse
+
+    snapshot = tmp_path / "snapshot"
+    snapshot.mkdir()
+    (snapshot / "news.tsv").write_text(
+        "N1\tscience\tspace\tMars water\tPlanet\turl\t[]\t[]\n"
+        "N2\tscience\tspace\tMars team\tPlanet\turl\t[]\t[]\n"
+    )
+    (snapshot / "behaviors.tsv").write_text(
+        "".join(f"{i}\tU1\t01/{i:02d}/2020 12:00:00 AM\tN1\tN1-0 N2-1\n" for i in range(1, 11))
+    )
+    result = rehearse(snapshot, tmp_path / "registry", ["2020-01-08", "2020-01-09"], 0, 1)
+    assert result["status"] == "completed"
+    assert [e["step"] for e in result["events"]][-1] == "rollback_and_resolve"
+    assert result["events"][-1]["run_id"] == result["events"][0]["run_id"]

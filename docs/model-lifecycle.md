@@ -25,3 +25,17 @@ then refits on available snapshot events. It does not establish final-test quali
 of that refit. This local implementation does not establish cloud orchestration,
 a long-running production deployment, user lift, or a sustained operational SLO.
 Keep the root writable only by trusted operators; artifact loading uses joblib.
+
+## Repeatable isolated release drill
+
+```sh
+python scripts/rehearse_lifecycle.py --snapshot data/MINDsmall_train --root runs/drill-01 --cutoffs 2019-11-13 2019-11-14 --minimum-ndcg 0.3 --minimum-validation 100
+```
+
+Choose cutoffs supported by the snapshot before evaluating. The script requires a
+new registry, trains two candidates, verifies retry idempotency, promotes each and
+rolls back to the first. `rehearsal.json` records measured step durations. The
+integration test exercises the complete transition using explicitly artificial
+fixtures. The drill does not start an HTTP server or prove service recovery/SLOs.
+The documented Microsoft training download returned HTTP 409 (public access
+prohibited) during this follow-up; a permitted local snapshot is still needed.
