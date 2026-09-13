@@ -40,3 +40,30 @@ popularity, and index-freshness components.
 The bundled articles are intentionally synthetic and refreshed relative to
 process start. Their text, identifiers, and popularity values are test fixtures,
 not real reporting or user engagement signals.
+
+## Deploy on Render
+
+This repository can be deployed as a small public demonstration on Render
+without copying licensed data or model artifacts to the host.
+
+1. Create a **Web Service** from `triasha72/NewsLens` on the `main` branch.
+2. Choose the **Docker** runtime. Render builds the repository's `Dockerfile`.
+3. Set the health check path to `/health`.
+4. Add `NEWSLENS_DEMO_MODE=true` as a runtime environment variable.
+5. Confirm that `NEWSLENS_REALTIME_DATABASE_URL`, `NEWSLENS_ARTIFACT_PATH`,
+   and `NEWSLENS_RELEASE_ROOT` are not configured, then create the service.
+
+Render supplies the `PORT` variable used by the container. Locally, the
+container continues to listen on port 8000 when that variable is absent.
+
+After the deployment is marked live, verify the public URL:
+
+```bash
+curl --fail https://<service-name>.onrender.com/health
+curl --get --fail --data-urlencode 'q=latest AI chip' \
+  https://<service-name>.onrender.com/search
+```
+
+Use the service description or linked documentation to state that this is a
+synthetic search demonstration, not a live news or personalized recommendation
+service. Configure log retention before sharing the URL publicly.
