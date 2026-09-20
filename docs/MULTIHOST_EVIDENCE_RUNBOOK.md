@@ -32,7 +32,7 @@ sudo docker compose --env-file .env -f deploy/ec2/app-host.compose.yaml ps
 PYTHONPATH=src python scripts/realtime/run_soak_evidence.py \
   --duration-minutes 60 --events 100000 --concurrency 20 \
   --environment aws-ec2-two-host \
-  --application-hosts 1 \
+  --application-hosts 2 \
   --output-dir reports/multihost-$(date -u +%Y%m%dT%H%M%SZ)
 ```
 
@@ -44,8 +44,9 @@ unplanned failures into a passing run.
 ## Acceptance
 
 Publish the raw load, recovery, DLQ, readiness, topology, and checksum files.
-The gap is closed only when the readiness receipt reports the multi-host
-topology, 100,000 events, freshness and recovery values, duplicate handling,
-DLQ behavior, and no unexplained event loss. If Kafka/PostgreSQL are a single
-stateful pair, label the result as multi-host application evidence, not highly
-available stateful-service evidence.
+This closes the multi-host application-evidence gap when the receipt records
+the two-host topology, 100,000 events, freshness and recovery values, duplicate
+handling, DLQ behavior, and no unexplained event loss. The current one-broker,
+one-PostgreSQL setup will correctly keep the separate high-availability gate
+blocked. It must be described as multi-host application evidence, not as a
+highly available production deployment.
