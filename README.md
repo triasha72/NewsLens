@@ -9,6 +9,9 @@ service or recommendation-quality demonstration.
 
 [Project overview](docs/PROJECT_OVERVIEW.md) — the problem, evidence boundary, reproduction check, and next validation.
 
+[Multi-host evidence runbook](docs/MULTIHOST_EVIDENCE_RUNBOOK.md) — the exact
+two-host soak, recovery, DLQ, and acceptance procedure.
+
 [![CI](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/ci.yml)
 [![Publish container](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml/badge.svg)](https://github.com/triasha72/NewsLens/actions/workflows/publish-container.yml)
 [![Release](https://img.shields.io/badge/release-v0.3.0-blue)](https://github.com/triasha72/NewsLens/releases/tag/v0.3.0)
