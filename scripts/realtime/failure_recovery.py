@@ -103,6 +103,7 @@ def main() -> int:
     parser.add_argument("--compose-file", type=Path, default=Path("deploy/realtime/compose.yaml"))
     parser.add_argument("--ingestion-url", default="http://127.0.0.1:8080")
     parser.add_argument("--search-url", default="http://127.0.0.1:8000")
+    parser.add_argument("--execution-host-role", choices=["application", "state"], default="state")
     parser.add_argument("--output", type=Path, default=Path("reports/realtime_recovery_v0_1.json"))
     args = parser.parse_args()
 
@@ -134,6 +135,8 @@ def main() -> int:
         {
             "generated_at": datetime.now(UTC).isoformat(),
             "environment": "local Docker Compose",
+            "execution_host_role": args.execution_host_role,
+            "endpoints": {"ingestion_url": args.ingestion_url, "search_url": args.search_url, "compose_file": str(args.compose_file)},
             "limitations": ["Single-host process failure exercise; broker and host failures are out of scope."],
         }
     )

@@ -82,6 +82,7 @@ def main() -> int:
     parser.add_argument("--duplicate-probes", type=int, default=25)
     parser.add_argument("--ingestion-url", default="http://127.0.0.1:8080")
     parser.add_argument("--search-url", default="http://127.0.0.1:8000")
+    parser.add_argument("--execution-host-role", choices=["application", "state"], default="application")
     parser.add_argument(
         "--consumer-url",
         action="append",
@@ -160,6 +161,8 @@ def main() -> int:
         "schema_version": "newslens.realtime-load.v1",
         "generated_at": datetime.now(UTC).isoformat(),
         "environment": "local Docker Compose",
+        "execution_host_role": args.execution_host_role,
+        "endpoints": {"ingestion_url": args.ingestion_url, "search_url": args.search_url, "consumer_urls": args.consumer_url},
         "configuration": {
             "events": args.events,
             "concurrency": args.concurrency,
