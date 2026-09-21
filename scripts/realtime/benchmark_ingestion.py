@@ -83,6 +83,13 @@ def main() -> int:
     parser.add_argument("--ingestion-url", default="http://127.0.0.1:8080")
     parser.add_argument("--search-url", default="http://127.0.0.1:8000")
     parser.add_argument("--execution-host-role", choices=["application", "state"], default="application")
+    parser.add_argument("--environment", default="local Docker Compose")
+    parser.add_argument(
+        "--endpoint-role",
+        action="append",
+        default=None,
+        help="Redacted endpoint description, for example ingestion=state-host.",
+    )
     parser.add_argument(
         "--consumer-url",
         action="append",
@@ -160,9 +167,9 @@ def main() -> int:
     report = {
         "schema_version": "newslens.realtime-load.v1",
         "generated_at": datetime.now(UTC).isoformat(),
-        "environment": "local Docker Compose",
+        "environment": args.environment,
         "execution_host_role": args.execution_host_role,
-        "endpoints": {"ingestion_url": args.ingestion_url, "search_url": args.search_url, "consumer_urls": args.consumer_url},
+        "endpoint_roles": args.endpoint_role or ["all=local"],
         "configuration": {
             "events": args.events,
             "concurrency": args.concurrency,
@@ -193,7 +200,7 @@ def main() -> int:
             "duplicates_observed_by_consumers": duplicates_observed,
         },
         "limitations": [
-            "This is a single-machine Docker Compose result, not a production capacity claim.",
+            "This is a bounded benchmark, not a production capacity claim.",
             "Freshness is sampled and includes client polling time only through the stored produced-to-indexed timestamp.",
         ],
     }

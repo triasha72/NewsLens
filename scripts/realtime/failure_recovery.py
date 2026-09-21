@@ -104,6 +104,18 @@ def main() -> int:
     parser.add_argument("--ingestion-url", default="http://127.0.0.1:8080")
     parser.add_argument("--search-url", default="http://127.0.0.1:8000")
     parser.add_argument("--execution-host-role", choices=["application", "state"], default="state")
+    parser.add_argument("--environment", default="local Docker Compose")
+    parser.add_argument(
+        "--endpoint-role",
+        action="append",
+        default=None,
+        help="Redacted endpoint description, for example search=state-host.",
+    )
+    parser.add_argument(
+        "--single-consumer-only",
+        action="store_true",
+        help="Exercise consumer-1 failover without trying to control consumer-2 on another host.",
+    )
     parser.add_argument("--output", type=Path, default=Path("reports/realtime_recovery_v0_1.json"))
     args = parser.parse_args()
 
@@ -118,26 +130,37 @@ def main() -> int:
         report["stopped_consumer_partition"] = target_partition
         report["one_consumer_stopped_searchable_ms"] = wait_search(args.search_url, token)
 
-        compose(args.compose_file, "stop", "consumer-2")
-        backlog_event, token = event("backlog")
-        request_json(f"{args.ingestion_url}/events", backlog_event)
-        time.sleep(2)
-        recovery_started = time.perf_counter()
-        compose(args.compose_file, "start", "consumer-1")
-        wait_search(args.search_url, token)
-        report["full_consumer_outage_recovery_ms"] = (
-            time.perf_counter() - recovery_started
-        ) * 1_000
+        if not args.single_consumer_only:
+            compose(args.compose_file, "stop", "consumer-2")
+            backlog_event, token = event("backlog")
+            request_json(f"{args.ingestion_url}/events", backlog_event)
+            time.sleep(2)
+            recovery_started = time.perf_counter()
+            compose(args.compose_file, "start", "consumer-1")
+            wait_search(args.search_url, token)
+            report["full_consumer_outage_recovery_ms"] = (
+                time.perf_counter() - recovery_started
+            ) * 1_000
     finally:
-        compose(args.compose_file, "start", "consumer-1", "consumer-2")
+        services = ["start", "consumer-1"]
+        if not args.single_consumer_only:
+            services.append("consumer-2")
+        compose(args.compose_file, *services)
 
     report.update(
         {
             "generated_at": datetime.now(UTC).isoformat(),
-            "environment": "local Docker Compose",
+            "environment": args.environment,
             "execution_host_role": args.execution_host_role,
-            "endpoints": {"ingestion_url": args.ingestion_url, "search_url": args.search_url, "compose_file": str(args.compose_file)},
-            "limitations": ["Single-host process failure exercise; broker and host failures are out of scope."],
+            "endpoint_roles": args.endpoint_role or ["all=local"],
+            "limitations": (
+                [
+                    "Consumer-1 failover only; consumer-2 runs on a separate host.",
+                    "Broker and host failures are out of scope.",
+                ]
+                if args.single_consumer_only
+                else ["Single-host process failure exercise; broker and host failures are out of scope."]
+            ),
         }
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)

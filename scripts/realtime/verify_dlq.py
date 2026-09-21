@@ -34,6 +34,13 @@ def main() -> int:
         default=["http://127.0.0.1:8081", "http://127.0.0.1:8082"],
     )
     parser.add_argument("--execution-host-role", choices=["application", "state"], default="state")
+    parser.add_argument("--environment", default="local Docker Compose")
+    parser.add_argument(
+        "--endpoint-role",
+        action="append",
+        default=None,
+        help="Redacted endpoint description, for example consumer=application-host.",
+    )
     parser.add_argument("--output", type=Path, default=Path("reports/realtime_dlq_v0_1.json"))
     args = parser.parse_args()
 
@@ -103,9 +110,9 @@ def main() -> int:
     report = {
         "schema_version": "newslens.realtime-dlq.v1",
         "generated_at": datetime.now(UTC).isoformat(),
-        "environment": "local Docker Compose",
+        "environment": args.environment,
         "execution_host_role": args.execution_host_role,
-        "endpoints": {"consumer_urls": args.consumer_url, "compose_file": str(args.compose_file)},
+        "endpoint_roles": args.endpoint_role or ["all=local"],
         "invalid_events_observed": invalid_delta,
         "dead_letter_events_observed": dlq_delta,
         "dead_letter_envelope_valid": envelope_valid,

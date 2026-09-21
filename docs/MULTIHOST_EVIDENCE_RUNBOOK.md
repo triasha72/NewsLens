@@ -46,19 +46,47 @@ PYTHONPATH=src python scripts/realtime/benchmark_ingestion.py \
   --search-url http://<state-host-private-dns>:8000 \
   --consumer-url http://<state-host-private-dns>:8081 \
   --consumer-url http://127.0.0.1:8082 \
-  --execution-host-role application --output reports/multihost/load.json
+  --execution-host-role application --environment aws-ec2-two-host \
+  --endpoint-role ingestion=state-host --endpoint-role search=state-host \
+  --endpoint-role consumer-1=state-host --endpoint-role consumer-2=application-host \
+  --output reports/multihost/load.json
 ```
 
 On the state host, run recovery and DLQ with its local Compose project. Pass
 the state and app consumer endpoints explicitly, saving `recovery.json` and
-`dlq.json` in the same evidence directory. Then build the receipt from the
-three raw reports and a redacted `topology.json`:
+`dlq.json` in the same evidence directory:
+
+```bash
+PYTHONPATH=src python scripts/realtime/failure_recovery.py \
+  --compose-file deploy/ec2/state-host.compose.yaml \
+  --ingestion-url http://127.0.0.1:8080 --search-url http://127.0.0.1:8000 \
+  --execution-host-role state --environment aws-ec2-two-host \
+  --endpoint-role ingestion=state-host --endpoint-role search=state-host \
+  --single-consumer-only \
+  --output reports/multihost/recovery.json
+
+PYTHONPATH=src python scripts/realtime/verify_dlq.py \
+  --compose-file deploy/ec2/state-host.compose.yaml \
+  --consumer-url http://127.0.0.1:8081 \
+  --consumer-url http://<app-host-private-dns>:8082 \
+  --execution-host-role state --environment aws-ec2-two-host \
+  --endpoint-role consumer-1=state-host --endpoint-role consumer-2=application-host \
+  --output reports/multihost/dlq.json
+```
+
+Copy the three redacted JSON reports to an operator-controlled evidence
+directory. Do not use Git as the transfer mechanism and do not copy `.env`
+files. Build and verify the receipt there together with a redacted
+`topology.json`:
 
 ```bash
 PYTHONPATH=src python scripts/realtime/build_multihost_receipt.py \
   --load reports/multihost/load.json --recovery reports/multihost/recovery.json \
   --dlq reports/multihost/dlq.json --topology reports/multihost/topology.json \
   --output-dir reports/multihost
+
+PYTHONPATH=src python scripts/realtime/build_multihost_receipt.py \
+  --verify reports/multihost/multihost_checksums_v0_1.json
 ```
 
 The topology manifest must set `stateful_services_highly_available` to
@@ -78,11 +106,6 @@ On the app host, after setting the state-host address in `.env`:
 cd NewsLens
 sudo docker compose --env-file .env -f deploy/ec2/app-host.compose.yaml up -d
 sudo docker compose --env-file .env -f deploy/ec2/app-host.compose.yaml ps
-PYTHONPATH=src python scripts/realtime/run_soak_evidence.py \
-  --duration-minutes 60 --events 100000 --concurrency 20 \
-  --environment aws-ec2-two-host \
-  --application-hosts 2 \
-  --output-dir reports/multihost-$(date -u +%Y%m%dT%H%M%SZ)
 ```
 
 The receipt must include a separate topology manifest showing the state host,
@@ -92,10 +115,14 @@ unplanned failures into a passing run.
 
 ## Acceptance
 
-Publish the raw load, recovery, DLQ, readiness, topology, and checksum files.
-This closes the multi-host application-evidence gap when the receipt records
-the two-host topology, 100,000 events, freshness and recovery values, duplicate
-handling, DLQ behavior, and no unexplained event loss. The current one-broker,
-one-PostgreSQL setup will correctly keep the separate high-availability gate
-blocked. It must be described as multi-host application evidence, not as a
-highly available production deployment.
+Publish the redacted load, recovery, DLQ, topology, receipt, and checksum
+files. This closes the multi-host application-evidence gap when the receipt
+records the two-host topology, measured freshness and recovery values,
+duplicate handling, DLQ behavior, and no unexplained event loss. The current
+one-broker, one-PostgreSQL setup correctly keeps the separate high-availability
+gate blocked. It must be described as multi-host application evidence, not as
+a highly available production deployment.
+
+The two-host run proves consumer-1 failover while consumer-2 stays active on
+the application host. A deliberately coordinated all-consumer outage is a
+separate exercise; do not infer that result from this receipt.
