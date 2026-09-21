@@ -14,3 +14,8 @@ def test_checksums_detect_changed_artifact(tmp_path) -> None:
     manifest = write_checksums([artifact], tmp_path)
     artifact.write_text("changed")
     assert not verify_checksums(manifest)
+
+
+def test_receipt_requires_three_host_local_reports() -> None:
+    with pytest.raises(ValueError, match="missing required field"):
+        build_receipt({}, {}, {}, {"application_hosts": 2, "stateful_services_highly_available": False})

@@ -1,5 +1,6 @@
 """Build an honest receipt from host-local NewsLens evidence stages."""
 
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -9,6 +10,9 @@ def build_receipt(load: dict, recovery: dict, dlq: dict, topology: dict) -> dict
     """Return a receipt only for the supported non-HA topology."""
     if topology.get("stateful_services_highly_available"):
         raise ValueError("stateful services are not highly available in this topology")
+    for name, report, role in (("load", load, "application"), ("recovery", recovery, "state"), ("dlq", dlq, "state")):
+        if report.get("execution_host_role") != role:
+            raise ValueError(f"missing required field execution_host_role={role} in {name} report")
     return {
         "schema_version": "newslens.multihost-receipt.v1",
         "topology": topology,
@@ -25,3 +29,24 @@ def write_checksums(paths: list[Path], output_dir: Path) -> Path:
 
 def verify_checksums(manifest: Path) -> bool:
     return all((manifest.parent / name).exists() and hashlib.sha256((manifest.parent / name).read_bytes()).hexdigest() == digest for name, digest in json.loads(manifest.read_text()).items())
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--load", type=Path, required=True)
+    parser.add_argument("--recovery", type=Path, required=True)
+    parser.add_argument("--dlq", type=Path, required=True)
+    parser.add_argument("--topology", type=Path, required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    args = parser.parse_args()
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    receipt = build_receipt(*(json.loads(path.read_text()) for path in (args.load, args.recovery, args.dlq, args.topology)))
+    output = args.output_dir / "multihost_receipt_v0_1.json"
+    output.write_text(json.dumps(receipt, indent=2) + "\n")
+    write_checksums([args.load, args.recovery, args.dlq, args.topology, output], args.output_dir)
+    print(output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

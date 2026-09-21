@@ -34,6 +34,36 @@ PY
 
 ## Run
 
+Run stages on the host that owns the operation. Replace
+`<state-host-private-dns>` and `<app-host-private-dns>` at execution time;
+never place host addresses or `.env` content in Git.
+
+On the app host, run load against the state tier and record both consumers:
+
+```bash
+PYTHONPATH=src python scripts/realtime/benchmark_ingestion.py \
+  --ingestion-url http://<state-host-private-dns>:8080 \
+  --search-url http://<state-host-private-dns>:8000 \
+  --consumer-url http://<state-host-private-dns>:8081 \
+  --consumer-url http://127.0.0.1:8082 \
+  --execution-host-role application --output reports/multihost/load.json
+```
+
+On the state host, run recovery and DLQ with its local Compose project. Pass
+the state and app consumer endpoints explicitly, saving `recovery.json` and
+`dlq.json` in the same evidence directory. Then build the receipt from the
+three raw reports and a redacted `topology.json`:
+
+```bash
+PYTHONPATH=src python scripts/realtime/build_multihost_receipt.py \
+  --load reports/multihost/load.json --recovery reports/multihost/recovery.json \
+  --dlq reports/multihost/dlq.json --topology reports/multihost/topology.json \
+  --output-dir reports/multihost
+```
+
+The topology manifest must set `stateful_services_highly_available` to
+`false`. This is multi-host application evidence, not an HA deployment.
+
 On the state host:
 
 ```bash
