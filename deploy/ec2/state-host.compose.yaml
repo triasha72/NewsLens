@@ -84,7 +84,7 @@ services:
       NEWSLENS_KAFKA_DLQ_TOPIC: news-events-dlq
       NEWSLENS_KAFKA_GROUP_ID: newslens-indexers
       NEWSLENS_KAFKA_CLIENT_ID: newslens-consumer-1
-      NEWSLENS_DATABASE_URL: postgresql://newslens:${NEWSLENS_POSTGRES_PASSWORD}@postgres:5432/newslens
+      NEWSLENS_DATABASE_URL: postgresql://newslens:${NEWSLENS_POSTGRES_PASSWORD_URLENCODED:?set NEWSLENS_POSTGRES_PASSWORD_URLENCODED}@postgres:5432/newslens
     ports:
       - "8081:8080"
     depends_on:
@@ -100,7 +100,7 @@ services:
       context: ../..
       dockerfile: Dockerfile
     environment:
-      NEWSLENS_REALTIME_DATABASE_URL: postgresql://newslens:${NEWSLENS_POSTGRES_PASSWORD}@postgres:5432/newslens
+      NEWSLENS_REALTIME_DATABASE_URL: postgresql://newslens:${NEWSLENS_POSTGRES_PASSWORD_URLENCODED:?set NEWSLENS_POSTGRES_PASSWORD_URLENCODED}@postgres:5432/newslens
     ports:
       - "8000:8000"
     depends_on:

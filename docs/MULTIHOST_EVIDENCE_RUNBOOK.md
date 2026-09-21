@@ -13,6 +13,25 @@ accepted as multi-host evidence.
 - Capture the private hostnames, instance types, image digests, and commit SHA
   in the run manifest. Do not commit credentials or private IPs.
 
+The deployment keeps the PostgreSQL password separate from its URL-encoded
+connection-string form. On each host, after setting
+`NEWSLENS_POSTGRES_PASSWORD`, derive the encoded form without printing either
+value:
+
+```bash
+python3 - <<'PY'
+from pathlib import Path
+from urllib.parse import quote
+
+env_file = Path(".env")
+lines = env_file.read_text().splitlines()
+password = next(line.split("=", 1)[1] for line in lines if line.startswith("NEWSLENS_POSTGRES_PASSWORD="))
+lines = [line for line in lines if not line.startswith("NEWSLENS_POSTGRES_PASSWORD_URLENCODED=")]
+lines.append(f"NEWSLENS_POSTGRES_PASSWORD_URLENCODED={quote(password, safe='')}")
+env_file.write_text("\n".join(lines) + "\n")
+PY
+```
+
 ## Run
 
 On the state host:
