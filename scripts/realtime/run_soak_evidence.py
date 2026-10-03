@@ -27,6 +27,7 @@ def aggregate_load(
     environment: str = "local Docker Compose",
     application_hosts: int = 1,
     stateful_services_highly_available: bool = False,
+    topology_manifest: dict | None = None,
 ) -> dict:
     accepted = sum(item["publish"]["accepted"] for item in reports)
     failed = sum(item["publish"]["failed"] for item in reports)
@@ -66,6 +67,8 @@ def aggregate_load(
         result["limitations"].append(
             "Kafka and PostgreSQL are not highly available in this topology."
         )
+    if topology_manifest is not None:
+        result["topology_manifest"] = topology_manifest
     return result
 
 
@@ -78,12 +81,27 @@ def main() -> int:
     parser.add_argument("--environment", default="local Docker Compose")
     parser.add_argument("--application-hosts", type=int, default=1)
     parser.add_argument("--stateful-services-highly-available", action="store_true")
+    parser.add_argument(
+        "--topology-manifest",
+        type=Path,
+        help="JSON manifest containing commit, host roles, image digests, and health checks.",
+    )
     parser.add_argument("--skip-recovery", action="store_true")
     args = parser.parse_args()
     if args.duration_minutes < 1 or args.events < args.duration_minutes:
         parser.error("events must be at least duration-minutes so every minute has a burst")
     if args.application_hosts < 1:
         parser.error("application-hosts must be at least 1")
+    if args.application_hosts >= 2 and args.topology_manifest is None:
+        parser.error("--topology-manifest is required for multi-host evidence")
+
+    topology_manifest = None
+    if args.topology_manifest is not None:
+        topology_manifest = load(args.topology_manifest)
+        required = {"schema_version", "commit_sha", "hosts", "image_digests", "health_checks"}
+        missing = sorted(required - topology_manifest.keys())
+        if missing:
+            parser.error(f"topology manifest is missing required keys: {', '.join(missing)}")
 
     root = Path(__file__).resolve().parents[2]
     benchmark = root / "scripts/realtime/benchmark_ingestion.py"
@@ -114,6 +132,7 @@ def main() -> int:
         environment=args.environment,
         application_hosts=args.application_hosts,
         stateful_services_highly_available=args.stateful_services_highly_available,
+        topology_manifest=topology_manifest,
     )
     load_path = args.output_dir / "realtime_soak_load_v0_1.json"
     load_path.write_text(json.dumps(load_report, indent=2) + "\n", encoding="utf-8")

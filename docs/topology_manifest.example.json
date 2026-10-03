@@ -1,0 +1,18 @@
+{
+  "schema_version": "newslens.topology.v1",
+  "commit_sha": "replace-with-git-rev-parse-HEAD",
+  "hosts": [
+    {"role": "state", "hostname": "private-state-host", "instance_type": "replace"},
+    {"role": "app", "hostname": "private-app-host", "instance_type": "replace"}
+  ],
+  "image_digests": {
+    "api": "sha256:replace",
+    "ingestion": "sha256:replace"
+  },
+  "health_checks": {
+    "state": "pass",
+    "app": "pass",
+    "kafka": "pass",
+    "postgres": "pass"
+  }
+}

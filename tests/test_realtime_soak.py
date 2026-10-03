@@ -28,3 +28,16 @@ def test_aggregate_soak_can_describe_a_multi_host_application_tier() -> None:
     assert result["topology"]["application_hosts"] == 2
     assert "single-host soak" not in " ".join(result["limitations"])
     assert "Kafka and PostgreSQL" in " ".join(result["limitations"])
+
+
+def test_aggregate_soak_preserves_topology_manifest() -> None:
+    manifest = {
+        "schema_version": "newslens.topology.v1",
+        "commit_sha": "abc123",
+        "hosts": [{"role": "state"}, {"role": "app"}],
+        "image_digests": {"api": "sha256:api"},
+        "health_checks": {"state": "pass", "app": "pass"},
+    }
+    result = aggregate_load([_burst(10, 0, 11.0)], 1, application_hosts=2,
+                            topology_manifest=manifest)
+    assert result["topology_manifest"] == manifest

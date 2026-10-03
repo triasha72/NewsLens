@@ -52,6 +52,7 @@ PYTHONPATH=src python scripts/realtime/run_soak_evidence.py \
   --duration-minutes 60 --events 100000 --concurrency 20 \
   --environment aws-ec2-two-host \
   --application-hosts 2 \
+  --topology-manifest docs/topology_manifest.json \
   --output-dir reports/multihost-$(date -u +%Y%m%dT%H%M%SZ)
 ```
 
@@ -59,6 +60,11 @@ The receipt must include a separate topology manifest showing the state host,
 app host, commit, image digests, and service health. Record failures by
 restarting the consumer and state services during separate runs; do not fold
 unplanned failures into a passing run.
+
+Start from [`topology_manifest.example.json`](topology_manifest.example.json),
+replace every placeholder, and pass it to the soak command with
+`--topology-manifest`. The command rejects a multi-host run without this
+manifest, so topology evidence cannot be accidentally omitted from the receipt.
 
 ## Acceptance
 
